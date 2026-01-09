@@ -8,11 +8,11 @@
 /* Focus Mode Styles */
 
 .focus-mode {
-    padding: 20px;
+    padding: 60px 8px 12px;
     min-height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
     overflow-x: hidden;
     max-width: 100vw;
@@ -20,23 +20,20 @@
 
 @media (max-width: 900px) {
     .focus-container {
+        display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 16px;
         align-items: stretch;
         max-width: 100%;
     }
     .timer-section, .settings-section, .stats-section {
         max-width: 100%;
-        padding: 25px;
+        padding: 24px;
         min-width: 0;
     }
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;
-    }
-    
-    .hero-image img {
-        max-width: 100%;
     }
 }
 
@@ -59,19 +56,19 @@
 
 @media (max-width: 600px) {
     .focus-mode {
-        padding: 4px;
+        padding: 70px 8px 16px;
         min-height: 100vh;
-        margin-top: 70px; /* Prevent header overlap */
+        margin-top: 0;
     }
     .focus-container {
         flex-direction: column;
-        gap: 8px;
+        gap: 10px;
         max-width: 100vw;
         width: 100vw;
         align-items: stretch;
     }
     .timer-section, .settings-section, .stats-section {
-        padding: 15px 10px;
+        padding: 16px 12px;
         border-radius: 8px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         width: 100%;
@@ -191,62 +188,68 @@
 }
 
 .focus-container {
-    display: flex;
-    gap: 20px;
+    display: grid;
+    grid-template-columns: minmax(240px, 340px) 1fr;
+    grid-template-areas:
+        "timer stats"
+        "settings stats";
+    gap: 10px;
     width: 100%;
-    max-width: 1400px;
+    max-width: 100vw;
     margin: 0 auto;
-    flex-wrap: wrap;
+    align-items: start;
 }
 
 .timer-section {
+    grid-area: timer;
     background: white;
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    flex: 1;
+    padding: 18px;
+    border-radius: 16px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
     text-align: center;
     min-width: 300px;
 }
 
 .stats-section {
+    grid-area: stats;
     background: white;
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    flex: 1;
-    min-width: 300px;
+    padding: 12px;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+    min-width: 240px;
 }
 
+
 .stats-section h2 {
-    font-size: 1.5rem;
+    font-size: 1.08rem;
     color: var(--text-color);
-    margin-bottom: 25px;
+    margin-bottom: 10px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
 }
 
 .stats-section h3 {
-    font-size: 1.2rem;
+    font-size: 0.92rem;
     color: var(--text-color);
-    margin: 25px 0 15px 0;
+    margin: 10px 0 6px 0;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 5px;
 }
 
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    margin-bottom: 30px;
+    gap: 8px;
+    margin-bottom: 10px;
 }
+
 
 .stat-card {
     background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
-    padding: 20px;
-    border-radius: 15px;
+    padding: 10px;
+    border-radius: 9px;
     text-align: center;
     transition: transform 0.3s, box-shadow 0.3s;
 }
@@ -256,40 +259,50 @@
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
 }
 
+
 .stat-icon {
-    font-size: 2rem;
-    margin-bottom: 10px;
+    font-size: 1.25rem;
+    margin-bottom: 3px;
     background: var(--gradient-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
 
+
 .stat-value {
-    font-size: 2rem;
+    font-size: 1.25rem;
     font-weight: 700;
     color: var(--text-color);
-    margin: 5px 0;
+    margin: 0;
 }
 
+
 .stat-label {
-    font-size: 0.9rem;
+    font-size: 0.7rem;
     color: #7f8c8d;
-    margin-top: 5px;
+    margin-top: 0;
 }
+
 
 .progress-section {
     background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
-    padding: 25px;
-    border-radius: 15px;
-    margin-top: 20px;
+    padding: 10px;
+    border-radius: 9px;
+    margin-top: 8px;
 }
+
 
 .circular-progress {
     position: relative;
-    width: 120px;
-    height: 120px;
-    margin: 20px auto;
+    width: 72px;
+    height: 72px;
+    margin: 4px auto 6px;
+}
+
+.progress-ring {
+    width: 72px;
+    height: 72px;
 }
 
 .progress-ring-circle {
@@ -301,22 +314,25 @@
     stroke-linecap: round;
 }
 
+
 .progress-text {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 1.5rem;
+    font-size: 0.86rem;
     font-weight: 700;
     color: var(--text-color);
 }
 
+
 .session-info {
-    margin-top: 20px;
+    margin-top: 8px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 5px;
 }
+
 
 .info-item {
     display: flex;
@@ -336,76 +352,85 @@
     font-weight: 700;
 }
 
+
 .motivation-section {
-    margin-top: 20px;
-    padding: 20px;
+    margin-top: 8px;
+    padding: 8px;
     background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
-    border-radius: 15px;
+    border-radius: 9px;
     color: white;
 }
+
 
 .motivation-message {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 1rem;
-    line-height: 1.6;
+    gap: 5px;
+    font-size: 0.86rem;
+    line-height: 1.35;
 }
 
+
 .motivation-message i {
-    font-size: 1.5rem;
+    font-size: 0.9rem;
     color: #f39c12;
 }
 
 .settings-section {
+    grid-area: settings;
     background: white;
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    flex: 1;
-    max-width: 500px;
-    min-width: 300px;
+    padding: 16px 14px 18px;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    min-width: 260px;
 }
+
 
 .timer-section h1 {
-    margin-bottom: 30px;
+    margin-bottom: 12px;
     color: var(--text-color);
+    font-size: 1.25rem;
 }
 
+
 .timer-display {
-    margin: 30px 0;
-    padding: 30px;
-    border-radius: 15px;
+    margin: 14px 0;
+    padding: 16px;
+    border-radius: 12px;
     background: var(--gradient-primary);
     color: white;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 200px;
+    min-height: 120px;
 }
 
+
 .timer-display .time {
-    font-size: 4.5rem;
+    font-size: 2.8rem;
     font-weight: 700;
     font-family: 'Poppins', monospace;
-    margin: 15px 0;
-    letter-spacing: 2px;
+    margin: 8px 0;
+    letter-spacing: 0.5px;
     text-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
+
 .timer-display .status {
-    font-size: 1.2rem;
+    font-size: 0.92rem;
     opacity: 0.9;
-    margin-top: 15px;
+    margin-top: 6px;
     font-family: 'Poppins', sans-serif;
 }
 
+
 .timer-controls {
     display: flex;
-    gap: 15px;
+    gap: 8px;
     justify-content: center;
-    margin: 30px 0;
+    margin: 10px 0 2px;
+    flex-wrap: wrap;
 }
 
 .settings-section {
@@ -417,15 +442,15 @@
 
 .settings-section h2,
 .settings-section h3 {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: var(--text-color);
-    margin: 15px 0 10px 0;
+    margin: 12px 0 8px 0;
     text-align: left;
 }
 
 .settings-section h2 {
-    font-size: 1.4rem;
-    margin-bottom: 25px;
+    font-size: 1.2rem;
+    margin-bottom: 14px;
 }
 
 .water-break-interval {
@@ -449,8 +474,8 @@
     display: flex;
     gap: 15px;
     justify-content: space-between;
-    margin: 15px 0;
-    padding: 15px;
+    margin: 10px 0;
+    padding: 10px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
 }
@@ -463,16 +488,16 @@
 }
 
 .setting label {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--text-color);
 }
 
 .setting input[type="number"] {
     width: 70px;
-    padding: 8px;
-    border: 2px solid var(--primary-color);
+    padding: 6px;
+    border: 1.5px solid var(--primary-color);
     border-radius: 5px;
-    font-size: 1rem;
+    font-size: 0.95rem;
     text-align: center;
 }
 
