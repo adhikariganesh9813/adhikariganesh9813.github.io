@@ -21,13 +21,39 @@
 @media (max-width: 900px) {
     .focus-container {
         flex-direction: column;
-        gap: 30px;
+        gap: 20px;
         align-items: stretch;
         max-width: 100%;
     }
-    .timer-section, .settings-section {
+    .timer-section, .settings-section, .stats-section {
         max-width: 100%;
-        padding: 30px 10px;
+        padding: 25px;
+        min-width: 0;
+    }
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    
+    .hero-image img {
+        max-width: 100%;
+    }
+}
+
+/* Tablet specific (iPad) */
+@media (min-width: 768px) and (max-width: 900px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .circular-progress {
+        width: 140px;
+        height: 140px;
+    }
+    
+    .progress-ring {
+        width: 140px;
+        height: 140px;
     }
 }
 
@@ -44,13 +70,40 @@
         width: 100vw;
         align-items: stretch;
     }
-    .timer-section, .settings-section {
-        padding: 6px 2px;
+    .timer-section, .settings-section, .stats-section {
+        padding: 15px 10px;
         border-radius: 8px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         width: 100%;
         min-width: 0;
         max-width: 100vw;
+    }
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+    .stat-card {
+        padding: 12px;
+    }
+    .stat-icon {
+        font-size: 1.5rem;
+    }
+    .stat-value {
+        font-size: 1.3rem;
+    }
+    .stat-label {
+        font-size: 0.75rem;
+    }
+    .circular-progress {
+        width: 100px;
+        height: 100px;
+    }
+    .progress-ring {
+        width: 100px;
+        height: 100px;
+    }
+    .progress-text {
+        font-size: 1.2rem;
     }
     .timer-section h1 {
         font-size: 1.3rem;
@@ -86,18 +139,31 @@
     .setting input[type="number"] {
         width: 100%;
         min-width: 0;
-        font-size: 0.95rem;
+        font-size: 16px; /* Prevents auto-zoom on iOS */
+        padding: 12px; /* Larger touch target */
     }
     .modal-content {
-        max-width: 99vw;
-        padding: 4px;
+        max-width: 95vw;
+        padding: 20px;
         font-size: 0.95rem;
+        margin: 0 10px;
     }
     .btn {
         font-size: 0.95rem;
-        padding: 6px 8px;
+        padding: 12px 16px; /* Larger touch target */
         width: 100%;
         min-width: 0;
+        box-sizing: border-box;
+        min-height: 44px; /* iOS recommended touch target */
+        -webkit-tap-highlight-color: transparent;
+    }
+    .stats-section h2, .stats-section h3 {
+        font-size: 1.1rem;
+    }
+    .motivation-message {
+        font-size: 0.9rem;
+    }
+}
         box-sizing: border-box;
     }
 }
@@ -128,8 +194,9 @@
     display: flex;
     gap: 20px;
     width: 100%;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
+    flex-wrap: wrap;
 }
 
 .timer-section {
@@ -139,6 +206,155 @@
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     flex: 1;
     text-align: center;
+    min-width: 300px;
+}
+
+.stats-section {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    min-width: 300px;
+}
+
+.stats-section h2 {
+    font-size: 1.5rem;
+    color: var(--text-color);
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.stats-section h3 {
+    font-size: 1.2rem;
+    color: var(--text-color);
+    margin: 25px 0 15px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+}
+
+.stat-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin: 5px 0;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    margin-top: 5px;
+}
+
+.progress-section {
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
+    padding: 25px;
+    border-radius: 15px;
+    margin-top: 20px;
+}
+
+.circular-progress {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 20px auto;
+}
+
+.progress-ring-circle {
+    transition: stroke-dashoffset 0.5s ease;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    stroke-dasharray: 326.73;
+    stroke-dashoffset: 326.73;
+    stroke-linecap: round;
+}
+
+.progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.session-info {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background: white;
+    border-radius: 8px;
+}
+
+.info-label {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.info-value {
+    color: #3498db;
+    font-weight: 700;
+}
+
+.motivation-section {
+    margin-top: 20px;
+    padding: 20px;
+    background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+    border-radius: 15px;
+    color: white;
+}
+
+.motivation-message {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.motivation-message i {
+    font-size: 1.5rem;
+    color: #f39c12;
 }
 
 .settings-section {
@@ -148,6 +364,7 @@
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     flex: 1;
     max-width: 500px;
+    min-width: 300px;
 }
 
 .timer-section h1 {
