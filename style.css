@@ -320,6 +320,9 @@ section {
     width: var(--container-width);
     max-width: var(--max-width);
     margin: 0 auto;
+    justify-content: center;
+    justify-items: center;
+    grid-auto-rows: 1fr;
 }
 
 
@@ -333,6 +336,8 @@ section {
     flex-direction: column;
     border: 1px solid rgba(0,0,0,0.04);
     height: 100%;
+    width: 100%;
+    max-width: 420px;
 }
 
 .project-card:hover {
@@ -688,6 +693,11 @@ footer {
     .project-container {
         grid-template-columns: 1fr;
         width: 90%;
+        justify-items: stretch;
+    }
+
+    .project-card {
+        max-width: 100%;
     }
 
     .hero-content h1 {
