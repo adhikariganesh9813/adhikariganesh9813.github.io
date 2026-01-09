@@ -332,6 +332,7 @@ section {
     display: flex;
     flex-direction: column;
     border: 1px solid rgba(0,0,0,0.04);
+    height: 100%;
 }
 
 .project-card:hover {
@@ -351,7 +352,7 @@ section {
 
 .project-info {
     padding: 24px 24px 24px;
-    flex-grow: 1;
+    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -373,7 +374,7 @@ section {
 .project-links {
     display: flex;
     gap: 12px;
-    margin-top: 12px;
+    margin-top: auto;
     flex-wrap: wrap;
 }
 
