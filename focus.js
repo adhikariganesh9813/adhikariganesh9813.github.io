@@ -14,7 +14,9 @@ let sessionStats = {
     currentStreak: 0,
     currentSessionStartTime: null,
     currentSessionInitialTime: 0,
-    lastSessionDate: null
+    lastSessionDate: null,
+    pausedAt: null,
+    accumulatedPauseTime: 0
 };
 
 // Stats update interval
@@ -110,9 +112,22 @@ function initializeFocusMode() {
         const offset = circumference - (progressClamped / 100) * circumference;
         progressRingCircle.style.strokeDashoffset = offset;
 
-        // Update current session time
-        const sessionElapsedSeconds = Math.floor((Date.now() - sessionStats.currentSessionStartTime) / 1000);
+        // Update current session time (excluding paused time)
+        let sessionElapsedSeconds;
+        if (sessionStats.pausedAt) {
+            // Currently paused - don't count time since pause
+            sessionElapsedSeconds = Math.floor((sessionStats.pausedAt - sessionStats.currentSessionStartTime - sessionStats.accumulatedPauseTime) / 1000);
+        } else {
+            // Currently active - count all time except accumulated pauses
+            sessionElapsedSeconds = Math.floor((Date.now() - sessionStats.currentSessionStartTime - sessionStats.accumulatedPauseTime) / 1000);
+        }
         currentSessionTimeEl.textContent = formatTimeStats(sessionElapsedSeconds);
+        
+        // Update total focus time in real-time
+        if (!sessionStats.pausedAt && timerId) {
+            sessionStats.totalFocusTimeSeconds = (sessionStats.totalFocusTimeSeconds || 0);
+            totalFocusTimeEl.textContent = formatTimeStats(sessionStats.totalFocusTimeSeconds + sessionElapsedSeconds);
+        }
     }
 
     // Update motivation message based on stats
@@ -136,8 +151,12 @@ function initializeFocusMode() {
     function startStatsTracking() {
         if (statsUpdateInterval) clearInterval(statsUpdateInterval);
         
-        sessionStats.currentSessionStartTime = Date.now();
-        sessionStats.currentSessionInitialTime = timeLeft;
+        if (!sessionStats.currentSessionStartTime) {
+            sessionStats.currentSessionStartTime = Date.now();
+            sessionStats.currentSessionInitialTime = timeLeft;
+            sessionStats.accumulatedPauseTime = 0;
+        }
+        sessionStats.pausedAt = null;
         saveStats();
 
         statsUpdateInterval = setInterval(() => {
@@ -157,12 +176,16 @@ function initializeFocusMode() {
     // Complete a session
     function completeSession() {
         if (sessionStats.currentSessionStartTime) {
-            const sessionDuration = Math.floor((Date.now() - sessionStats.currentSessionStartTime) / 1000);
+            const totalElapsed = Date.now() - sessionStats.currentSessionStartTime;
+            const activeTime = totalElapsed - (sessionStats.accumulatedPauseTime || 0);
+            const sessionDuration = Math.floor(activeTime / 1000);
             sessionStats.totalFocusTimeSeconds += sessionDuration;
             sessionStats.sessionsCompleted++;
             sessionStats.currentStreak++;
             sessionStats.currentSessionStartTime = null;
             sessionStats.currentSessionInitialTime = 0;
+            sessionStats.pausedAt = null;
+            sessionStats.accumulatedPauseTime = 0;
             saveStats();
             updateStatsDisplay();
             updateProgressRing();
@@ -179,7 +202,9 @@ function initializeFocusMode() {
                 currentStreak: 0,
                 currentSessionStartTime: null,
                 currentSessionInitialTime: 0,
-                lastSessionDate: null
+                lastSessionDate: null,
+                pausedAt: null,
+                accumulatedPauseTime: 0
             };
             sessionStorage.removeItem('focusModeStats');
             updateStatsDisplay();
@@ -267,8 +292,23 @@ function initializeFocusMode() {
         // Compute or recompute deadline
         if (!deadline) {
             deadline = Date.now() + (timeLeft * 1000);
-            // Start stats tracking for new session
-            startStatsTracking();
+            // Start stats tracking for new session or resume
+            if (!sessionStats.currentSessionStartTime) {
+                startStatsTracking();
+            } else if (sessionStats.pausedAt) {
+                // Resuming from pause - accumulate pause time
+                const pauseDuration = Date.now() - sessionStats.pausedAt;
+                sessionStats.accumulatedPauseTime = (sessionStats.accumulatedPauseTime || 0) + pauseDuration;
+                sessionStats.pausedAt = null;
+                saveStats();
+                // Restart the interval if it was stopped
+                if (!statsUpdateInterval) {
+                    statsUpdateInterval = setInterval(() => {
+                        updateProgressRing();
+                        sessionStatusEl.textContent = timerId ? 'Active' : 'Paused';
+                    }, 1000);
+                }
+            }
         }
 
         // Update UI state
@@ -342,6 +382,13 @@ function initializeFocusMode() {
         statusDisplay.textContent = 'Paused';
         sessionStatusEl.textContent = 'Paused';
         setInputsEnabled(true);
+        
+        // Track pause time
+        if (sessionStats.currentSessionStartTime) {
+            sessionStats.pausedAt = Date.now();
+            saveStats();
+        }
+        
         // Pausing cancels scheduled water break; it will be re-scheduled on resume
         clearTimeout(waterTimeoutId); waterTimeoutId = null; nextBreakAtMs = null;
     }
@@ -365,6 +412,8 @@ function initializeFocusMode() {
         sessionStats.currentSessionStartTime = null;
         sessionStats.currentSessionInitialTime = 0;
         sessionStats.currentStreak = 0; // Reset streak on manual reset
+        sessionStats.pausedAt = null;
+        sessionStats.accumulatedPauseTime = 0;
         saveStats();
         updateStatsDisplay();
         updateProgressRing();
