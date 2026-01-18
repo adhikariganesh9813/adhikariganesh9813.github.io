@@ -4,6 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://ganadhik-github-io-backend.onrender.com; frame-ancestors 'none';">
     <title>Ganesh Adhikari</title>
     <!-- My main stylesheet for the whole site -->
     <link rel="stylesheet" href="style.css">
@@ -180,15 +185,15 @@
             <h2 class="section-title">Get In Touch</h2>
             <div class="contact-content">
                 <p>I'm currently open to new opportunities and collaborations. Feel free to send me a message!</p>
-                <form id="contactForm"> 
+                <form id="contactForm" autocomplete="on"> 
                     <div class="form-group">
-                        <input type="text" id="senderName" name="name" placeholder="Your Name" required> 
+                        <input type="text" id="senderName" name="name" placeholder="Your Name" required maxlength="100" minlength="2" pattern="[a-zA-Z\s\-'.]+" title="Name can only contain letters, spaces, hyphens, and apostrophes" autocomplete="name"> 
                     </div>
                     <div class="form-group">
-                        <input type="email" id="senderEmail" name="email" placeholder="Your Email" required> 
+                        <input type="email" id="senderEmail" name="email" placeholder="Your Email" required maxlength="254" autocomplete="email"> 
                     </div>
                     <div class="form-group">
-                        <textarea id="senderMessage" name="message" placeholder="Your Message" rows="5" required></textarea> 
+                        <textarea id="senderMessage" name="message" placeholder="Your Message" rows="5" required maxlength="5000" minlength="10"></textarea> 
                     </div>
                     <button type="submit" class="btn">Send Message</button>
                 </form>

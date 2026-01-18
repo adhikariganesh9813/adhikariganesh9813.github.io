@@ -123,32 +123,91 @@ const senderMessageInput = document.getElementById('senderMessage');
 const formStatusDiv = document.getElementById('formStatus');
 
 if (contactForm) { // Ensure the form exists before attaching listener
+    let isSubmitting = false; // Prevent multiple submissions
+
     contactForm.addEventListener('submit', async (event) => {
         event.preventDefault(); // Prevent the default form submission (page reload)
 
+        // Prevent multiple submissions
+        if (isSubmitting) {
+            return;
+        }
+
+        isSubmitting = true;
         formStatusDiv.style.display = 'block'; // Make status div visible
         formStatusDiv.className = 'message-status'; // Reset classes
         formStatusDiv.textContent = 'Sending your message...'; // Initial sending message
+
+        // Disable submit button
+        const submitBtn = contactForm.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+        }
 
         const name = senderNameInput.value.trim();
         const email = senderEmailInput.value.trim();
         const message = senderMessageInput.value.trim();
 
-        // Basic client-side validation
+        // Comprehensive client-side validation
         if (!name || !email || !message) {
             formStatusDiv.className = 'message-status error';
             formStatusDiv.textContent = 'Please fill in all fields.';
             return;
         }
 
+        // Length validation
+        if (name.length < 2 || name.length > 100) {
+            formStatusDiv.className = 'message-status error';
+            formStatusDiv.textContent = 'Name must be between 2 and 100 characters.';
+            return;
+        }
+
+        if (message.length < 10 || message.length > 5000) {
+            formStatusDiv.className = 'message-status error';
+            formStatusDiv.textContent = 'Message must be between 10 and 5000 characters.';
+            return;
+        }
+
+        // Email format validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email) || email.length > 254) {
+            formStatusDiv.className = 'message-status error';
+            formStatusDiv.textContent = 'Please enter a valid email address.';
+            return;
+        }
+
+        // Name format validation (letters, spaces, hyphens, apostrophes only)
+        const nameRegex = /^[a-zA-Z\s\-'.]+$/;
+        if (!nameRegex.test(name)) {
+            formStatusDiv.className = 'message-status error';
+            formStatusDiv.textContent = 'Name can only contain letters, spaces, hyphens, and apostrophes.';
+            return;
+        }
+
+        // Check for suspicious patterns (basic spam detection)
+        const suspiciousPatterns = /<script|javascript:|onclick|onerror/gi;
+        if (suspiciousPatterns.test(name) || suspiciousPatterns.test(message)) {
+            formStatusDiv.className = 'message-status error';
+            formStatusDiv.textContent = 'Message contains prohibited content.';
+            return;
+        }
+
         try {
+            // Add timeout to prevent hanging requests
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
             const response = await fetch(`${BACKEND_URL}/api/send-message`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ name, email, message })
+                body: JSON.stringify({ name, email, message }),
+                signal: controller.signal
             });
+
+            clearTimeout(timeoutId);
 
             const result = await response.json();
 
@@ -166,7 +225,18 @@ if (contactForm) { // Ensure the form exists before attaching listener
         } catch (error) {
             console.error('Error sending message to backend:', error);
             formStatusDiv.className = 'message-status error';
-            formStatusDiv.textContent = 'Network error or problem connecting to backend. Please try again.';
+            if (error.name === 'AbortError') {
+                formStatusDiv.textContent = 'Request timed out. Please try again.';
+            } else {
+                formStatusDiv.textContent = 'Network error or problem connecting to backend. Please try again.';
+            }
+        } finally {
+            // Re-enable submission
+            isSubmitting = false;
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Message';
+            }
         }
     });
 }
