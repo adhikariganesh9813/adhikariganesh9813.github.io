@@ -56,7 +56,7 @@ function initializeFocusMode() {
     const progressRingCircle = document.querySelector('.progress-ring-circle');
     const resetStatsButton = document.getElementById('resetStats');
 
-    // Load stats from sessionStorage
+    // Load stats from sessionStorage (persist in-tab, cleared on tab close)
     function loadStats() {
         const saved = sessionStorage.getItem('focusModeStats');
         if (saved) {
@@ -282,6 +282,7 @@ function initializeFocusMode() {
     // Main timer function - handles starting/resuming the countdown (deadline-based)
     function startTimer() {
         if (timerId) return;  // Prevent multiple timers
+        const isNewSession = !sessionStats.currentSessionStartTime;
 
         // Initialize time if needed
         if (timeLeft <= 0) {
@@ -317,7 +318,11 @@ function initializeFocusMode() {
         statusDisplay.textContent = 'Focus time!';
         sessionStatusEl.textContent = 'Active';
         setInputsEnabled(false);
-        if (lastWaterBreakMs === 0) lastWaterBreakMs = Date.now();
+        if (isNewSession) {
+            lastWaterBreakMs = Date.now();
+        } else if (lastWaterBreakMs === 0) {
+            lastWaterBreakMs = Date.now();
+        }
         // schedule or reschedule precise water break
         scheduleWaterBreak(lastWaterBreakMs);
 
@@ -358,6 +363,7 @@ function initializeFocusMode() {
                     timerEndSound.play().catch(e => console.log('Error playing sound:', e));
                 }
                 timerEndModal.style.display = 'flex';
+                lastWaterBreakMs = 0;
                 clearTimeout(waterTimeoutId); waterTimeoutId = null; nextBreakAtMs = null;
             }
         }, 250);
