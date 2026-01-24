@@ -2,9 +2,10 @@
 let timeLeft = 0;          // Tracks remaining time in seconds
 let timerId = null;        // For storing the timer interval ID
 let deadline = null;       // Absolute timestamp (ms) when the timer should hit zero
-let lastWaterBreakMs = 0;  // Keeps track of last water break time in milliseconds
 let waterTimeoutId = null; // setTimeout id for precise water break scheduling
 let nextBreakAtMs = null;  // next scheduled water break time (ms)
+let waterBreakRemainingMs = null; // remaining time until next water break while running
+let waterBreakActive = false; // true while water break modal is active
 
 // Session stats tracking
 let sessionStats = {
@@ -94,6 +95,14 @@ function initializeFocusMode() {
         updateMotivationMessage();
     }
 
+    function updateSessionStatusText() {
+        if (waterBreakActive) {
+            sessionStatusEl.textContent = 'Water Break';
+        } else {
+            sessionStatusEl.textContent = timerId ? 'Active' : 'Paused';
+        }
+    }
+
     // Update progress ring
     function updateProgressRing() {
         if (!sessionStats.currentSessionStartTime || sessionStats.currentSessionInitialTime === 0) {
@@ -161,7 +170,7 @@ function initializeFocusMode() {
 
         statsUpdateInterval = setInterval(() => {
             updateProgressRing();
-            sessionStatusEl.textContent = timerId ? 'Active' : 'Paused';
+            updateSessionStatusText();
         }, 1000);
     }
 
@@ -231,6 +240,10 @@ function initializeFocusMode() {
         return (hours * 3600) + (minutes * 60) + seconds;  // Same conversion logic
     }
 
+    function getWaterBreakIntervalMs() {
+        return calculateWaterBreakInterval() * 1000;
+    }
+
     // Converts seconds back into HH:MM:SS format for display
     // Added padStart to always show two digits (e.g., 01:05:08)
     function formatTime(seconds) {
@@ -261,26 +274,49 @@ function initializeFocusMode() {
          waterBreakToggle].forEach(el => { if (el) el.disabled = !enabled; });
     }
 
-    // Schedule next water break precisely using setTimeout
-    function scheduleWaterBreak(baseNow) {
-        if (!waterBreakToggle.checked) { clearTimeout(waterTimeoutId); waterTimeoutId = null; nextBreakAtMs = null; return; }
-        const wbIntervalSec = calculateWaterBreakInterval();
-        const intervalMs = wbIntervalSec * 1000;
-        if (intervalMs <= 0) { clearTimeout(waterTimeoutId); waterTimeoutId = null; nextBreakAtMs = null; return; }
-        const now = baseNow || Date.now();
-        nextBreakAtMs = now + intervalMs;
+    function scheduleWaterBreak() {
+        if (!waterBreakToggle.checked) {
+            clearTimeout(waterTimeoutId);
+            waterTimeoutId = null;
+            nextBreakAtMs = null;
+            return;
+        }
+        const intervalMs = getWaterBreakIntervalMs();
+        if (intervalMs <= 0) {
+            clearTimeout(waterTimeoutId);
+            waterTimeoutId = null;
+            nextBreakAtMs = null;
+            return;
+        }
+        if (waterBreakRemainingMs === null || waterBreakRemainingMs <= 0) {
+            waterBreakRemainingMs = intervalMs;
+        }
         clearTimeout(waterTimeoutId);
-        const delay = Math.max(0, nextBreakAtMs - Date.now());
+        nextBreakAtMs = Date.now() + waterBreakRemainingMs;
+        const delay = Math.max(0, waterBreakRemainingMs);
         waterTimeoutId = setTimeout(() => {
-            pauseTimer();
-            lastWaterBreakMs = Date.now();
-            showWaterBreakModal();
+            waterBreakRemainingMs = 0;
+            triggerWaterBreak();
         }, delay);
-        console.log('Water break scheduled in', delay, 'ms');
+    }
+
+    function pauseWaterBreakCountdown() {
+        if (!waterTimeoutId || nextBreakAtMs === null) return;
+        waterBreakRemainingMs = Math.max(0, nextBreakAtMs - Date.now());
+        clearTimeout(waterTimeoutId);
+        waterTimeoutId = null;
+        nextBreakAtMs = null;
+    }
+
+    function triggerWaterBreak() {
+        waterBreakActive = true;
+        pauseTimer({ forWaterBreak: true });
+        showWaterBreakModal();
     }
 
     // Main timer function - handles starting/resuming the countdown (deadline-based)
     function startTimer() {
+        if (waterBreakActive) return;
         if (timerId) return;  // Prevent multiple timers
         const isNewSession = !sessionStats.currentSessionStartTime;
 
@@ -306,7 +342,7 @@ function initializeFocusMode() {
                 if (!statsUpdateInterval) {
                     statsUpdateInterval = setInterval(() => {
                         updateProgressRing();
-                        sessionStatusEl.textContent = timerId ? 'Active' : 'Paused';
+                        updateSessionStatusText();
                     }, 1000);
                 }
             }
@@ -319,12 +355,10 @@ function initializeFocusMode() {
         sessionStatusEl.textContent = 'Active';
         setInputsEnabled(false);
         if (isNewSession) {
-            lastWaterBreakMs = Date.now();
-        } else if (lastWaterBreakMs === 0) {
-            lastWaterBreakMs = Date.now();
+            waterBreakRemainingMs = null;
         }
         // schedule or reschedule precise water break
-        scheduleWaterBreak(lastWaterBreakMs);
+        scheduleWaterBreak();
 
         // Use a shorter tick to improve accuracy, but only update display when whole second changes
         timerId = setInterval(() => {
@@ -363,7 +397,8 @@ function initializeFocusMode() {
                     timerEndSound.play().catch(e => console.log('Error playing sound:', e));
                 }
                 timerEndModal.style.display = 'flex';
-                lastWaterBreakMs = 0;
+                waterBreakRemainingMs = null;
+                waterBreakActive = false;
                 clearTimeout(waterTimeoutId); waterTimeoutId = null; nextBreakAtMs = null;
             }
         }, 250);
@@ -371,7 +406,8 @@ function initializeFocusMode() {
 
 
     // Pause timer
-    function pauseTimer() {
+    function pauseTimer(options = {}) {
+        const { forWaterBreak = false } = options;
         if (!timerId) return;
         clearInterval(timerId);
         timerId = null;
@@ -383,11 +419,19 @@ function initializeFocusMode() {
         }
         deadline = null;
         updateDisplay();
-        startButton.disabled = false;
-        pauseButton.disabled = true;
-        statusDisplay.textContent = 'Paused';
-        sessionStatusEl.textContent = 'Paused';
-        setInputsEnabled(true);
+        if (forWaterBreak) {
+            startButton.disabled = true;
+            pauseButton.disabled = true;
+            statusDisplay.textContent = 'Water break';
+            sessionStatusEl.textContent = 'Water Break';
+            setInputsEnabled(false);
+        } else {
+            startButton.disabled = false;
+            pauseButton.disabled = true;
+            statusDisplay.textContent = 'Paused';
+            sessionStatusEl.textContent = 'Paused';
+            setInputsEnabled(true);
+        }
         
         // Track pause time
         if (sessionStats.currentSessionStartTime) {
@@ -396,7 +440,7 @@ function initializeFocusMode() {
         }
         
         // Pausing cancels scheduled water break; it will be re-scheduled on resume
-        clearTimeout(waterTimeoutId); waterTimeoutId = null; nextBreakAtMs = null;
+        pauseWaterBreakCountdown();
     }
 
     // Reset timer
@@ -409,7 +453,8 @@ function initializeFocusMode() {
         startButton.disabled = false;
         pauseButton.disabled = true;
         statusDisplay.textContent = 'Ready to focus';
-        lastWaterBreakMs = 0;
+        waterBreakRemainingMs = null;
+        waterBreakActive = false;
         setInputsEnabled(true);
         clearTimeout(waterTimeoutId); waterTimeoutId = null; nextBreakAtMs = null;
         
@@ -568,13 +613,34 @@ function initializeFocusMode() {
         // reschedule/cancel precise water break if timer is running
         if (timerId) {
             if (waterBreakToggle.checked) {
-                lastWaterBreakMs = Date.now();
-                scheduleWaterBreak(lastWaterBreakMs);
+                waterBreakRemainingMs = getWaterBreakIntervalMs();
+                scheduleWaterBreak();
             } else {
+                waterBreakRemainingMs = null;
                 clearTimeout(waterTimeoutId); waterTimeoutId = null; nextBreakAtMs = null;
             }
         }
     });
+
+    function onWaterBreakInputChange() {
+        if (!waterBreakToggle.checked) return;
+        const intervalMs = getWaterBreakIntervalMs();
+        if (intervalMs <= 0) {
+            waterBreakRemainingMs = null;
+            clearTimeout(waterTimeoutId);
+            waterTimeoutId = null;
+            nextBreakAtMs = null;
+            return;
+        }
+        if (timerId && !waterBreakActive) {
+            waterBreakRemainingMs = intervalMs;
+            scheduleWaterBreak();
+        }
+    }
+
+    waterBreakHoursInput.addEventListener('input', onWaterBreakInputChange);
+    waterBreakMinutesInput.addEventListener('input', onWaterBreakInputChange);
+    waterBreakSecondsInput.addEventListener('input', onWaterBreakInputChange);
 
     drankButton.addEventListener('click', () => {
         if (waterBreakSound) {
@@ -582,18 +648,19 @@ function initializeFocusMode() {
             waterBreakSound.currentTime = 0;
         }
         waterBreakModal.style.display = 'none';
+        waterBreakActive = false;
         
         // Track water break in stats
         sessionStats.waterBreaksTaken++;
         saveStats();
         updateStatsDisplay();
         
-        // Reset the water break baseline and recreate deadline based on current timeLeft and resume
-        lastWaterBreakMs = Date.now();
+        // Reset the water break countdown and resume
+        waterBreakRemainingMs = getWaterBreakIntervalMs();
         deadline = null;
         startTimer();  // Resume the timer
         // Ensure next break is precisely scheduled from now
-        if (timerId) scheduleWaterBreak(lastWaterBreakMs);
+        if (timerId) scheduleWaterBreak();
     });
 
     // Close timer end modal and stop sound
