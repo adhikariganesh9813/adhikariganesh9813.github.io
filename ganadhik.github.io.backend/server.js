@@ -96,7 +96,11 @@ const transporter = nodemailer.createTransport({
   },
   // Security: Require TLS
   secure: true,
-  requireTLS: true
+  requireTLS: true,
+  // Fail fast instead of hanging on blocked SMTP ports
+  connectionTimeout: 5000,
+  greetingTimeout: 5000,
+  socketTimeout: 8000
 });
 
 // --- API Endpoints ---
@@ -104,6 +108,17 @@ const transporter = nodemailer.createTransport({
 // Root route: just a quick check to see if backend is running
 app.get('/', (req, res) => {
   res.send('Node.js Backend for contact form is running!');
+});
+
+// SMTP health check (fails fast if SMTP is blocked)
+app.get('/health/smtp', async (req, res) => {
+  try {
+    await transporter.verify();
+    res.status(200).json({ status: 'success', message: 'SMTP connection OK' });
+  } catch (error) {
+    console.error('SMTP verify failed:', error);
+    res.status(500).json({ status: 'error', message: 'SMTP verify failed', code: error.code || 'UNKNOWN' });
+  }
 });
 
 // Main endpoint for sending emails from my contact form (with rate limiting)
@@ -211,7 +226,11 @@ app.post('/api/send-message', limiter, async (req, res) => {
     res.status(200).json({ status: 'success', message: 'Your message has been sent successfully!' });
   } catch (error) {
     console.error('Error sending email:', error);
-    res.status(500).json({ status: 'error', message: 'Failed to send your message. Please try again later.' });
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to send your message. Please try again later.',
+      code: error.code || 'UNKNOWN'
+    });
   }
 });
 
