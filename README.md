@@ -96,11 +96,9 @@ npm install
 ```
 .
 ├── index.html              # Main page
-├── focus.html              # Focus mode page
-├── style.css               # Main styles
-├── focus.css               # Focus mode styles
-├── script.js               # Main JavaScript (with security)
-├── focus.js                # Focus mode logic
+├── electron-app/focus.html # Focus mode page (Electron only)
+├── css/style.css           # Main styles
+├── js/script.js            # Main JavaScript (with security)
 ├── SECURITY.md             # Security documentation
 ├── .well-known/
 │   └── security.txt        # Security disclosure policy
@@ -175,7 +173,6 @@ This is a personal portfolio. For security issues, please report responsibly via
 - ✅ Added comprehensive security measures
 - ✅ Implemented rate limiting
 - ✅ Added input validation and sanitization
-- ✅ Enhanced focus mode with real-time stats
 - ✅ Added security headers and CSP
 - ✅ Implemented spam detection
 
