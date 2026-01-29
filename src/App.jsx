@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import heroPhoto from "./assets/cover.jpg";
+import heroPhoto from "./assets/cover-optimized.jpg";
 import profilePhoto from "./assets/profile.jpg";
 import journalPhoto from "./assets/journal.jpg";
 import slide1 from "./assets/slide1.jpg";
@@ -216,6 +216,7 @@ function App() {
   const slides = [slide1, slide2, slide3];
   const [slideIndex, setSlideIndex] = useState(0);
   const [projectFilter, setProjectFilter] = useState("All");
+  const [showBackToTop, setShowBackToTop] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -223,6 +224,15 @@ function App() {
     }, 3000);
     return () => clearInterval(timer);
   }, [slides.length]);
+
+  useEffect(() => {
+    const onScroll = () => {
+      setShowBackToTop(window.scrollY > 400);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <div className="relative min-h-screen overflow-hidden">
@@ -266,39 +276,39 @@ function App() {
             <img
               src={heroPhoto}
               alt="Cover"
-              className="h-56 w-full object-cover opacity-95 md:h-72 [mask-image:linear-gradient(to_right,transparent,black_3%,black_97%,transparent),linear-gradient(to_bottom,transparent,black_6%,black_94%,transparent)] [mask-composite:intersect]"
+              className="h-40 w-full object-cover opacity-95 sm:h-56 md:h-72 [mask-image:linear-gradient(to_right,transparent,black_3%,black_97%,transparent),linear-gradient(to_bottom,transparent,black_6%,black_94%,transparent)] [mask-composite:intersect]"
             />
           </div>
 
-          <div className="grid items-center gap-12 md:grid-cols-[1.1fr_0.9fr]">
-          <div className="space-y-6 reveal">
-            <div className="inline-flex flex-wrap items-center gap-2 rounded-full border border-fog/80 bg-white/80 px-4 py-2 text-sm font-bold uppercase tracking-[0.15em] text-ink shadow-soft">
-              <span className="rounded-full bg-fog px-3 py-1.5 text-ink">M.S. Computer Science</span>
-              <span className="rounded-full bg-white px-3 py-1.5 text-ink">Texas Tech University</span>
+          <div className="hero-grid grid items-center gap-8 sm:gap-10 lg:gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+          <div className="order-2 space-y-5 reveal md:order-1 lg:pr-0">
+            <div className="inline-flex flex-wrap items-center gap-2 rounded-full border border-fog/80 bg-white/80 px-3 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-ink shadow-soft sm:px-4 sm:text-sm sm:tracking-[0.15em]">
+              <span className="rounded-full bg-fog px-2.5 py-1 text-ink sm:px-3 sm:py-1.5">M.S. Computer Science</span>
+              <span className="rounded-full bg-white px-2.5 py-1 text-ink sm:px-3 sm:py-1.5">Texas Tech University</span>
             </div>
-            <h1 className="font-display text-4xl font-semibold text-ink md:text-6xl">
+            <h1 className="font-display text-2xl font-semibold text-ink sm:text-4xl md:text-5xl lg:text-6xl">
               <span className="typing">Data‑first software engineer</span>
               <span className="block">blending engineering, analytics, and product thinking.</span>
             </h1>
-            <p className="max-w-xl text-lg leading-relaxed text-slate">
+            <p className="max-w-xl text-sm leading-relaxed text-slate sm:text-lg">
               M.S. Computer Science student at Texas Tech University with 2+ years of professional experience in Japan. I build scalable data and
               software systems across ERP, analytics, and backend integration, with foundations in AI/ML and a focus on modern data engineering.
             </p>
-            <div className="flex flex-wrap items-center gap-4">
+            <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-4">
               <a
                 href="#projects"
-                className="btn-primary"
+                className="btn-primary w-full text-center sm:w-auto"
               >
                 View Projects
               </a>
               <a
                 href="mailto:adhikariganesh9813@gmail.com"
-                className="btn-secondary"
+                className="btn-secondary w-full text-center sm:w-auto break-all"
               >
                 adhikariganesh9813@gmail.com
               </a>
             </div>
-            <div className="flex flex-wrap gap-4 text-sm text-slate">
+            <div className="flex flex-col gap-3 text-sm text-slate sm:flex-row sm:flex-wrap sm:gap-4">
               <div className="glass rounded-2xl px-4 py-3">
                 <p className="text-xs uppercase tracking-[0.2em] text-slate/70">Interest</p>
                 <p className="mt-1 font-semibold text-ink">Data Eng · Data Science · Software</p>
@@ -308,7 +318,7 @@ function App() {
                 <p className="mt-1 font-semibold text-ink">Lubbock, TX & Rancho Cordova, CA</p>
               </div>
             </div>
-            <div className="flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate/60">
+            <div className="flex flex-wrap gap-2 text-[9px] font-semibold uppercase tracking-[0.08em] text-slate/60 sm:text-xs sm:tracking-[0.2em]">
               <span className="rounded-full border border-fog/80 bg-white/80 px-3 py-1">Data Engineering</span>
               <span className="rounded-full border border-fog/80 bg-white/80 px-3 py-1">Data Science</span>
               <span className="rounded-full border border-fog/80 bg-white/80 px-3 py-1">Software Engineer</span>
@@ -316,11 +326,11 @@ function App() {
               <span className="rounded-full border border-fog/80 bg-white/80 px-3 py-1">Product Management</span>
             </div>
           </div>
-          <div className="relative mr-auto reveal reveal-delay-2 h-[360px] w-[260px] overflow-hidden rounded-[32px] border border-fog/80 bg-white/80 md:h-[440px] md:w-[320px] md:-ml-28">
+          <div className="hero-profile order-1 relative mx-auto reveal reveal-delay-2 h-[360px] w-[260px] overflow-hidden rounded-[32px] border border-fog/80 bg-white/80 sm:h-[400px] sm:w-[300px] md:order-2 md:h-[440px] md:w-[320px] md:mx-auto lg:ml-0 lg:mr-0">
             <img
               src={profilePhoto}
               alt="Ganesh Adhikari profile"
-              className="absolute inset-0 h-full w-full rounded-[32px] object-cover object-[50%_10%] shadow-glow transition duration-500 hover:-translate-y-2 hover:shadow-lift"
+              className="relative h-full w-full rounded-[32px] object-cover object-[50%_10%] shadow-glow transition duration-500 hover:-translate-y-2 hover:shadow-lift"
             />
           </div>
           </div>
@@ -507,7 +517,7 @@ function App() {
               <p className="section-label">Contact</p>
               <h2 className="section-title mt-3">Let&apos;s Connect</h2>
               <p className="mt-3 text-base text-slate">
-                Open to Summer 2026 internships (Data Engineering priority) with flexibility across data science, software engineering, analytics,
+                Open to Summer 2026 internships with flexibility across data engineering, data science, software engineering, analytics,
                 and product roles.
               </p>
             </div>
@@ -544,6 +554,15 @@ function App() {
           </div>
         </div>
       </footer>
+
+      <button
+        type="button"
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        className={`back-to-top ${showBackToTop ? "flex" : "hidden"}`}
+        aria-label="Back to top"
+      >
+        ↑
+      </button>
     </div>
   );
 }
