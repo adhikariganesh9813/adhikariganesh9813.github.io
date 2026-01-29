@@ -5,15 +5,6 @@ IMPLEMENTATION_SUMMARY.md
 CHECKLIST.md
 .well-known/
 
-# Backend files (sensitive)
-ganadhik.github.io.backend/.env
-ganadhik.github.io.backend/.env.*
-ganadhik.github.io.backend/node_modules/
-ganadhik.github.io.backend/README.md
-ganadhik.github.io.backend/security-test.js
-ganadhik.github.io.backend/*.log
-ganadhik.github.io.backend/package-lock.json
-
 # OS files
 .DS_Store
 Thumbs.db

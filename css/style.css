@@ -529,25 +529,22 @@ footer {
     background-color: var(--primary-hover-color);
 }
 
-/* Form Message Status */
-.message-status {
-    margin-top: 15px;
-    padding: 10px;
-    border-radius: 4px;
-    font-size: 0.9em;
+/* Contact email */
+.contact-email {
+    margin-top: 10px;
+    font-size: 1rem;
     text-align: center;
 }
 
-.message-status.success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
+.contact-email a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
 }
 
-.message-status.error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
+.contact-email a:hover {
+    color: var(--primary-hover-color);
+    text-decoration: underline;
 }
 
 /* Responsive tweaks for tablets and mobile - I want it to look good everywhere! */
@@ -833,4 +830,3 @@ footer {
         gap: 1.5rem;
     }
 }
-
