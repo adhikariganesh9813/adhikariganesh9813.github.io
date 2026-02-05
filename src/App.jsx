@@ -338,7 +338,7 @@ function App() {
 
         <section className="grid gap-6 md:grid-cols-3">
           {highlights.map((item, index) => (
-            <div key={item.title} className="card glass">
+            <div key={item.title} className="card glass highlight-card">
               <div className="flex items-center justify-between">
                 <div className="text-teal">{icons[item.icon]}</div>
                 <span className="rounded-full bg-fog px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate">
@@ -356,14 +356,19 @@ function App() {
                     className="inline-flex"
                     aria-label="View Data Engineering Essentials badge on Credly"
                   >
-                    <img
-                      src="/credly-badge.png"
-                      alt="IBM Data Engineering Essentials badge"
-                      width="150"
-                      height="150"
-                      loading="lazy"
-                      className="rounded-md shadow-soft"
-                    />
+                    <div className="flex flex-col items-center gap-2">
+                      <img
+                        src="/credly-badge.png"
+                        alt="IBM Data Engineering Essentials badge"
+                        width="150"
+                        height="150"
+                        loading="lazy"
+                        className="rounded-md shadow-soft"
+                      />
+                      <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate/70">
+                        IBM Data Engineering Essentials
+                      </span>
+                    </div>
                   </a>
                 </div>
               )}
