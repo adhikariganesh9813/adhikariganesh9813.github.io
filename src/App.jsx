@@ -234,6 +234,16 @@ function App() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = '//cdn.credly.com/assets/utilities/embed.js';
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
   return (
     <div className="relative min-h-screen overflow-hidden">
       <div className="pointer-events-none absolute -top-32 right-[-120px] h-64 w-64 rounded-full bg-teal/20 blur-2xl" />
@@ -332,6 +342,9 @@ function App() {
               alt="Ganesh Adhikari profile"
               className="relative h-full w-full rounded-[32px] object-cover object-[50%_10%] shadow-glow transition duration-500 hover:-translate-y-2 hover:shadow-lift"
             />
+          </div>
+          <div className="order-3 flex justify-center reveal reveal-delay-3">
+            <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="955e4e2a-da64-49f3-be7a-aac4d5568d9b" data-share-badge-host="https://www.credly.com"></div>
           </div>
           </div>
         </section>
