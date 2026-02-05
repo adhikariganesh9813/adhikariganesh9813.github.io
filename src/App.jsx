@@ -348,16 +348,23 @@ function App() {
               <h3 className="mt-6 font-display text-xl text-ink">{item.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-slate">{item.detail}</p>
               {item.title === "Data Engineering" && (
-                <div className="mt-6 flex justify-center min-h-[280px]">
-                  <iframe
-                    title="Data Engineering Essentials Badge"
-                    src="https://www.credly.com/badges/955e4e2a-da64-49f3-be7a-aac4d5568d9b/embed"
-                    width="150"
-                    height="270"
-                    className="border-0"
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                  />
+                <div className="mt-6 flex justify-center">
+                  <a
+                    href="https://www.credly.com/badges/955e4e2a-da64-49f3-be7a-aac4d5568d9b/public_url"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex"
+                    aria-label="View Data Engineering Essentials badge on Credly"
+                  >
+                    <img
+                      src="https://images.credly.com/images/c0b439e5-79d5-498e-abc9-2b71cdf08c34/linkedin_thumb_image.png"
+                      alt="IBM Data Engineering Essentials badge"
+                      width="150"
+                      height="150"
+                      loading="lazy"
+                      className="rounded-md shadow-soft"
+                    />
+                  </a>
                 </div>
               )}
             </div>
