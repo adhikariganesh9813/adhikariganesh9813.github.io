@@ -343,9 +343,6 @@ function App() {
               className="relative h-full w-full rounded-[32px] object-cover object-[50%_10%] shadow-glow transition duration-500 hover:-translate-y-2 hover:shadow-lift"
             />
           </div>
-          <div className="order-3 flex justify-center reveal reveal-delay-3">
-            <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="955e4e2a-da64-49f3-be7a-aac4d5568d9b" data-share-badge-host="https://www.credly.com"></div>
-          </div>
           </div>
         </section>
 
@@ -360,6 +357,11 @@ function App() {
               </div>
               <h3 className="mt-6 font-display text-xl text-ink">{item.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-slate">{item.detail}</p>
+              {item.title === "Data Engineering" && (
+                <div className="mt-4 flex justify-center">
+                  <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="955e4e2a-da64-49f3-be7a-aac4d5568d9b" data-share-badge-host="https://www.credly.com"></div>
+                </div>
+              )}
             </div>
           ))}
         </section>
