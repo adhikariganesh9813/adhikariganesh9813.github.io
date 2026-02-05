@@ -234,16 +234,6 @@ function App() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src = '//cdn.credly.com/assets/utilities/embed.js';
-    script.async = true;
-    document.body.appendChild(script);
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
-
   return (
     <div className="relative min-h-screen overflow-hidden">
       <div className="pointer-events-none absolute -top-32 right-[-120px] h-64 w-64 rounded-full bg-teal/20 blur-2xl" />
