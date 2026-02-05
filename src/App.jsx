@@ -357,7 +357,7 @@ function App() {
                     aria-label="View Data Engineering Essentials badge on Credly"
                   >
                     <img
-                      src="https://images.credly.com/images/c0b439e5-79d5-498e-abc9-2b71cdf08c34/linkedin_thumb_image.png"
+                      src="/credly-badge.png"
                       alt="IBM Data Engineering Essentials badge"
                       width="150"
                       height="150"
