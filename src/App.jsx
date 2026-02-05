@@ -349,12 +349,15 @@ function App() {
               <p className="mt-2 text-sm leading-relaxed text-slate">{item.detail}</p>
               {item.title === "Data Engineering" && (
                 <div className="mt-6 flex justify-center min-h-[280px]">
-                  <div 
-                    data-iframe-width="150" 
-                    data-iframe-height="270" 
-                    data-share-badge-id="955e4e2a-da64-49f3-be7a-aac4d5568d9b" 
-                    data-share-badge-host="https://www.credly.com"
-                  ></div>
+                  <iframe
+                    title="Data Engineering Essentials Badge"
+                    src="https://www.credly.com/badges/955e4e2a-da64-49f3-be7a-aac4d5568d9b/embed"
+                    width="150"
+                    height="270"
+                    className="border-0"
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
                 </div>
               )}
             </div>
