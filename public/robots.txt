@@ -5,7 +5,7 @@ Disallow: /admin/
 Disallow: /private/
 
 # Sitemaps
-Sitemap: https://adhikariganesh9813.github.io/Personal-Website-/sitemap.xml
+Sitemap: https://adhikariganesh9813.github.io/sitemap.xml
 
 # Crawl-delay (optional, in seconds)
 Crawl-delay: 1
