@@ -166,4 +166,33 @@ A running log of all significant changes made to this portfolio site. Append new
 
 ---
 
+## [2026-06-07] Profile Photo Fix — Hero Section
+
+**Author:** Claude (AI assistant via Claude Code)
+
+**Problem:** Profile photo (profile.jpg) was invisible in the hero section. Two compounding bugs:
+
+1. **Animation conflict**: The outer photo wrapper had both `reveal` (sets `opacity:0`, animates to 1) and `hero-profile` (breathing glow animation). Because both set the `animation` CSS property, only one ran — the photo stayed at `opacity:0`.
+2. **Grid layout override**: A stale `@media (min-width:1024px) and (max-width:1366px)` rule forced the hero grid to single-column on most laptop screens (MacBook 13" = 1280px), pushing the photo below the fold. DOM debug confirmed the element existed but was off-screen.
+
+**Fix applied:**
+
+`src/App.jsx` — Photo wrapper simplified:
+- Removed `reveal` + `reveal-delay-2` from photo wrapper (no animation conflict)
+- Removed `order-1`/`order-2` classes (unnecessary with fixed-column grid)
+- Outer div: `hidden md:block md:sticky md:top-28 md:self-start` — hidden on mobile, block on 768px+
+- Inner div: `hero-profile` only — breathing glow animation works without conflict
+- Photo dims: `h-[400px] w-full max-w-[320px]` (lg: `h-[460px] max-w-[360px]`)
+
+`src/index.css` — Removed broken laptop override:
+- Deleted: `@media (min-width:1024px) and (max-width:1366px) { .hero-grid { grid-template-columns: 1fr; } }`
+- Added: `@media (max-width:767px) { .hero-grid { grid-template-columns: 1fr; } }` (single column only on true mobile)
+
+`src/App.jsx` — Hero grid updated:
+- `md:grid-cols-[1fr_340px] lg:grid-cols-[1fr_380px]` — 2-column from 768px with fixed photo column width
+
+**Result:** Photo visible on all screens ≥ 768px wide, hidden (not just off-screen) on mobile.
+
+---
+
 _Append new entries below this line when making further changes._

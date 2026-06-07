@@ -406,8 +406,8 @@ function App() {
           </div>
 
           {/* Hero content */}
-          <div className="hero-grid grid items-center gap-8 lg:gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-            <div className="order-2 space-y-6 reveal md:order-1">
+          <div className="hero-grid grid items-start gap-10 md:grid-cols-[1fr_340px] lg:grid-cols-[1fr_380px]">
+            <div className="space-y-6 reveal">
 
               {/* Badge */}
               <div
@@ -484,25 +484,25 @@ function App() {
             </div>
 
             {/* Profile photo */}
-            <div
-              className="hero-profile hero-profile-wrap order-1 relative mx-auto h-[340px] w-[250px] overflow-hidden rounded-[28px] reveal reveal-delay-2 sm:h-[390px] sm:w-[290px] md:order-2 md:h-[430px] md:w-[310px]"
-              style={{ border: "1px solid rgba(34,211,238,0.15)" }}
-            >
-              {/* Subtle gradient overlay at top */}
+            <div className="hidden md:block md:sticky md:top-28 md:self-start">
               <div
-                className="absolute inset-x-0 top-0 z-10 h-16 pointer-events-none"
-                style={{ background: "linear-gradient(to bottom, rgba(5,12,24,0.3), transparent)" }}
-              />
-              <img
-                src={profilePhoto}
-                alt="Ganesh Adhikari"
-                className="h-full w-full object-cover object-[50%_10%] transition duration-500 hover:-translate-y-2"
-              />
-              {/* Bottom glow */}
-              <div
-                className="absolute inset-x-0 bottom-0 z-10 h-24 pointer-events-none"
-                style={{ background: "linear-gradient(to top, rgba(5,12,24,0.5), transparent)" }}
-              />
+                className="hero-profile relative mx-auto h-[400px] w-full max-w-[320px] overflow-hidden rounded-[28px] lg:h-[460px] lg:max-w-[360px]"
+                style={{ border: "1px solid rgba(34,211,238,0.15)" }}
+              >
+                <div
+                  className="absolute inset-x-0 top-0 z-10 h-16 pointer-events-none"
+                  style={{ background: "linear-gradient(to bottom, rgba(5,12,24,0.3), transparent)" }}
+                />
+                <img
+                  src={profilePhoto}
+                  alt="Ganesh Adhikari"
+                  className="h-full w-full object-cover object-[50%_10%] transition duration-500 hover:-translate-y-2"
+                />
+                <div
+                  className="absolute inset-x-0 bottom-0 z-10 h-24 pointer-events-none"
+                  style={{ background: "linear-gradient(to top, rgba(5,12,24,0.5), transparent)" }}
+                />
+              </div>
             </div>
           </div>
         </section>

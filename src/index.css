@@ -272,21 +272,10 @@
   }
 }
 
-/* ── Responsive hero stacking ── */
-@media (min-width: 1024px) and (max-width: 1366px) {
+/* ── Hero always side-by-side from 768px up ── */
+@media (max-width: 767px) {
   .hero-grid {
-    grid-template-columns: 1fr !important;
-  }
-  .hero-profile-wrap {
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-}
-
-@media (min-width: 900px) and (max-width: 980px) {
-  .hero-profile-wrap {
-    margin-left: auto !important;
-    margin-right: auto !important;
+    grid-template-columns: 1fr;
   }
 }
 
