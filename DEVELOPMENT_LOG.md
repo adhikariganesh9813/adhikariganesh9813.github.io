@@ -218,4 +218,75 @@ A running log of all significant changes made to this portfolio site. Append new
 
 ---
 
+## [2026-06-07] Design System Refinement — Tech-Savvy Engineering Aesthetic
+
+**Author:** Claude (AI assistant via Claude Code)
+
+**Design goal:** Elevate from "dark theme preset" to a refined, intentional engineer's portfolio. Core principles applied: (1) accent discipline — cyan used deliberately, not everywhere; (2) a monospace "code" signal on all technical metadata; (3) technical texture; (4) polish details engineers notice.
+
+### tailwind.config.js
+- Added `mono` font family: **JetBrains Mono** (the developer signature font)
+- Refined neutral tokens for better legibility & sophistication:
+  - `ink` `#e2e8f4` → `#eef2f8` (crisper)
+  - `slate` `#7d8fa8` → `#8c9cb5` (more legible secondary)
+  - `dim` `#4a5568` → `#566276`
+  - `cloud` `#050c18` → `#070b13` (more neutral deep black)
+  - `fog` `#0b1524` → `#0d1320`; `mist` `#122033` → `#151d2c`
+- Added `line: #1e2838` (hairline borders) and `mint: #34d399` (emerald — "available" status)
+- New keyframes/animations: `gradient-shift` (animated gradient text/buttons), `status-pulse` (availability dot)
+
+### src/index.css — Refinements
+- **Imported JetBrains Mono** alongside Inter + Space Grotesk
+- **Background**: replaced dot grid with a fine **blueprint line grid** (56px, ~1.6% opacity) + refined ambient cyan/violet glows; `background-attachment: fixed`
+- **Custom scrollbar**: thin, dark track with rounded `#1e2838` thumb (webkit + firefox)
+- **Section labels**: now monospace lowercase with a leading gradient tick line (`section-label::before`) — replaces the old uppercase pill
+- **Pills**: monospace, squared-off (8px radius) instead of fully round, refined 3-color variants
+- **Cards / project cards**: subtle top-lit gradient surface `linear-gradient(180deg, mist→fog)`, tighter radii (18-22px)
+- **Featured project cards** (`.featured::before`): cyan→violet gradient accent line across the top edge
+- **Gradient text**: smoother 3-stop cyan→blue→violet with slow animated shift
+- **Buttons**: 12px radius (was pill), animated gradient position on hover, layered glow shadows
+- **github-btn / expand-btn / category filters**: monospace, squared radii
+- **Status dot**: pulsing emerald availability indicator
+
+### src/App.jsx — Applied the system
+- **Hero badges**: replaced the affiliation pill with two refined mono chips — a pulsing green **"available · summer 2026"** status + a compact **"M.S. CS · Texas Tech"** chip
+- **Stat chip labels** ("interest" / "based in"): monospace lowercase, kept teal/violet color coding
+- **Role tags**: monospace lowercase, squared, kept per-tag color coding (cyan/violet/gold)
+- **Project tags**: monospace lowercase, neutral squared chips (less cyan noise)
+- **Featured badge**: "★ featured" monospace
+- **Highlight badge**: monospace lowercase "highlight"
+- **Category filters**: monospace lowercase, 8px radius
+- **Research takeaways label**: "// key takeaways" monospace
+- **Languages badge / IBM cert label**: monospace lowercase
+
+**Net effect:** Monospace metadata + blueprint grid + accent discipline + availability status = reads as a working engineer's site, not a template. Cyan now punctuates rather than saturates.
+
+---
+
+## [2026-06-07] Container Consistency + Description Legibility + Pill Cleanup
+
+**Author:** Claude (AI assistant via Claude Code)
+
+**Client feedback:** unhappy with (1) background colors of some containers, (2) pill colors, (3) description font colors.
+
+**Root cause found — palette drift:** The dark redesign introduced new neutral tokens (`cloud #070b13`, `fog #0d1320`, `mist #151d2c`), but several inline styles still used the *old* palette — section panels on `rgba(11,21,36)` (a bluer, more saturated navy) and nav/footer/overlays on `rgba(5,12,24)`. Panels and cards were therefore subtly different hues sitting next to each other.
+
+### Fixes
+
+**1. Container consistency (`src/index.css` + `src/App.jsx`)**
+- Added reusable `.panel` class — one consistent surface: `linear-gradient(180deg, rgba(22,30,46,0.5), rgba(14,20,33,0.66))`, `blur(14px)`, subtle inner top-light. Applied to About, Research, and Contact sections (removed their divergent inline styles).
+- Added `.panel-inset` for nested boxes (Research "key takeaways") — recessed `rgba(7,11,19,0.55)` for depth.
+- Synced all remaining old values to the new palette: nav `rgba(5,12,24,0.85)`→`rgba(7,11,19,0.86)`, mobile nav, footer, hero photo gradient overlays, slideshow image bg `rgba(11,21,36,0.4)`→`rgba(13,19,32,0.5)`, "View GitHub Profile" button → `rgba(21,29,44,0.5)`.
+
+**2. Description legibility (`tailwind.config.js`)**
+- Brightened `slate` (all body/description text) `#8c9cb5` → `#aab6ca` — clearer, slightly warmer read against the dark bg while keeping hierarchy below `ink` headings.
+- Bumped `dim` `#566276` → `#6b7689` for muted metadata.
+
+**3. Pill cleanup (`src/index.css` + `src/App.jsx`)**
+- Removed the 3-color alternating skill pills (teal/violet/neutral cycling across 15 items read as arbitrary rainbow).
+- New single `.pill` style: subtle top-lit gradient surface `linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.025))`, brighter `#c4d0e2` text, crisp border, cyan glow on hover. Uniform = more professional.
+- Hero role tags keep their intentional per-role color coding (those are meaningful, not arbitrary).
+
+---
+
 _Append new entries below this line when making further changes._

@@ -5,18 +5,21 @@ export default {
     extend: {
       fontFamily: {
         display: ["\"Space Grotesk\"", "sans-serif"],
-        body: ["\"Inter\"", "\"Source Serif 4\"", "sans-serif"],
+        body: ["\"Inter\"", "sans-serif"],
+        mono: ["\"JetBrains Mono\"", "ui-monospace", "SFMono-Regular", "monospace"],
       },
       colors: {
-        ink:   "#e2e8f4",   // primary text — cool near-white
-        slate: "#7d8fa8",   // secondary text — blue-gray
-        dim:   "#4a5568",   // muted text
-        cloud: "#050c18",   // main background — deep space navy
-        fog:   "#0b1524",   // card surface — dark navy
-        mist:  "#122033",   // elevated surface
+        ink:   "#eef2f8",   // primary text — crisp near-white
+        slate: "#aab6ca",   // body / descriptions — brighter, readable
+        dim:   "#6b7689",   // muted text / metadata
+        cloud: "#070b13",   // main background — deep neutral navy-black
+        fog:   "#0d1320",   // card surface
+        mist:  "#151d2c",   // elevated surface
+        line:  "#1e2838",   // hairline borders
         teal:  "#22d3ee",   // primary accent — electric cyan
         coral: "#a78bfa",   // secondary accent — soft violet
-        gold:  "#f0b94d",   // amber gold
+        mint:  "#34d399",   // tertiary — emerald (status / available)
+        gold:  "#f0b94d",   // amber gold (sparing highlight)
         moss:  "#1a3a5c",   // deep blue
       },
       boxShadow: {
@@ -43,6 +46,14 @@ export default {
           "0%, 100%": { boxShadow: "0 0 0 1px rgba(34,211,238,0.12), 0 0 24px rgba(34,211,238,0.08), 0 20px 60px rgba(0,0,0,0.7)" },
           "50%": { boxShadow: "0 0 0 1px rgba(34,211,238,0.25), 0 0 48px rgba(34,211,238,0.15), 0 20px 60px rgba(0,0,0,0.7)" },
         },
+        "gradient-shift": {
+          "0%, 100%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+        },
+        "status-pulse": {
+          "0%, 100%": { opacity: "1", boxShadow: "0 0 0 0 rgba(52,211,153,0.5)" },
+          "50%": { opacity: "0.85", boxShadow: "0 0 0 5px rgba(52,211,153,0)" },
+        },
         shimmer: {
           "0%": { backgroundPosition: "-200% 0" },
           "100%": { backgroundPosition: "200% 0" },
@@ -53,6 +64,8 @@ export default {
         "fade-in": "fade-in 0.5s ease-out both",
         float: "float 6s ease-in-out infinite",
         "profile-breathe": "profile-breathe 4s ease-in-out infinite",
+        "gradient-shift": "gradient-shift 6s ease infinite",
+        "status-pulse": "status-pulse 2.4s ease-in-out infinite",
         shimmer: "shimmer 3s linear infinite",
       },
     },

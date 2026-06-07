@@ -227,14 +227,14 @@ const icons = {
 
 function ProjectCard({ project, featured = false }) {
   return (
-    <article className="project-card">
+    <article className={`project-card${featured ? " featured" : ""}`}>
       <div className="flex items-start justify-between gap-3">
         <div className="flex flex-wrap gap-1.5">
           {project.tags.slice(0, 3).map((tag) => (
             <span
               key={tag}
-              className="rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.15em]"
-              style={{ background: "rgba(34,211,238,0.07)", color: "#7d8fa8", border: "1px solid rgba(34,211,238,0.12)" }}
+              className="mono rounded-md px-2 py-0.5 text-[10px] font-medium lowercase"
+              style={{ background: "rgba(255,255,255,0.04)", color: "#8c9cb5", border: "1px solid rgba(255,255,255,0.08)" }}
             >
               {tag}
             </span>
@@ -242,10 +242,10 @@ function ProjectCard({ project, featured = false }) {
         </div>
         {featured && (
           <span
-            className="shrink-0 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.15em]"
-            style={{ background: "rgba(34,211,238,0.1)", color: "#22d3ee", border: "1px solid rgba(34,211,238,0.25)" }}
+            className="mono shrink-0 rounded-md px-2 py-0.5 text-[10px] font-semibold lowercase tracking-tight"
+            style={{ background: "rgba(34,211,238,0.1)", color: "#22d3ee", border: "1px solid rgba(34,211,238,0.28)" }}
           >
-            Featured
+            ★ featured
           </span>
         )}
       </div>
@@ -306,7 +306,7 @@ function App() {
       {/* ── Navigation ── */}
       <header
         className="sticky top-0 z-30 backdrop-blur-xl"
-        style={{ background: "rgba(5,12,24,0.85)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}
+        style={{ background: "rgba(7,11,19,0.86)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <a href="#" className="font-display text-2xl font-extrabold md:text-3xl">
@@ -356,7 +356,7 @@ function App() {
         {menuOpen && (
           <nav
             className="px-6 py-4 md:hidden animate-fade-in"
-            style={{ borderTop: "1px solid rgba(255,255,255,0.06)", background: "rgba(5,12,24,0.95)" }}
+            style={{ borderTop: "1px solid rgba(255,255,255,0.06)", background: "rgba(7,11,19,0.96)" }}
             aria-label="Mobile navigation"
           >
             <div className="flex flex-col gap-1">
@@ -409,16 +409,22 @@ function App() {
           <div className="hero-grid grid items-start gap-10 md:grid-cols-[1fr_340px] lg:grid-cols-[1fr_380px]">
             <div className="space-y-6 reveal">
 
-              {/* Badge */}
-              <div
-                className="inline-flex flex-wrap items-center gap-2 rounded-full px-3 py-2 text-[11px] font-bold uppercase tracking-[0.12em] sm:px-4 sm:text-xs sm:tracking-[0.15em]"
-                style={{ border: "1px solid rgba(34,211,238,0.18)", background: "rgba(34,211,238,0.05)", backdropFilter: "blur(8px)" }}
-              >
-                <span className="rounded-full px-2.5 py-1 text-slate sm:px-3" style={{ background: "rgba(255,255,255,0.05)" }}>
-                  M.S. Computer Science
+              {/* Status + affiliation badges */}
+              <div className="flex flex-wrap items-center gap-2.5">
+                <span
+                  className="mono inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-[11px] font-medium lowercase"
+                  style={{ border: "1px solid rgba(52,211,153,0.28)", background: "rgba(52,211,153,0.06)", color: "#34d399" }}
+                >
+                  <span className="status-dot" />
+                  available · for full-time roles
                 </span>
-                <span className="rounded-full px-2.5 py-1 sm:px-3" style={{ background: "rgba(34,211,238,0.12)", color: "#22d3ee" }}>
-                  Texas Tech University
+                <span
+                  className="mono inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-[11px] font-medium"
+                  style={{ border: "1px solid rgba(255,255,255,0.09)", background: "rgba(255,255,255,0.03)", color: "#8c9cb5" }}
+                >
+                  M.S. CS
+                  <span style={{ color: "#566276" }}>·</span>
+                  <span style={{ color: "#22d3ee" }}>Texas Tech</span>
                 </span>
               </div>
 
@@ -457,14 +463,14 @@ function App() {
                   className="rounded-2xl px-4 py-3"
                   style={{ border: "1px solid rgba(34,211,238,0.22)", borderTop: "2px solid rgba(34,211,238,0.5)", background: "rgba(34,211,238,0.06)", backdropFilter: "blur(8px)" }}
                 >
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em]" style={{ color: "#22d3ee" }}>Interest</p>
+                  <p className="mono text-[10px] font-medium lowercase tracking-wide" style={{ color: "#22d3ee" }}>interest</p>
                   <p className="mt-1 text-sm font-semibold text-ink">Data Eng · Data Science · Software</p>
                 </div>
                 <div
                   className="rounded-2xl px-4 py-3"
                   style={{ border: "1px solid rgba(167,139,250,0.22)", borderTop: "2px solid rgba(167,139,250,0.5)", background: "rgba(167,139,250,0.06)", backdropFilter: "blur(8px)" }}
                 >
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em]" style={{ color: "#a78bfa" }}>Based In</p>
+                  <p className="mono text-[10px] font-medium lowercase tracking-wide" style={{ color: "#a78bfa" }}>based in</p>
                   <p className="mt-1 text-sm font-semibold text-ink">Lubbock, TX & Sacramento, CA</p>
                 </div>
               </div>
@@ -480,7 +486,7 @@ function App() {
                 ].map(({ label, bg, border, color }) => (
                   <span
                     key={label}
-                    className="rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.12em]"
+                    className="mono rounded-md px-2.5 py-1 text-[10px] font-medium lowercase"
                     style={{ border: `1px solid ${border}`, background: bg, color }}
                   >
                     {label}
@@ -497,7 +503,7 @@ function App() {
               >
                 <div
                   className="absolute inset-x-0 top-0 z-10 h-16 pointer-events-none"
-                  style={{ background: "linear-gradient(to bottom, rgba(5,12,24,0.3), transparent)" }}
+                  style={{ background: "linear-gradient(to bottom, rgba(7,11,19,0.35), transparent)" }}
                 />
                 <img
                   src={profilePhoto}
@@ -507,7 +513,7 @@ function App() {
                 />
                 <div
                   className="absolute inset-x-0 bottom-0 z-10 h-24 pointer-events-none"
-                  style={{ background: "linear-gradient(to top, rgba(5,12,24,0.5), transparent)" }}
+                  style={{ background: "linear-gradient(to top, rgba(7,11,19,0.55), transparent)" }}
                 />
               </div>
             </div>
@@ -521,10 +527,10 @@ function App() {
               <div className="flex items-center justify-between">
                 <div className="text-teal">{icons[item.icon]}</div>
                 <span
-                  className="rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em]"
+                  className="mono rounded-md px-2.5 py-1 text-[10px] font-medium lowercase"
                   style={{ background: "rgba(34,211,238,0.08)", color: "#22d3ee", border: "1px solid rgba(34,211,238,0.25)" }}
                 >
-                  Highlight
+                  highlight
                 </span>
               </div>
               <h3 className="mt-6 font-display text-xl font-semibold text-ink">{item.title}</h3>
@@ -547,7 +553,7 @@ function App() {
                       className="rounded-xl opacity-90 transition hover:opacity-100"
                       style={{ filter: "drop-shadow(0 0 12px rgba(34,211,238,0.15))" }}
                     />
-                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate/60">
+                    <span className="mono text-[10px] font-medium lowercase text-slate/70">
                       IBM Data Engineering Essentials
                     </span>
                   </a>
@@ -560,8 +566,7 @@ function App() {
         {/* ── About ── */}
         <section
           id="about"
-          className="grid gap-12 rounded-[36px] p-8 md:p-12 md:grid-cols-[1fr_1.1fr]"
-          style={{ border: "1px solid rgba(255,255,255,0.07)", background: "rgba(11,21,36,0.6)", backdropFilter: "blur(12px)" }}
+          className="panel grid gap-12 rounded-[36px] p-8 md:p-12 md:grid-cols-[1fr_1.1fr]"
           aria-label="About me"
         >
           <div className="space-y-6">
@@ -581,8 +586,8 @@ function App() {
             <div>
               <h3 className="font-display text-lg font-semibold text-ink">Core Skills</h3>
               <div className="mt-4 flex flex-wrap gap-2">
-                {skills.map((skill, i) => (
-                  <span key={skill} className={`pill ${["pill-teal", "pill-violet", "pill-neutral"][i % 3]}`}>
+                {skills.map((skill) => (
+                  <span key={skill} className="pill">
                     {skill}
                   </span>
                 ))}
@@ -596,7 +601,7 @@ function App() {
                 src={journalPhoto}
                 alt="TECDIA journal feature"
                 className="h-96 w-full object-contain md:h-[28rem]"
-                style={{ background: "rgba(11,21,36,0.4)" }}
+                style={{ background: "rgba(13,19,32,0.5)" }}
               />
             </div>
             <div className="overflow-hidden rounded-[28px]" style={{ border: "1px solid rgba(255,255,255,0.06)" }}>
@@ -604,7 +609,7 @@ function App() {
                 src={slides[slideIndex]}
                 alt={`About slideshow ${slideIndex + 1}`}
                 className="h-64 w-full object-contain md:h-72"
-                style={{ background: "rgba(11,21,36,0.4)" }}
+                style={{ background: "rgba(13,19,32,0.5)" }}
               />
               <div className="flex justify-end px-4 py-3">
                 <div className="flex gap-2">
@@ -620,10 +625,10 @@ function App() {
               </div>
             </div>
             <div
-              className="absolute -bottom-5 -right-5 hidden rounded-2xl px-5 py-3 text-xs font-bold uppercase tracking-[0.2em] text-slate md:block"
-              style={{ border: "1px solid rgba(34,211,238,0.15)", background: "rgba(5,12,24,0.9)", backdropFilter: "blur(8px)" }}
+              className="mono absolute -bottom-5 -right-5 hidden rounded-xl px-5 py-3 text-[11px] font-medium lowercase text-slate md:block"
+              style={{ border: "1px solid rgba(34,211,238,0.18)", background: "rgba(7,11,19,0.92)", backdropFilter: "blur(8px)" }}
             >
-              4 Languages · Global Experience
+              4 languages · global experience
             </div>
           </div>
         </section>
@@ -643,8 +648,8 @@ function App() {
               href={GITHUB_PROFILE}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex shrink-0 items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-slate transition-all duration-200 hover:text-teal"
-              style={{ border: "1px solid rgba(255,255,255,0.09)", background: "rgba(11,21,36,0.6)" }}
+              className="inline-flex shrink-0 items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold text-slate transition-all duration-200 hover:text-teal"
+              style={{ border: "1px solid rgba(255,255,255,0.1)", background: "rgba(21,29,44,0.5)" }}
               onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(34,211,238,0.3)"; }}
               onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.09)"; }}
             >
@@ -683,11 +688,11 @@ function App() {
                     <button
                       key={cat}
                       onClick={() => setCategoryFilter(cat)}
-                      className="rounded-full px-4 py-2 text-sm font-semibold transition-all duration-200"
+                      className="mono rounded-lg px-4 py-2 text-[13px] font-medium lowercase transition-all duration-200"
                       style={
                         categoryFilter === cat
-                          ? { background: "linear-gradient(125deg,#22d3ee,#818cf8)", color: "#050c18", fontWeight: 700 }
-                          : { border: "1px solid rgba(255,255,255,0.09)", background: "rgba(11,21,36,0.6)", color: "#7d8fa8" }
+                          ? { background: "linear-gradient(115deg,#22d3ee,#818cf8)", color: "#050c18", fontWeight: 600 }
+                          : { border: "1px solid rgba(255,255,255,0.09)", background: "rgba(13,19,32,0.6)", color: "#8c9cb5" }
                       }
                       onMouseEnter={e => { if (categoryFilter !== cat) { e.currentTarget.style.borderColor = "rgba(34,211,238,0.3)"; e.currentTarget.style.color = "#22d3ee"; } }}
                       onMouseLeave={e => { if (categoryFilter !== cat) { e.currentTarget.style.borderColor = "rgba(255,255,255,0.09)"; e.currentTarget.style.color = "#7d8fa8"; } }}
@@ -715,8 +720,7 @@ function App() {
         {/* ── Research ── */}
         <section
           id="research"
-          className="grid gap-10 rounded-[36px] p-8 md:p-12 md:grid-cols-[1.1fr_0.9fr]"
-          style={{ border: "1px solid rgba(255,255,255,0.07)", background: "rgba(11,21,36,0.5)", backdropFilter: "blur(12px)" }}
+          className="panel grid gap-10 rounded-[36px] p-8 md:p-12 md:grid-cols-[1.1fr_0.9fr]"
           aria-label="Research"
         >
           <div className="space-y-5">
@@ -737,11 +741,8 @@ function App() {
               <ExternalLinkIcon />
             </a>
           </div>
-          <div
-            className="rounded-[24px] p-7"
-            style={{ border: "1px solid rgba(255,255,255,0.07)", background: "rgba(11,21,36,0.5)" }}
-          >
-            <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-teal/70">Key Takeaways</p>
+          <div className="panel-inset rounded-[24px] p-7">
+            <p className="mono text-[11px] font-medium lowercase text-teal/80">// key takeaways</p>
             <ul className="mt-5 space-y-4 text-sm text-slate">
               {[
                 "Digital marketing reshapes consumer learning patterns.",
@@ -761,8 +762,7 @@ function App() {
         {/* ── Contact ── */}
         <section
           id="contact"
-          className="rounded-[36px] p-8 md:p-12"
-          style={{ border: "1px solid rgba(255,255,255,0.07)", background: "rgba(11,21,36,0.6)", backdropFilter: "blur(12px)" }}
+          className="panel rounded-[36px] p-8 md:p-12"
           aria-label="Contact"
         >
           <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
@@ -770,7 +770,7 @@ function App() {
               <p className="section-label">Contact</p>
               <h2 className="section-title mt-4">Let&apos;s Connect</h2>
               <p className="mt-3 text-sm leading-relaxed text-slate sm:text-base">
-                Open to Summer 2026 internships across data engineering, data science, software engineering, analytics, and product roles.
+                Open to roles across data engineering, data science, software engineering, analytics.
                 Flexible on location.
               </p>
             </div>
@@ -802,7 +802,7 @@ function App() {
       </main>
 
       {/* ── Footer ── */}
-      <footer style={{ borderTop: "1px solid rgba(255,255,255,0.06)", background: "rgba(5,12,24,0.8)" }}>
+      <footer style={{ borderTop: "1px solid rgba(255,255,255,0.06)", background: "rgba(7,11,19,0.82)" }}>
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-8 text-sm text-slate md:flex-row">
           <p>© 2026 Ganesh Adhikari. All rights reserved.</p>
           <div className="flex items-center gap-6">
