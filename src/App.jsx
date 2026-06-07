@@ -42,9 +42,9 @@ const ChevronDownIcon = ({ open }) => (
 );
 
 const highlights = [
-  { title: "Data Engineering", detail: "ETL/ELT pipelines, data modeling, and analytics layers", icon: "spark" },
-  { title: "Software Engineering", detail: "2+ years shipping enterprise systems in semiconductor manufacturing", icon: "gear" },
-  { title: "AI + Analytics", detail: "ML foundations, Business Intelligence, and data-driven decision support", icon: "globe" },
+  { title: "Data Engineering", detail: "IBM Data Engineering Professional Certification from coursera", icon: "spark" },
+  { title: "Software Engineering", detail: "2 years professional experience in shipping enterprise IT applications for semiconductor component manufacturing sector in Japan", icon: "gear" },
+  { title: "AI + Analytics", detail: "Courseworks and Projects in Machine Learning, Business Intelligence, and data-driven decision support", icon: "globe" },
 ];
 
 const skills = [
@@ -52,7 +52,7 @@ const skills = [
   "AI / Machine Learning", "Python", "SQL & MS SQL Server",
   "JavaScript", "Tableau & BI", "Airflow · Spark · Hadoop",
   "REST APIs · Postman", "IBM Cloud", ".NET",
-  "Web Development", "Git & GitHub", "SDLC · Product Development",
+  "Web Development", "Git & GitHub", "SDLC · Product(App) Development",
 ];
 
 const featuredProjects = [
@@ -396,7 +396,6 @@ function App() {
               alt="Cover"
               className="h-40 w-full object-cover sm:h-56 md:h-72"
               style={{
-                opacity: 0.55,
                 maskImage: "linear-gradient(to right,transparent,black 4%,black 96%,transparent), linear-gradient(to bottom,transparent,black 8%,black 92%,transparent)",
                 WebkitMaskImage: "linear-gradient(to right,transparent,black 4%,black 96%,transparent), linear-gradient(to bottom,transparent,black 8%,black 92%,transparent)",
                 maskComposite: "intersect",
@@ -479,8 +478,8 @@ function App() {
               <div className="flex flex-wrap gap-2">
                 {[
                   { label: "Data Engineering",       bg: "rgba(34,211,238,0.08)",  border: "rgba(34,211,238,0.28)",  color: "#5ecfdf" },
-                  { label: "Data Science",           bg: "rgba(167,139,250,0.08)", border: "rgba(167,139,250,0.28)", color: "#a690f0" },
-                  { label: "Software Engineer",      bg: "rgba(34,211,238,0.06)",  border: "rgba(34,211,238,0.2)",   color: "#4abfcf" },
+                  { label: "Machine Learning",           bg: "rgba(167,139,250,0.08)", border: "rgba(167,139,250,0.28)", color: "#a690f0" },
+                  { label: "Software Engineering",      bg: "rgba(34,211,238,0.06)",  border: "rgba(34,211,238,0.2)",   color: "#4abfcf" },
                   { label: "Data/Business Analysis", bg: "rgba(240,185,77,0.08)",  border: "rgba(240,185,77,0.28)",  color: "#c8a040" },
                   { label: "Product Management",     bg: "rgba(167,139,250,0.06)", border: "rgba(167,139,250,0.2)",  color: "#9880e0" },
                 ].map(({ label, bg, border, color }) => (
@@ -509,7 +508,6 @@ function App() {
                   src={profilePhoto}
                   alt="Ganesh Adhikari"
                   className="h-full w-full object-cover object-[50%_10%] transition duration-500 hover:-translate-y-2"
-                  style={{ filter: "brightness(0.62)" }}
                 />
                 <div
                   className="absolute inset-x-0 bottom-0 z-10 h-24 pointer-events-none"
@@ -550,7 +548,7 @@ function App() {
                       width="130"
                       height="130"
                       loading="lazy"
-                      className="rounded-xl opacity-90 transition hover:opacity-100"
+                      className="rounded-xl transition"
                       style={{ filter: "drop-shadow(0 0 12px rgba(34,211,238,0.15))" }}
                     />
                     <span className="mono text-[10px] font-medium lowercase text-slate/70">
@@ -770,7 +768,7 @@ function App() {
               <p className="section-label">Contact</p>
               <h2 className="section-title mt-4">Let&apos;s Connect</h2>
               <p className="mt-3 text-sm leading-relaxed text-slate sm:text-base">
-                Open to roles across data engineering, data science, software engineering, analytics.
+                Open to roles across data engineering, data science, AI, software engineering, analytics.
                 Flexible on location.
               </p>
             </div>
