@@ -110,4 +110,60 @@ A running log of all significant changes made to this portfolio site. Append new
 
 ---
 
+## [2026-06-07] Premium Dark Redesign — Full Visual Overhaul
+
+**Author:** Claude (AI assistant via Claude Code)
+
+**Design direction:** Deep space navy + electric cyan + soft violet — inspired by Linear, Vercel, Resend. Premium, dark, techie.
+
+### tailwind.config.js — New dark color palette
+| Token | Old value | New value | Role |
+|---|---|---|---|
+| `cloud` | `#F8F4EF` warm cream | `#050c18` deep navy | Main background |
+| `fog` | `#EFE7DD` warm light | `#0b1524` dark surface | Card / panel bg |
+| `mist` | `#E2E8F0` light | `#122033` elevated dark | Higher surface |
+| `ink` | `#0F172A` dark | `#e2e8f4` near-white | Primary text |
+| `slate` | `#334155` dark | `#7d8fa8` blue-gray | Secondary text |
+| `teal` | `#1E5D6C` dark teal | `#22d3ee` electric cyan | Primary accent |
+| `coral` | `#E06B4F` warm coral | `#a78bfa` soft violet | Secondary accent |
+| `gold` | `#D6A146` | `#f0b94d` amber | Badge/highlight |
+- Added `profile-breathe` keyframe animation for the glowing avatar border effect
+- Shadows updated for dark mode (glow-based, not shadow-based)
+- Font body updated to `Inter` (more modern/clean for dark design)
+
+### src/index.css — Full rewrite
+- Body background: subtle 32px dot grid + radial cyan/violet gradient blobs
+- `::selection`: cyan highlight
+- `.section-label`: cyan chip (border + glow bg) replaces the old white pill
+- `.gradient-text`: cyan → indigo → violet gradient, used on logo + hero headline
+- `.card`, `.project-card`: dark glass with `backdrop-filter: blur`, cyan border glow on hover
+- `.glass`: dark semi-transparent frosted panel
+- `.pill`: dark chip with cyan hover (border + color)
+- `.btn-primary`: cyan→violet gradient, dark text (`#050c18`)
+- `.btn-secondary`: cyan outline + tint background
+- `.github-btn`: dark surface, full cyan on hover
+- `.expand-btn`: cyan outline pill
+- `.back-to-top`: cyan→violet gradient
+- `.hero-profile`: `profile-breathe` breathing glow animation on profile photo border
+- Removed all warm-palette references
+
+### src/App.jsx — Visual updates
+- **Nav**: transparent dark glass with `backdrop-blur-xl`; logo "Ganesh" uses `gradient-text`; GitHub button with subtle dark border
+- **Background orbs**: 3 large fixed blur orbs (cyan top-right, violet bottom-left, cyan center) for ambient glow
+- **Hero cover image**: opacity lowered to 0.55, rounded corners + subtle dark border; gradient overlays on profile photo
+- **Hero badge**: dark glass pill with cyan border; "Texas Tech" span in cyan tint
+- **Hero h1**: first line uses `typing` + `gradient-text` (cyan→violet animate-in); secondary lines in `text-ink/80`
+- **Hero profile photo**: breathing glow border via CSS keyframe animation; dark gradient overlays top/bottom
+- **Stat chips**: dark glass with `backdropFilter: blur`
+- **Role tags**: dark surface chips with subtle white border
+- **Highlight cards**: "Highlight" badge uses cyan tint; Credly badge has `drop-shadow` cyan glow filter
+- **About / Research / Contact sections**: all use `rgba(11,21,36,0.6)` with `backdropFilter: blur(12px)` — consistent dark glass panels
+- **Slideshow dots**: active dot expands width (pill shape) for a cleaner indicator
+- **"4 Languages" badge**: dark glass with cyan border
+- **Research takeaways**: bulleted with cyan dot markers
+- **Category filter buttons**: active state uses inline gradient style (cyan→violet); hover via JS inline style for precision
+- **All `bg-white/XX`**: replaced with dark equivalents throughout — no light backgrounds remain
+
+---
+
 _Append new entries below this line when making further changes._

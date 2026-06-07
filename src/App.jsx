@@ -31,10 +31,10 @@ const ExternalLinkIcon = () => (
 const ChevronDownIcon = ({ open }) => (
   <svg
     viewBox="0 0 24 24"
-    className={`h-5 w-5 transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+    className={`h-4 w-4 transition-transform duration-300 ${open ? "rotate-180" : ""}`}
     fill="none"
     stroke="currentColor"
-    strokeWidth="2.2"
+    strokeWidth="2.5"
     aria-hidden="true"
   >
     <polyline points="6 9 12 15 18 9" strokeLinecap="round" strokeLinejoin="round" />
@@ -43,50 +43,36 @@ const ChevronDownIcon = ({ open }) => (
 
 const highlights = [
   { title: "Data Engineering", detail: "ETL/ELT pipelines, data modeling, and analytics layers", icon: "spark" },
-  { title: "Software & ERP", detail: "2+ years shipping enterprise systems in semiconductor manufacturing", icon: "gear" },
+  { title: "Software Engineering", detail: "2+ years shipping enterprise systems in semiconductor manufacturing", icon: "gear" },
   { title: "AI + Analytics", detail: "ML foundations, Business Intelligence, and data-driven decision support", icon: "globe" },
 ];
 
 const skills = [
-  "ETL/ELT & Pipelines",
-  "Relational & NoSQL DBs",
-  "Data Warehousing",
-  "AI / Machine Learning",
-  "Python",
-  "SQL & SQL Server",
-  "JavaScript",
-  "Tableau & BI",
-  "Airflow · Spark · Hadoop",
-  "REST APIs · Postman",
-  "IBM Cloud",
-  ".NET",
-  "Web Development",
-  "Git & GitHub",
-  "SDLC · Product Development",
-  "Product Management",
+  "ETL/ELT & Pipelines", "Relational & NoSQL DBs", "Data Warehousing",
+  "AI / Machine Learning", "Python", "SQL & MS SQL Server",
+  "JavaScript", "Tableau & BI", "Airflow · Spark · Hadoop",
+  "REST APIs · Postman", "IBM Cloud", ".NET",
+  "Web Development", "Git & GitHub", "SDLC · Product Development",
 ];
 
 const featuredProjects = [
   {
     title: "eLearning Web Platform — GeoTechBrain",
-    description:
-      "Full-stack e-learning platform for GeoTech Engineering PE License exam prep. Built and maintained as sole developer, covering coursework, quizzes, and structured exam prep content. Currently in testing phase.",
+    description: "Full-stack e-learning platform for GeoTech Engineering PE License exam prep. Built and maintained as sole developer, covering coursework, quizzes, and structured exam prep content.",
     link: "https://github.com/adhikariganesh9813/eLearning-Web-Platform-geoTechBrain-",
     tags: ["Full-Stack", "Web", "Education"],
     category: "Web",
   },
   {
     title: "Pendulum Balancing — Reinforcement Learning",
-    description:
-      "Reinforcement learning agent trained to balance an inverted pendulum using Python. Explores policy gradient methods, reward shaping, and core RL fundamentals for classic control problems.",
+    description: "Reinforcement learning agent trained to balance an inverted pendulum using Python. Explores policy gradient methods, reward shaping, and core RL fundamentals.",
     link: "https://github.com/adhikariganesh9813/Pendulum-Balancing-Reinforcement-Learning",
     tags: ["Python", "Machine Learning", "RL"],
     category: "ML",
   },
   {
     title: "Focus Mode Productivity App",
-    description:
-      "Cross-platform desktop deep-work timer for macOS & Windows. Features focus countdown, pause/reset, optional water-break reminders, voice/audio alerts, session stats, a progress ring, and weekly/monthly/yearly focus charts with week navigation.",
+    description: "Cross-platform desktop deep-work timer for macOS & Windows. Features focus countdown, water-break reminders, voice alerts, session stats, a progress ring, and weekly/monthly/yearly focus charts.",
     link: "https://github.com/adhikariganesh9813/FocusMode-Productivity-App-for-PC-",
     tags: ["JavaScript", "Desktop", "App"],
     category: "App",
@@ -180,7 +166,7 @@ const additionalProjects = [
   },
   {
     title: "Library Management System — OOP",
-    description: "Object-oriented library management system in Python demonstrating OOP design principles and data structure fundamentals.",
+    description: "Object-oriented library management system in Python demonstrating OOP design principles.",
     link: "https://github.com/adhikariganesh9813/LibraryManagementSystem-OOP",
     tags: ["Python", "OOP"],
     category: "App",
@@ -194,7 +180,7 @@ const additionalProjects = [
   },
   {
     title: "Database Design Proposal",
-    description: "Full project report proposing a database design for a travel company transitioning from Excel spreadsheets to a modern relational database.",
+    description: "Full project report proposing a database design for a travel company transitioning from Excel to a modern relational database.",
     link: "https://github.com/adhikariganesh9813/Proposal-for-Data-Integration-and-Database-Design---Full-Project-Report",
     tags: ["Database", "SQL", "Report"],
     category: "Data",
@@ -208,7 +194,7 @@ const additionalProjects = [
   },
   {
     title: "Replace Text in a File",
-    description: "Python utility script for finding and replacing text patterns across files — a handy text processing tool.",
+    description: "Python utility script for finding and replacing text patterns across files.",
     link: "https://github.com/adhikariganesh9813/Replace-text-in-a-file",
     tags: ["Python", "Utility"],
     category: "Utility",
@@ -218,28 +204,21 @@ const additionalProjects = [
 const ALL_CATEGORIES = ["All", "Data", "App", "Web", "Research", "Utility"];
 
 const icons = {
-  code: (
-    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.6">
-      <path d="M8 9l-4 3 4 3" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M16 9l4 3-4 3" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M10 19l4-14" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  ),
   globe: (
-    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.6">
+    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.5">
       <circle cx="12" cy="12" r="9" />
       <path d="M3 12h18" strokeLinecap="round" strokeLinejoin="round" />
       <path d="M12 3c2.8 3.2 2.8 14.8 0 18-2.8-3.2-2.8-14.8 0-18z" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   ),
   gear: (
-    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.6">
+    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.5">
       <path d="M12 8.6a3.4 3.4 0 1 1 0 6.8 3.4 3.4 0 0 1 0-6.8Z" />
       <path d="M19.4 13.5c.1-.5.1-1 .1-1.5s0-1-.1-1.5l2-1.6-2-3.4-2.4.8a7.6 7.6 0 0 0-2.6-1.5l-.4-2.5h-4l-.4 2.5a7.6 7.6 0 0 0-2.6 1.5l-2.4-.8-2 3.4 2 1.6c-.1.5-.1 1-.1 1.5s0 1 .1 1.5l-2 1.6 2 3.4 2.4-.8a7.6 7.6 0 0 0 2.6 1.5l.4 2.5h4l.4-2.5a7.6 7.6 0 0 0 2.6-1.5l2.4.8 2-3.4-2-1.6Z" />
     </svg>
   ),
   spark: (
-    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.6">
+    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.5">
       <path d="M12 3l1.8 4.9L19 9l-5.2 1.1L12 15l-1.8-4.9L5 9l5.2-1.1L12 3Z" />
       <path d="M4 18l1 2 2 1-2 1-1 2-1-2-2-1 2-1 1-2Z" />
     </svg>
@@ -248,36 +227,40 @@ const icons = {
 
 function ProjectCard({ project, featured = false }) {
   return (
-    <article className="project-card flex flex-col gap-4">
+    <article className="project-card">
       <div className="flex items-start justify-between gap-3">
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-1.5">
           {project.tags.slice(0, 3).map((tag) => (
             <span
               key={tag}
-              className="rounded-full bg-fog/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.15em] text-slate"
+              className="rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.15em]"
+              style={{ background: "rgba(34,211,238,0.07)", color: "#7d8fa8", border: "1px solid rgba(34,211,238,0.12)" }}
             >
               {tag}
             </span>
           ))}
         </div>
         {featured && (
-          <span className="shrink-0 rounded-full bg-teal/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.15em] text-teal ring-1 ring-teal/20">
+          <span
+            className="shrink-0 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.15em]"
+            style={{ background: "rgba(34,211,238,0.1)", color: "#22d3ee", border: "1px solid rgba(34,211,238,0.25)" }}
+          >
             Featured
           </span>
         )}
       </div>
       <div className="flex-1 space-y-2">
-        <h3 className="font-display text-xl font-semibold leading-snug text-ink">{project.title}</h3>
+        <h3 className="font-display text-lg font-semibold leading-snug text-ink">{project.title}</h3>
         <p className="text-sm leading-relaxed text-slate">{project.description}</p>
       </div>
       <a
         href={project.link}
         target="_blank"
         rel="noreferrer"
-        className="github-btn inline-flex items-center gap-2 self-start"
+        className="github-btn self-start"
         aria-label={`View ${project.title} on GitHub`}
       >
-        <GitHubIcon className="h-4 w-4" />
+        <GitHubIcon className="h-3.5 w-3.5" />
         View on GitHub
         <ExternalLinkIcon />
       </a>
@@ -312,15 +295,23 @@ function App() {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      <div className="pointer-events-none absolute -top-32 right-[-120px] h-64 w-64 rounded-full bg-teal/20 blur-2xl" />
-      <div className="pointer-events-none absolute -bottom-40 left-[-80px] h-72 w-72 rounded-full bg-coral/20 blur-2xl" />
+      {/* Background glow orbs */}
+      <div className="pointer-events-none fixed -top-80 right-[-300px] h-[700px] w-[700px] rounded-full blur-[120px]"
+        style={{ background: "radial-gradient(circle, rgba(34,211,238,0.08) 0%, transparent 70%)" }} />
+      <div className="pointer-events-none fixed -bottom-80 left-[-300px] h-[700px] w-[700px] rounded-full blur-[120px]"
+        style={{ background: "radial-gradient(circle, rgba(167,139,250,0.08) 0%, transparent 70%)" }} />
+      <div className="pointer-events-none fixed top-[45%] left-[50%] -translate-x-1/2 -translate-y-1/2 h-[400px] w-[400px] rounded-full blur-[100px]"
+        style={{ background: "radial-gradient(circle, rgba(34,211,238,0.04) 0%, transparent 70%)" }} />
 
       {/* ── Navigation ── */}
-      <header className="sticky top-0 z-30 border-b border-fog/80 bg-cloud/95 backdrop-blur-sm">
+      <header
+        className="sticky top-0 z-30 backdrop-blur-xl"
+        style={{ background: "rgba(5,12,24,0.85)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}
+      >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <a href="#" className="font-display text-2xl font-extrabold text-ink md:text-3xl">
-            <span className="text-teal">Ganesh</span>{" "}
-            <span className="text-ink">Adhikari</span>
+          <a href="#" className="font-display text-2xl font-extrabold md:text-3xl">
+            <span className="gradient-text">Ganesh</span>
+            <span className="text-ink"> Adhikari</span>
           </a>
 
           <nav className="hidden items-center gap-1 md:flex" aria-label="Main navigation">
@@ -328,7 +319,10 @@ function App() {
               <a
                 key={item}
                 href={`#${item.toLowerCase()}`}
-                className="rounded-lg px-4 py-2 text-sm font-semibold text-slate transition-colors duration-200 hover:bg-teal/10 hover:text-teal"
+                className="rounded-lg px-4 py-2 text-sm font-semibold text-slate transition-all duration-200 hover:text-teal"
+                style={{ "--hover-bg": "rgba(34,211,238,0.07)" }}
+                onMouseEnter={e => e.currentTarget.style.background = "rgba(34,211,238,0.07)"}
+                onMouseLeave={e => e.currentTarget.style.background = "transparent"}
               >
                 {item}
               </a>
@@ -337,7 +331,10 @@ function App() {
               href={GITHUB_PROFILE}
               target="_blank"
               rel="noreferrer"
-              className="ml-3 inline-flex items-center gap-2 rounded-lg border border-ink/15 bg-white/70 px-4 py-2 text-sm font-semibold text-ink transition-colors duration-200 hover:border-teal/60 hover:bg-teal/10 hover:text-teal"
+              className="ml-3 inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-slate transition-all duration-200 hover:text-teal"
+              style={{ border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.03)" }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(34,211,238,0.35)"; e.currentTarget.style.background = "rgba(34,211,238,0.06)"; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; e.currentTarget.style.background = "rgba(255,255,255,0.03)"; }}
               aria-label="GitHub Profile"
             >
               <GitHubIcon className="h-4 w-4" />
@@ -346,7 +343,8 @@ function App() {
           </nav>
 
           <button
-            className="rounded-lg border border-ink/15 bg-white/70 px-3 py-2 text-sm font-semibold text-ink transition-colors duration-200 hover:border-teal hover:text-teal md:hidden"
+            className="rounded-lg px-3 py-2 text-sm font-semibold text-slate transition-colors duration-200 hover:text-teal md:hidden"
+            style={{ border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.03)" }}
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle navigation"
             aria-expanded={menuOpen}
@@ -357,7 +355,8 @@ function App() {
 
         {menuOpen && (
           <nav
-            className="border-t border-fog/80 bg-cloud px-6 py-4 md:hidden animate-fade-in"
+            className="px-6 py-4 md:hidden animate-fade-in"
+            style={{ borderTop: "1px solid rgba(255,255,255,0.06)", background: "rgba(5,12,24,0.95)" }}
             aria-label="Mobile navigation"
           >
             <div className="flex flex-col gap-1">
@@ -366,7 +365,7 @@ function App() {
                   key={item}
                   onClick={() => setMenuOpen(false)}
                   href={`#${item.toLowerCase()}`}
-                  className="rounded-lg px-3 py-2.5 text-sm font-semibold text-slate hover:bg-teal/10 hover:text-teal"
+                  className="rounded-lg px-3 py-2.5 text-sm font-semibold text-slate hover:text-teal"
                 >
                   {item}
                 </a>
@@ -375,7 +374,7 @@ function App() {
                 href={GITHUB_PROFILE}
                 target="_blank"
                 rel="noreferrer"
-                className="mt-2 inline-flex items-center gap-2 rounded-lg border border-ink/15 px-3 py-2.5 text-sm font-semibold text-ink hover:text-teal"
+                className="mt-2 inline-flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-semibold text-slate hover:text-teal"
                 onClick={() => setMenuOpen(false)}
               >
                 <GitHubIcon className="h-4 w-4" />
@@ -386,32 +385,57 @@ function App() {
         )}
       </header>
 
-      <main className="mx-auto flex max-w-6xl flex-col gap-24 px-6 pb-16 pt-4 md:pb-20 md:pt-8">
+      <main className="mx-auto flex max-w-6xl flex-col gap-24 px-6 pb-20 pt-4 md:pt-8">
 
         {/* ── Hero ── */}
         <section className="space-y-10">
-          <div className="overflow-hidden">
+          {/* Cover image */}
+          <div className="overflow-hidden rounded-2xl" style={{ border: "1px solid rgba(255,255,255,0.06)" }}>
             <img
               src={heroPhoto}
               alt="Cover"
-              className="h-40 w-full object-cover opacity-95 sm:h-56 md:h-72 [mask-image:linear-gradient(to_right,transparent,black_3%,black_97%,transparent),linear-gradient(to_bottom,transparent,black_6%,black_94%,transparent)] [mask-composite:intersect]"
+              className="h-40 w-full object-cover sm:h-56 md:h-72"
+              style={{
+                opacity: 0.55,
+                maskImage: "linear-gradient(to right,transparent,black 4%,black 96%,transparent), linear-gradient(to bottom,transparent,black 8%,black 92%,transparent)",
+                WebkitMaskImage: "linear-gradient(to right,transparent,black 4%,black 96%,transparent), linear-gradient(to bottom,transparent,black 8%,black 92%,transparent)",
+                maskComposite: "intersect",
+                WebkitMaskComposite: "source-in",
+              }}
             />
           </div>
 
-          <div className="hero-grid grid items-center gap-8 sm:gap-10 lg:gap-6 lg:grid-cols-[1.05fr_0.95fr]">
-            <div className="order-2 space-y-5 reveal md:order-1 lg:pr-0">
-              <div className="inline-flex flex-wrap items-center gap-2 rounded-full border border-fog/80 bg-white/80 px-3 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-ink shadow-soft sm:px-4 sm:text-sm sm:tracking-[0.15em]">
-                <span className="rounded-full bg-fog px-2.5 py-1 text-ink sm:px-3 sm:py-1.5">M.S. Computer Science</span>
-                <span className="rounded-full bg-white px-2.5 py-1 text-ink sm:px-3 sm:py-1.5">Texas Tech University</span>
+          {/* Hero content */}
+          <div className="hero-grid grid items-center gap-8 lg:gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+            <div className="order-2 space-y-6 reveal md:order-1">
+
+              {/* Badge */}
+              <div
+                className="inline-flex flex-wrap items-center gap-2 rounded-full px-3 py-2 text-[11px] font-bold uppercase tracking-[0.12em] sm:px-4 sm:text-xs sm:tracking-[0.15em]"
+                style={{ border: "1px solid rgba(34,211,238,0.18)", background: "rgba(34,211,238,0.05)", backdropFilter: "blur(8px)" }}
+              >
+                <span className="rounded-full px-2.5 py-1 text-slate sm:px-3" style={{ background: "rgba(255,255,255,0.05)" }}>
+                  M.S. Computer Science
+                </span>
+                <span className="rounded-full px-2.5 py-1 sm:px-3" style={{ background: "rgba(34,211,238,0.12)", color: "#22d3ee" }}>
+                  Texas Tech University
+                </span>
               </div>
-              <h1 className="font-display text-2xl font-semibold text-ink sm:text-4xl md:text-5xl lg:text-6xl">
-                <span className="typing">Software engineer</span>
-                <span className="block">blending engineering, analytics, and product thinking.</span>
+
+              {/* Headline */}
+              <h1 className="font-display text-2xl font-bold text-ink sm:text-4xl md:text-5xl lg:text-[3.5rem] lg:leading-[1.1]">
+                <span className="typing gradient-text">Software engineer</span>
+                <span className="block mt-1 text-ink/80">blending engineering, analytics,</span>
+                <span className="block text-ink/80">and product thinking.</span>
               </h1>
-              <p className="max-w-xl text-sm leading-relaxed text-slate sm:text-lg">
-                M.S. Computer Science student at Texas Tech University with 2+ years of professional experience in Software Engineering at Japanese semiconductor component manufacturer. I build scalable data and
-                software systems across ERP, analytics, and backend integration, with foundations in AI/ML and a focus on modern software engineering.
+
+              <p className="max-w-xl text-sm leading-relaxed text-slate sm:text-base">
+                M.S. Computer Science student at Texas Tech University with 2 years of professional experience in Japan.
+                I build scalable data and software systems across ERP, analytics, and backend integration —
+                with foundations in AI/ML and a focus on modern AI powered software engineering.
               </p>
+
+              {/* CTAs */}
               <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-4">
                 <a href="#projects" className="btn-primary w-full text-center sm:w-auto">
                   View Projects
@@ -426,46 +450,77 @@ function App() {
                   GitHub Profile
                 </a>
               </div>
-              <div className="flex flex-col gap-3 text-sm text-slate sm:flex-row sm:flex-wrap sm:gap-4">
-                <div className="glass rounded-2xl px-4 py-3">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate/70">Interest</p>
-                  <p className="mt-1 font-semibold text-ink">Data Eng · Data Science · Software</p>
+
+              {/* Stat chips */}
+              <div className="flex flex-wrap gap-3 text-sm">
+                <div
+                  className="rounded-2xl px-4 py-3"
+                  style={{ border: "1px solid rgba(255,255,255,0.07)", background: "rgba(11,21,36,0.6)", backdropFilter: "blur(8px)" }}
+                >
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate/60">Interest</p>
+                  <p className="mt-1 text-sm font-semibold text-ink">Data Eng · Data Science · Software</p>
                 </div>
-                <div className="glass rounded-2xl px-4 py-3">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate/70">Based In</p>
-                  <p className="mt-1 font-semibold text-ink">Lubbock, TX & Rancho Cordova, CA</p>
+                <div
+                  className="rounded-2xl px-4 py-3"
+                  style={{ border: "1px solid rgba(255,255,255,0.07)", background: "rgba(11,21,36,0.6)", backdropFilter: "blur(8px)" }}
+                >
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate/60">Based In</p>
+                  <p className="mt-1 text-sm font-semibold text-ink">Lubbock, TX & Sacramento, CA</p>
                 </div>
               </div>
-              <div className="flex flex-wrap gap-2 text-[9px] font-semibold uppercase tracking-[0.08em] text-slate/60 sm:text-xs sm:tracking-[0.2em]">
+
+              {/* Role tags */}
+              <div className="flex flex-wrap gap-2">
                 {["Data Engineering", "Data Science", "Software Engineer", "Data/Business Analysis", "Product Management"].map((tag) => (
-                  <span key={tag} className="rounded-full border border-fog/80 bg-white/80 px-3 py-1">
+                  <span
+                    key={tag}
+                    className="rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate/60"
+                    style={{ border: "1px solid rgba(255,255,255,0.08)", background: "rgba(11,21,36,0.5)" }}
+                  >
                     {tag}
                   </span>
                 ))}
               </div>
             </div>
 
-            <div className="hero-profile order-1 relative mx-auto reveal reveal-delay-2 h-[360px] w-[260px] overflow-hidden rounded-[32px] border border-fog/80 bg-white/80 sm:h-[400px] sm:w-[300px] md:order-2 md:h-[440px] md:w-[320px] md:mx-auto lg:ml-0 lg:mr-0">
+            {/* Profile photo */}
+            <div
+              className="hero-profile hero-profile-wrap order-1 relative mx-auto h-[340px] w-[250px] overflow-hidden rounded-[28px] reveal reveal-delay-2 sm:h-[390px] sm:w-[290px] md:order-2 md:h-[430px] md:w-[310px]"
+              style={{ border: "1px solid rgba(34,211,238,0.15)" }}
+            >
+              {/* Subtle gradient overlay at top */}
+              <div
+                className="absolute inset-x-0 top-0 z-10 h-16 pointer-events-none"
+                style={{ background: "linear-gradient(to bottom, rgba(5,12,24,0.3), transparent)" }}
+              />
               <img
                 src={profilePhoto}
                 alt="Ganesh Adhikari"
-                className="relative h-full w-full rounded-[32px] object-cover object-[50%_10%] shadow-glow transition duration-500 hover:-translate-y-2 hover:shadow-lift"
+                className="h-full w-full object-cover object-[50%_10%] transition duration-500 hover:-translate-y-2"
+              />
+              {/* Bottom glow */}
+              <div
+                className="absolute inset-x-0 bottom-0 z-10 h-24 pointer-events-none"
+                style={{ background: "linear-gradient(to top, rgba(5,12,24,0.5), transparent)" }}
               />
             </div>
           </div>
         </section>
 
         {/* ── Highlights ── */}
-        <section className="grid gap-6 md:grid-cols-3" aria-label="Expertise highlights">
+        <section className="grid gap-5 md:grid-cols-3" aria-label="Expertise highlights">
           {highlights.map((item) => (
-            <div key={item.title} className="card glass highlight-card">
+            <div key={item.title} className="card highlight-card">
               <div className="flex items-center justify-between">
                 <div className="text-teal">{icons[item.icon]}</div>
-                <span className="rounded-full bg-fog px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate">
+                <span
+                  className="rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em]"
+                  style={{ background: "rgba(34,211,238,0.07)", color: "#7d8fa8", border: "1px solid rgba(34,211,238,0.12)" }}
+                >
                   Highlight
                 </span>
               </div>
-              <h3 className="mt-6 font-display text-xl text-ink">{item.title}</h3>
+              <h3 className="mt-6 font-display text-xl font-semibold text-ink">{item.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-slate">{item.detail}</p>
               {item.title === "Data Engineering" && (
                 <div className="mt-6 flex justify-center">
@@ -473,22 +528,21 @@ function App() {
                     href="https://www.credly.com/badges/955e4e2a-da64-49f3-be7a-aac4d5568d9b/public_url"
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex"
+                    className="inline-flex flex-col items-center gap-2"
                     aria-label="View IBM Data Engineering Essentials badge on Credly"
                   >
-                    <div className="flex flex-col items-center gap-2">
-                      <img
-                        src="/credly-badge.png"
-                        alt="IBM Data Engineering Essentials badge"
-                        width="150"
-                        height="150"
-                        loading="lazy"
-                        className="rounded-md shadow-soft"
-                      />
-                      <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate/70">
-                        IBM Data Engineering Essentials
-                      </span>
-                    </div>
+                    <img
+                      src="/credly-badge.png"
+                      alt="IBM Data Engineering Essentials badge"
+                      width="130"
+                      height="130"
+                      loading="lazy"
+                      className="rounded-xl opacity-90 transition hover:opacity-100"
+                      style={{ filter: "drop-shadow(0 0 12px rgba(34,211,238,0.15))" }}
+                    />
+                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate/60">
+                      IBM Data Engineering Essentials
+                    </span>
                   </a>
                 </div>
               )}
@@ -499,25 +553,27 @@ function App() {
         {/* ── About ── */}
         <section
           id="about"
-          className="grid gap-12 rounded-[40px] border border-fog/80 bg-white/80 p-8 shadow-soft md:p-10 md:grid-cols-[1fr_1.1fr]"
+          className="grid gap-12 rounded-[36px] p-8 md:p-12 md:grid-cols-[1fr_1.1fr]"
+          style={{ border: "1px solid rgba(255,255,255,0.07)", background: "rgba(11,21,36,0.6)", backdropFilter: "blur(12px)" }}
           aria-label="About me"
         >
           <div className="space-y-6">
             <div>
               <p className="section-label">Background</p>
-              <h2 className="section-title mt-3">About Me</h2>
-              <p className="mt-4 text-base leading-relaxed text-slate">
-                I'm a software engineer with hands-on experience building data and ERP systems in the semiconductor manufacturing industry at TECDIA
-                Co. Ltd. I've automated ETL workflows, optimized MS SQL Server performance, integrated REST APIs, and designed analytics-ready
-                reporting layers that deliver actionable KPI insights.
+              <h2 className="section-title mt-4">About Me</h2>
+              <p className="mt-4 text-sm leading-relaxed text-slate sm:text-base">
+                I am a software engineer with hands-on experience developing data and ERP systems for semiconductor component manufacturing at TECDIA Co., Ltd. in Japan.
+                I've automated ETL workflows, optimized MS SQL Server performance, integrated REST APIs, and designed analytics-ready reporting layers
+                delivering actionable KPI insights.
               </p>
             </div>
-            <p className="text-base leading-relaxed text-slate">
-              I'm pursuing my M.S. in Computer Science at Texas Tech University (expected Dec 2026). I am interested in data/software engineering and analytics while collaborating across software, data science, and product teams.
+            <p className="text-sm leading-relaxed text-slate sm:text-base">
+              Pursuing M.S. in Computer Science at Texas Tech University (expected Dec 2026). Seeking a full time role to contribute
+              to data/software engineering and analytics while collaborating across software, data science, and product teams.
             </p>
             <div>
-              <h3 className="font-display text-xl font-semibold text-ink">Core Skills</h3>
-              <div className="mt-4 flex flex-wrap gap-3">
+              <h3 className="font-display text-lg font-semibold text-ink">Core Skills</h3>
+              <div className="mt-4 flex flex-wrap gap-2">
                 {skills.map((skill) => (
                   <span key={skill} className="pill">
                     {skill}
@@ -528,33 +584,38 @@ function App() {
           </div>
 
           <div className="relative grid gap-6">
-            <div className="rounded-[32px]">
+            <div className="overflow-hidden rounded-[28px]" style={{ border: "1px solid rgba(255,255,255,0.06)" }}>
               <img
                 src={journalPhoto}
                 alt="TECDIA journal feature"
-                className="h-96 w-full rounded-[32px] object-contain md:h-[28rem]"
+                className="h-96 w-full object-contain md:h-[28rem]"
+                style={{ background: "rgba(11,21,36,0.4)" }}
               />
             </div>
-            <div className="rounded-[32px]">
+            <div className="overflow-hidden rounded-[28px]" style={{ border: "1px solid rgba(255,255,255,0.06)" }}>
               <img
                 src={slides[slideIndex]}
                 alt={`About slideshow ${slideIndex + 1}`}
-                className="h-72 w-full rounded-[32px] object-contain md:h-80"
+                className="h-64 w-full object-contain md:h-72"
+                style={{ background: "rgba(11,21,36,0.4)" }}
               />
-              <div className="mt-4 flex justify-end">
+              <div className="flex justify-end px-4 py-3">
                 <div className="flex gap-2">
                   {slides.map((_, idx) => (
                     <button
                       key={idx}
                       onClick={() => setSlideIndex(idx)}
-                      className={`h-2.5 w-2.5 rounded-full transition ${slideIndex === idx ? "bg-teal" : "bg-slate/30"}`}
+                      className={`h-2 w-2 rounded-full transition-all duration-300 ${slideIndex === idx ? "w-5 bg-teal" : "bg-slate/30"}`}
                       aria-label={`Slide ${idx + 1}`}
                     />
                   ))}
                 </div>
               </div>
             </div>
-            <div className="absolute -bottom-6 -right-6 hidden rounded-3xl border border-ink/10 bg-cloud/90 px-6 py-4 text-xs font-semibold uppercase tracking-[0.2em] text-slate md:block">
+            <div
+              className="absolute -bottom-5 -right-5 hidden rounded-2xl px-5 py-3 text-xs font-bold uppercase tracking-[0.2em] text-slate md:block"
+              style={{ border: "1px solid rgba(34,211,238,0.15)", background: "rgba(5,12,24,0.9)", backdropFilter: "blur(8px)" }}
+            >
               4 Languages · Global Experience
             </div>
           </div>
@@ -565,25 +626,28 @@ function App() {
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
               <p className="section-label">Selected Work</p>
-              <h2 className="section-title mt-3">Projects & Products</h2>
-              <p className="mt-3 max-w-2xl text-base text-slate">
-                A curated selection of projects across software engineering, data analysis, machine learning, and web products. All projects are
-                open source and available on GitHub.
+              <h2 className="section-title mt-4">Projects & Products</h2>
+              <p className="mt-3 max-w-2xl text-sm text-slate sm:text-base">
+                A curated selection of projects across software engineering, data analysis, machine learning, and web products.
+                All open source — available on GitHub.
               </p>
             </div>
             <a
               href={GITHUB_PROFILE}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex shrink-0 items-center gap-2 rounded-full border border-ink/15 bg-white/70 px-5 py-2.5 text-sm font-semibold text-slate transition-colors duration-200 hover:border-teal/60 hover:text-teal"
+              className="inline-flex shrink-0 items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-slate transition-all duration-200 hover:text-teal"
+              style={{ border: "1px solid rgba(255,255,255,0.09)", background: "rgba(11,21,36,0.6)" }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(34,211,238,0.3)"; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.09)"; }}
             >
               <GitHubIcon className="h-4 w-4" />
               View GitHub Profile
             </a>
           </div>
 
-          {/* Featured (always visible) */}
-          <div className="grid gap-6 md:grid-cols-3">
+          {/* Featured — always visible */}
+          <div className="grid gap-5 md:grid-cols-3">
             {featuredProjects.map((project) => (
               <ProjectCard key={project.title} project={project} featured />
             ))}
@@ -592,19 +656,16 @@ function App() {
           {/* Expand / Collapse */}
           <div className="space-y-8">
             <div className="flex items-center gap-4">
-              <div className="h-px flex-1 bg-fog/80" />
+              <div className="h-px flex-1" style={{ background: "rgba(255,255,255,0.06)" }} />
               <button
-                onClick={() => {
-                  setShowAllProjects((prev) => !prev);
-                  setCategoryFilter("All");
-                }}
-                className="expand-btn inline-flex items-center gap-2.5"
+                onClick={() => { setShowAllProjects((p) => !p); setCategoryFilter("All"); }}
+                className="expand-btn"
                 aria-expanded={showAllProjects}
               >
                 <span>{showAllProjects ? "Hide Additional Projects" : `Show All Projects (${additionalProjects.length} more)`}</span>
                 <ChevronDownIcon open={showAllProjects} />
               </button>
-              <div className="h-px flex-1 bg-fog/80" />
+              <div className="h-px flex-1" style={{ background: "rgba(255,255,255,0.06)" }} />
             </div>
 
             {showAllProjects && (
@@ -615,11 +676,14 @@ function App() {
                     <button
                       key={cat}
                       onClick={() => setCategoryFilter(cat)}
-                      className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors duration-200 ${
+                      className="rounded-full px-4 py-2 text-sm font-semibold transition-all duration-200"
+                      style={
                         categoryFilter === cat
-                          ? "bg-teal text-white shadow-soft"
-                          : "border border-ink/15 bg-white/70 text-slate hover:border-teal/60 hover:text-teal"
-                      }`}
+                          ? { background: "linear-gradient(125deg,#22d3ee,#818cf8)", color: "#050c18", fontWeight: 700 }
+                          : { border: "1px solid rgba(255,255,255,0.09)", background: "rgba(11,21,36,0.6)", color: "#7d8fa8" }
+                      }
+                      onMouseEnter={e => { if (categoryFilter !== cat) { e.currentTarget.style.borderColor = "rgba(34,211,238,0.3)"; e.currentTarget.style.color = "#22d3ee"; } }}
+                      onMouseLeave={e => { if (categoryFilter !== cat) { e.currentTarget.style.borderColor = "rgba(255,255,255,0.09)"; e.currentTarget.style.color = "#7d8fa8"; } }}
                     >
                       {cat}
                     </button>
@@ -627,14 +691,14 @@ function App() {
                 </div>
 
                 {/* Additional project grid */}
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
                   {filteredAdditional.map((project) => (
                     <ProjectCard key={project.title} project={project} />
                   ))}
                 </div>
 
                 {filteredAdditional.length === 0 && (
-                  <p className="text-center text-sm text-slate/60">No projects in this category.</p>
+                  <p className="text-center text-sm text-slate/50">No projects in this category.</p>
                 )}
               </div>
             )}
@@ -644,15 +708,17 @@ function App() {
         {/* ── Research ── */}
         <section
           id="research"
-          className="grid gap-10 rounded-[36px] border border-fog/80 bg-cloud/90 p-8 md:p-10 md:grid-cols-[1.1fr_0.9fr]"
+          className="grid gap-10 rounded-[36px] p-8 md:p-12 md:grid-cols-[1.1fr_0.9fr]"
+          style={{ border: "1px solid rgba(255,255,255,0.07)", background: "rgba(11,21,36,0.5)", backdropFilter: "blur(12px)" }}
           aria-label="Research"
         >
-          <div className="space-y-4">
+          <div className="space-y-5">
             <p className="section-label">Research</p>
             <h2 className="section-title mt-3">Digital Marketing & Consumer Psychology</h2>
-            <p className="text-base text-slate">
-              This research examines the effects of digital marketing on consumer psychological buying behavior, focusing on learning, motivational,
-              and perceptual aspects. It highlights how firms can better understand customer behavior and apply these insights to grow their business.
+            <p className="text-sm leading-relaxed text-slate sm:text-base">
+              This research examines the effects of digital marketing on consumer psychological buying behavior, focusing on learning,
+              motivational, and perceptual aspects. It highlights how firms can better understand customer behavior and apply these insights
+              to grow their business.
             </p>
             <a
               href="https://github.com/adhikariganesh9813/Research-Paper-Digital-Marketing-and-Psychological-Aspects-of-Consumer-Buying-Behavior"
@@ -664,13 +730,23 @@ function App() {
               <ExternalLinkIcon />
             </a>
           </div>
-          <div className="glass rounded-[28px] p-8">
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate">Key Takeaways</p>
-            <ul className="mt-6 space-y-4 text-base text-slate">
-              <li>Digital marketing reshapes consumer learning patterns.</li>
-              <li>Motivational and perceptual shifts impact buying intent.</li>
-              <li>Actionable insights for firms embracing digitalization.</li>
-              <li>Psychology-first perspective for marketing strategy.</li>
+          <div
+            className="rounded-[24px] p-7"
+            style={{ border: "1px solid rgba(255,255,255,0.07)", background: "rgba(11,21,36,0.5)" }}
+          >
+            <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-teal/70">Key Takeaways</p>
+            <ul className="mt-5 space-y-4 text-sm text-slate">
+              {[
+                "Digital marketing reshapes consumer learning patterns.",
+                "Motivational and perceptual shifts impact buying intent.",
+                "Actionable insights for firms embracing digitalization.",
+                "Psychology-first perspective for marketing strategy.",
+              ].map((point) => (
+                <li key={point} className="flex items-start gap-2.5">
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-teal/50" />
+                  {point}
+                </li>
+              ))}
             </ul>
           </div>
         </section>
@@ -678,19 +754,21 @@ function App() {
         {/* ── Contact ── */}
         <section
           id="contact"
-          className="rounded-[32px] border border-fog/80 bg-white/80 p-8 shadow-soft md:p-10"
+          className="rounded-[36px] p-8 md:p-12"
+          style={{ border: "1px solid rgba(255,255,255,0.07)", background: "rgba(11,21,36,0.6)", backdropFilter: "blur(12px)" }}
           aria-label="Contact"
         >
           <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
-            <div>
+            <div className="max-w-lg">
               <p className="section-label">Contact</p>
-              <h2 className="section-title mt-3">Let&apos;s Connect</h2>
-              <p className="mt-3 text-base text-slate">
-                Open to roles across data engineering, data science, software engineering, and analytics.
+              <h2 className="section-title mt-4">Let&apos;s Connect</h2>
+              <p className="mt-3 text-sm leading-relaxed text-slate sm:text-base">
+                Open to Summer 2026 internships across data engineering, data science, software engineering, analytics, and product roles.
+                Flexible on location.
               </p>
             </div>
-            <div className="flex flex-col gap-3 md:min-w-[250px]">
-              <a href="mailto:adhikariganesh9813@gmail.com" className="btn-primary text-center">
+            <div className="flex flex-col gap-3 md:min-w-[240px]">
+              <a href="mailto:adhikariganesh9813@gmail.com" className="btn-primary text-center text-sm">
                 adhikariganesh9813@gmail.com
               </a>
               <a
@@ -717,7 +795,7 @@ function App() {
       </main>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-fog/80 bg-cloud/80">
+      <footer style={{ borderTop: "1px solid rgba(255,255,255,0.06)", background: "rgba(5,12,24,0.8)" }}>
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-8 text-sm text-slate md:flex-row">
           <p>© 2026 Ganesh Adhikari. All rights reserved.</p>
           <div className="flex items-center gap-6">

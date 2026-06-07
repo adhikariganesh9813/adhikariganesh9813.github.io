@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -11,16 +13,16 @@
     @apply bg-cloud text-ink font-body antialiased;
     overflow-x: hidden;
     background-image:
-      linear-gradient(120deg, rgba(15, 23, 42, 0.03) 0%, rgba(15, 23, 42, 0.01) 40%, rgba(255, 255, 255, 0.02) 100%),
-      radial-gradient(circle at 15% 20%, rgba(224, 107, 79, 0.08), transparent 45%),
-      radial-gradient(circle at 85% 15%, rgba(30, 93, 108, 0.09), transparent 40%),
-      radial-gradient(circle at 80% 80%, rgba(214, 161, 70, 0.08), transparent 45%);
-    background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
-    background-position: center, center, center, center;
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.025) 1px, transparent 0),
+      radial-gradient(ellipse 80% 50% at 15% 0%, rgba(34,211,238,0.07), transparent),
+      radial-gradient(ellipse 60% 40% at 85% 0%, rgba(167,139,250,0.07), transparent),
+      radial-gradient(ellipse 60% 50% at 50% 100%, rgba(34,211,238,0.04), transparent);
+    background-size: 32px 32px, 100% 100%, 100% 100%, 100% 100%;
   }
 
   ::selection {
-    background: #cfdcd7;
+    background: rgba(34,211,238,0.25);
+    color: #e2e8f4;
   }
 
   section {
@@ -29,31 +31,94 @@
 }
 
 @layer components {
+
+  /* ── Section labels ── */
   .section-label {
-    @apply inline-flex items-center gap-2 rounded-full border border-ink/10 bg-white/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 9999px;
+    border: 1px solid rgba(34,211,238,0.22);
+    background: rgba(34,211,238,0.07);
+    padding: 4px 14px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: #22d3ee;
   }
 
   .section-title {
-    @apply font-display text-3xl text-ink md:text-4xl;
+    @apply font-display text-3xl font-bold text-ink md:text-4xl;
   }
 
+  /* ── Skill pills ── */
   .pill {
-    @apply rounded-full border border-ink/15 bg-cloud px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-slate transition duration-300 hover:-translate-y-0.5 hover:border-teal hover:text-teal;
+    display: inline-block;
+    border-radius: 9999px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(11,21,36,0.8);
+    padding: 8px 16px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #7d8fa8;
+    transition: all 0.25s;
   }
 
+  .pill:hover {
+    border-color: rgba(34,211,238,0.35);
+    color: #22d3ee;
+    background: rgba(34,211,238,0.06);
+    transform: translateY(-2px);
+  }
+
+  /* ── Highlight / about cards ── */
   .card {
-    @apply rounded-[28px] border border-fog/90 bg-white/85 p-6 shadow-soft transition duration-300 hover:-translate-y-1 hover:shadow-lift;
+    border-radius: 28px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(11,21,36,0.75);
+    padding: 24px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.35);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(8px);
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(34,211,238,0.15);
+    box-shadow: 0 0 0 1px rgba(34,211,238,0.08), 0 12px 40px rgba(0,0,0,0.5);
   }
 
   .highlight-card {
-    @apply min-h-[360px] p-7;
+    min-height: 360px;
+    padding: 28px;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
   }
 
+  /* ── Glass panels ── */
+  .glass {
+    border: 1px solid rgba(255,255,255,0.07);
+    background: rgba(11,21,36,0.55);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.25), inset 0 0 0 1px rgba(255,255,255,0.04);
+  }
+
+  /* ── Gradient text ── */
+  .gradient-text {
+    background: linear-gradient(125deg, #22d3ee 0%, #818cf8 55%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* ── Typing animation ── */
   .typing {
-    @apply font-display font-semibold text-ink;
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 700;
     position: relative;
     display: inline-block;
     overflow: hidden;
@@ -61,6 +126,7 @@
     animation: typing 3.2s steps(28, end);
   }
 
+  /* ── Reveal animations ── */
   .reveal {
     opacity: 0;
     transform: translateY(16px) scale(0.98);
@@ -71,102 +137,160 @@
   .reveal-delay-2 { animation-delay: 0.3s; }
   .reveal-delay-3 { animation-delay: 0.45s; }
 
-  .glass {
-    @apply border border-white/60 bg-white/75;
-    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.1);
-  }
-
-  .gradient-text {
-    background: linear-gradient(120deg, #c5543c, #d0912e, #175260);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-
+  /* ── Primary button — cyan-violet gradient ── */
   .btn-primary {
-    @apply rounded-full px-6 py-3 text-sm font-semibold text-white shadow-soft transition duration-300;
-    background: linear-gradient(120deg, #c5543c, #d0912e);
+    display: inline-block;
+    border-radius: 9999px;
+    padding: 12px 24px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #050c18;
+    transition: all 0.25s;
+    background: linear-gradient(125deg, #22d3ee 0%, #818cf8 100%);
+    box-shadow: 0 0 0 1px rgba(34,211,238,0.3);
   }
 
   .btn-primary:hover {
-    box-shadow: 0 18px 40px rgba(197, 84, 60, 0.4);
+    box-shadow: 0 0 28px rgba(34,211,238,0.4), 0 0 0 1px rgba(34,211,238,0.5);
     transform: translateY(-2px);
+    filter: brightness(1.05);
   }
 
+  /* ── Secondary button — cyan outline ── */
   .btn-secondary {
-    @apply rounded-full border-2 px-6 py-3 text-sm font-semibold transition duration-300;
-    border-color: rgba(23, 82, 96, 0.6);
-    color: #175260;
-    background: rgba(23, 82, 96, 0.12);
+    display: inline-block;
+    border-radius: 9999px;
+    border: 1.5px solid rgba(34,211,238,0.3);
+    padding: 12px 24px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #22d3ee;
+    background: rgba(34,211,238,0.06);
+    transition: all 0.25s;
   }
 
   .btn-secondary:hover {
-    border-color: rgba(23, 82, 96, 0.95);
-    background: rgba(23, 82, 96, 0.2);
+    border-color: rgba(34,211,238,0.6);
+    background: rgba(34,211,238,0.12);
+    box-shadow: 0 0 16px rgba(34,211,238,0.15);
+    transform: translateY(-2px);
   }
 
+  /* ── Back to top ── */
   .back-to-top {
-    @apply fixed bottom-6 right-6 z-40 hidden h-12 w-12 items-center justify-center rounded-full text-white shadow-soft transition duration-300;
-    background: linear-gradient(120deg, #c5543c, #d0912e);
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 40;
+    display: none;
+    height: 48px;
+    width: 48px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    font-size: 1.125rem;
+    color: #050c18;
+    font-weight: 700;
+    transition: all 0.25s;
+    background: linear-gradient(135deg, #22d3ee, #818cf8);
+    box-shadow: 0 0 20px rgba(34,211,238,0.3);
   }
 
   .back-to-top:hover {
     transform: translateY(-3px);
-    box-shadow: 0 18px 40px rgba(197, 84, 60, 0.4);
+    box-shadow: 0 0 32px rgba(34,211,238,0.5);
   }
 
+  /* ── Project cards ── */
   .project-card {
-    @apply rounded-[24px] border border-fog/90 bg-white/85 p-6 shadow-soft transition-all duration-300;
+    border-radius: 22px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(11,21,36,0.75);
+    padding: 24px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.35);
+    backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
   }
 
   .project-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.14);
-    border-color: rgba(30, 93, 108, 0.25);
+    border-color: rgba(34,211,238,0.2);
+    box-shadow: 0 0 0 1px rgba(34,211,238,0.08), 0 16px 48px rgba(0,0,0,0.5);
   }
 
+  /* ── GitHub button on cards ── */
   .github-btn {
-    @apply rounded-full px-4 py-2 text-sm font-semibold text-white transition-all duration-200;
-    background: #1a1f2e;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 9999px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    padding: 8px 16px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #e2e8f4;
+    transition: all 0.2s;
   }
 
   .github-btn:hover {
-    background: #1E5D6C;
+    border-color: rgba(34,211,238,0.4);
+    background: rgba(34,211,238,0.08);
+    color: #22d3ee;
     transform: translateY(-1px);
-    box-shadow: 0 8px 20px rgba(26, 31, 46, 0.3);
+    box-shadow: 0 0 12px rgba(34,211,238,0.12);
   }
 
+  /* ── Expand / collapse button ── */
   .expand-btn {
-    @apply inline-flex items-center gap-2 rounded-full border border-teal/30 bg-white/80 px-5 py-2.5 text-sm font-semibold text-teal shadow-soft transition-all duration-200;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 9999px;
+    border: 1px solid rgba(34,211,238,0.25);
+    background: rgba(34,211,238,0.05);
+    padding: 10px 22px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #22d3ee;
+    transition: all 0.25s;
+    white-space: nowrap;
   }
 
   .expand-btn:hover {
-    @apply border-teal/60;
-    background: rgba(30, 93, 108, 0.08);
-    box-shadow: 0 8px 24px rgba(30, 93, 108, 0.15);
+    border-color: rgba(34,211,238,0.5);
+    background: rgba(34,211,238,0.1);
+    box-shadow: 0 0 20px rgba(34,211,238,0.12);
+  }
+
+  /* ── Profile photo breathing glow ── */
+  .hero-profile {
+    animation: profile-breathe 4s ease-in-out infinite;
   }
 }
 
-/* iPad Pro widths: stack hero to prevent overflow */
+/* ── Responsive hero stacking ── */
 @media (min-width: 1024px) and (max-width: 1366px) {
   .hero-grid {
     grid-template-columns: 1fr !important;
   }
-  .hero-profile {
+  .hero-profile-wrap {
     margin-left: auto !important;
     margin-right: auto !important;
   }
 }
 
-/* Surface Pro 7 (approx 912x1368) - center profile image */
 @media (min-width: 900px) and (max-width: 980px) {
-  .hero-profile {
+  .hero-profile-wrap {
     margin-left: auto !important;
     margin-right: auto !important;
   }
 }
 
-
+/* ── Keyframes ── */
 @keyframes typing {
   from { width: 0; }
   to { width: 100%; }
@@ -176,5 +300,18 @@
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes profile-breathe {
+  0%, 100% {
+    box-shadow: 0 0 0 1px rgba(34,211,238,0.12),
+                0 0 24px rgba(34,211,238,0.08),
+                0 20px 60px rgba(0,0,0,0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 1px rgba(34,211,238,0.28),
+                0 0 52px rgba(34,211,238,0.16),
+                0 20px 60px rgba(0,0,0,0.7);
   }
 }
