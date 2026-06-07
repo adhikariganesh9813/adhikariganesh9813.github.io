@@ -195,4 +195,27 @@ A running log of all significant changes made to this portfolio site. Append new
 
 ---
 
+## [2026-06-07] Visual Polish — Photo Brightness, Pill Colors, Nav & Headline Text
+
+**Author:** Claude (AI assistant via Claude Code)
+
+**Changes:**
+
+- **Profile photo brightness** (`src/App.jsx`): Added `filter: brightness(0.62)` to the profile `<img>` tag. Cover photo is rendered at `opacity: 0.55`; brightness 0.62 gives a comparable dimness so both images feel consistent.
+
+- **Skills pills** (`src/index.css` + `src/App.jsx`): Replaced the single flat `.pill` style with three color variants cycling teal → violet → neutral:
+  - `.pill-teal`: `rgba(34,211,238,0.07)` bg, teal border, cyan text `#68cfe0`
+  - `.pill-violet`: `rgba(167,139,250,0.07)` bg, violet border, violet text `#b09ef5`
+  - `.pill-neutral`: `rgba(255,255,255,0.05)` bg, white border, steel text `#9db4c8`
+  - Hover on all three → full teal glow (`.pill:hover` specificity wins over variant classes)
+  - All 15 skills cycle through variants by index `i % 3`
+
+- **Nav link text** (`src/App.jsx`): Changed `text-slate` (#7d8fa8 blue-gray) to `text-ink/80` (rgba(226,232,244,0.80)) on desktop links, GitHub button, and mobile links. Crisper neutral white that reads more clearly against the dark nav.
+
+- **Hero headline** (`src/App.jsx`): Added keyword color accents to secondary h1 lines:
+  - "analytics" → `#22d3ee` (electric cyan)
+  - "product thinking" → `#a78bfa` (soft violet)
+
+---
+
 _Append new entries below this line when making further changes._

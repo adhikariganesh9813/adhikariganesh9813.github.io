@@ -319,7 +319,7 @@ function App() {
               <a
                 key={item}
                 href={`#${item.toLowerCase()}`}
-                className="rounded-lg px-4 py-2 text-sm font-semibold text-slate transition-all duration-200 hover:text-teal"
+                className="rounded-lg px-4 py-2 text-sm font-semibold text-ink/80 transition-all duration-200 hover:text-teal"
                 style={{ "--hover-bg": "rgba(34,211,238,0.07)" }}
                 onMouseEnter={e => e.currentTarget.style.background = "rgba(34,211,238,0.07)"}
                 onMouseLeave={e => e.currentTarget.style.background = "transparent"}
@@ -331,7 +331,7 @@ function App() {
               href={GITHUB_PROFILE}
               target="_blank"
               rel="noreferrer"
-              className="ml-3 inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-slate transition-all duration-200 hover:text-teal"
+              className="ml-3 inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-ink/80 transition-all duration-200 hover:text-teal"
               style={{ border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.03)" }}
               onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(34,211,238,0.35)"; e.currentTarget.style.background = "rgba(34,211,238,0.06)"; }}
               onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; e.currentTarget.style.background = "rgba(255,255,255,0.03)"; }}
@@ -365,7 +365,7 @@ function App() {
                   key={item}
                   onClick={() => setMenuOpen(false)}
                   href={`#${item.toLowerCase()}`}
-                  className="rounded-lg px-3 py-2.5 text-sm font-semibold text-slate hover:text-teal"
+                  className="rounded-lg px-3 py-2.5 text-sm font-semibold text-ink/80 hover:text-teal"
                 >
                   {item}
                 </a>
@@ -374,7 +374,7 @@ function App() {
                 href={GITHUB_PROFILE}
                 target="_blank"
                 rel="noreferrer"
-                className="mt-2 inline-flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-semibold text-slate hover:text-teal"
+                className="mt-2 inline-flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-semibold text-ink/80 hover:text-teal"
                 onClick={() => setMenuOpen(false)}
               >
                 <GitHubIcon className="h-4 w-4" />
@@ -425,8 +425,8 @@ function App() {
               {/* Headline */}
               <h1 className="font-display text-2xl font-bold text-ink sm:text-4xl md:text-5xl lg:text-[3.5rem] lg:leading-[1.1]">
                 <span className="typing gradient-text">Software engineer</span>
-                <span className="block mt-1 text-ink/80">blending engineering, analytics,</span>
-                <span className="block text-ink/80">and product thinking.</span>
+                <span className="block mt-1 text-ink/70">blending engineering, <span style={{ color: "#22d3ee", opacity: 0.9 }}>analytics</span>,</span>
+                <span className="block text-ink/70">and <span style={{ color: "#a78bfa", opacity: 0.9 }}>product thinking</span>.</span>
               </h1>
 
               <p className="max-w-xl text-sm leading-relaxed text-slate sm:text-base">
@@ -497,6 +497,7 @@ function App() {
                   src={profilePhoto}
                   alt="Ganesh Adhikari"
                   className="h-full w-full object-cover object-[50%_10%] transition duration-500 hover:-translate-y-2"
+                  style={{ filter: "brightness(0.62)" }}
                 />
                 <div
                   className="absolute inset-x-0 bottom-0 z-10 h-24 pointer-events-none"
@@ -574,8 +575,8 @@ function App() {
             <div>
               <h3 className="font-display text-lg font-semibold text-ink">Core Skills</h3>
               <div className="mt-4 flex flex-wrap gap-2">
-                {skills.map((skill) => (
-                  <span key={skill} className="pill">
+                {skills.map((skill, i) => (
+                  <span key={skill} className={`pill ${["pill-teal", "pill-violet", "pill-neutral"][i % 3]}`}>
                     {skill}
                   </span>
                 ))}
