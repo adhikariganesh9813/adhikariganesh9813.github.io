@@ -52,7 +52,7 @@ const skills = [
   "Relational & NoSQL DBs",
   "Data Warehousing",
   "AI / Machine Learning",
-  "Python (Pandas, NumPy, Scikit-Learn)",
+  "Python",
   "SQL & SQL Server",
   "JavaScript",
   "Tableau & BI",
@@ -405,12 +405,12 @@ function App() {
                 <span className="rounded-full bg-white px-2.5 py-1 text-ink sm:px-3 sm:py-1.5">Texas Tech University</span>
               </div>
               <h1 className="font-display text-2xl font-semibold text-ink sm:text-4xl md:text-5xl lg:text-6xl">
-                <span className="typing">Data-first software engineer</span>
+                <span className="typing">Software engineer</span>
                 <span className="block">blending engineering, analytics, and product thinking.</span>
               </h1>
               <p className="max-w-xl text-sm leading-relaxed text-slate sm:text-lg">
-                M.S. Computer Science student at Texas Tech University with 2+ years of professional experience in Japan. I build scalable data and
-                software systems across ERP, analytics, and backend integration, with foundations in AI/ML and a focus on modern data engineering.
+                M.S. Computer Science student at Texas Tech University with 2+ years of professional experience in Software Engineering at Japanese semiconductor component manufacturer. I build scalable data and
+                software systems across ERP, analytics, and backend integration, with foundations in AI/ML and a focus on modern software engineering.
               </p>
               <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-4">
                 <a href="#projects" className="btn-primary w-full text-center sm:w-auto">
@@ -513,8 +513,7 @@ function App() {
               </p>
             </div>
             <p className="text-base leading-relaxed text-slate">
-              I'm pursuing my M.S. in Computer Science at Texas Tech University (expected Dec 2026). Seeking a Summer 2026 internship where I can
-              contribute to data/software engineering and analytics while collaborating across software, data science, and product teams.
+              I'm pursuing my M.S. in Computer Science at Texas Tech University (expected Dec 2026). I am interested in data/software engineering and analytics while collaborating across software, data science, and product teams.
             </p>
             <div>
               <h3 className="font-display text-xl font-semibold text-ink">Core Skills</h3>
@@ -687,10 +686,10 @@ function App() {
               <p className="section-label">Contact</p>
               <h2 className="section-title mt-3">Let&apos;s Connect</h2>
               <p className="mt-3 text-base text-slate">
-                Open to Summer 2026 internships across data engineering, data science, software engineering, analytics, and product roles.
+                Open to roles across data engineering, data science, software engineering, and analytics.
               </p>
             </div>
-            <div className="flex flex-col gap-3 md:min-w-[240px]">
+            <div className="flex flex-col gap-3 md:min-w-[250px]">
               <a href="mailto:adhikariganesh9813@gmail.com" className="btn-primary text-center">
                 adhikariganesh9813@gmail.com
               </a>
