@@ -43,7 +43,7 @@ const ChevronDownIcon = ({ open }) => (
 
 const highlights = [
   { title: "Data Engineering", detail: "IBM Data Engineering Professional Certification from coursera", icon: "spark" },
-  { title: "Software Engineering", detail: "2 years professional experience in shipping enterprise IT applications for semiconductor component manufacturing sector in Japan", icon: "gear" },
+  { title: "Software Engineering", detail: "2 years of professional experience in shipping enterprise IT applications for semiconductor component manufacturing sector in Japan", icon: "gear" },
   { title: "AI + Analytics", detail: "Courseworks and Projects in Machine Learning, Business Intelligence, and data-driven decision support", icon: "globe" },
 ];
 
@@ -435,7 +435,7 @@ function App() {
               </h1>
 
               <p className="max-w-xl text-sm leading-relaxed text-slate sm:text-base">
-                M.S. Computer Science student at Texas Tech University with 2 years of professional experience in Japan.
+                M.S. Computer Science student at Texas Tech University with 2 years of professional experience in software engineering for a semi-conductor component manufacturer in Japan.
                 I build scalable data and software systems across ERP, analytics, and backend integration —
                 with foundations in AI/ML and a focus on modern AI powered software engineering.
               </p>
