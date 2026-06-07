@@ -114,6 +114,37 @@
     transform: translateY(-3px);
     box-shadow: 0 18px 40px rgba(197, 84, 60, 0.4);
   }
+
+  .project-card {
+    @apply rounded-[24px] border border-fog/90 bg-white/85 p-6 shadow-soft transition-all duration-300;
+  }
+
+  .project-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.14);
+    border-color: rgba(30, 93, 108, 0.25);
+  }
+
+  .github-btn {
+    @apply rounded-full px-4 py-2 text-sm font-semibold text-white transition-all duration-200;
+    background: #1a1f2e;
+  }
+
+  .github-btn:hover {
+    background: #1E5D6C;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(26, 31, 46, 0.3);
+  }
+
+  .expand-btn {
+    @apply inline-flex items-center gap-2 rounded-full border border-teal/30 bg-white/80 px-5 py-2.5 text-sm font-semibold text-teal shadow-soft transition-all duration-200;
+  }
+
+  .expand-btn:hover {
+    @apply border-teal/60;
+    background: rgba(30, 93, 108, 0.08);
+    box-shadow: 0 8px 24px rgba(30, 93, 108, 0.15);
+  }
 }
 
 /* iPad Pro widths: stack hero to prevent overflow */

@@ -44,11 +44,5 @@ npm run dev
 │   ├── index.css
 │   └── assets/
 ├── public/
-└── legacy-static/          # Previous static site archive
+└── DEVELOPMENT_LOG.md      # Change history for developers
 ```
-
-## 📜 Changelog
-
-### January 2026
-- ✅ Migrated to React + Tailwind CSS
-- ✅ New visual direction and layout
