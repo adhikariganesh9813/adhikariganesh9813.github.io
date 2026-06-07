@@ -455,29 +455,35 @@ function App() {
               <div className="flex flex-wrap gap-3 text-sm">
                 <div
                   className="rounded-2xl px-4 py-3"
-                  style={{ border: "1px solid rgba(255,255,255,0.07)", background: "rgba(11,21,36,0.6)", backdropFilter: "blur(8px)" }}
+                  style={{ border: "1px solid rgba(34,211,238,0.22)", borderTop: "2px solid rgba(34,211,238,0.5)", background: "rgba(34,211,238,0.06)", backdropFilter: "blur(8px)" }}
                 >
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate/60">Interest</p>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em]" style={{ color: "#22d3ee" }}>Interest</p>
                   <p className="mt-1 text-sm font-semibold text-ink">Data Eng · Data Science · Software</p>
                 </div>
                 <div
                   className="rounded-2xl px-4 py-3"
-                  style={{ border: "1px solid rgba(255,255,255,0.07)", background: "rgba(11,21,36,0.6)", backdropFilter: "blur(8px)" }}
+                  style={{ border: "1px solid rgba(167,139,250,0.22)", borderTop: "2px solid rgba(167,139,250,0.5)", background: "rgba(167,139,250,0.06)", backdropFilter: "blur(8px)" }}
                 >
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate/60">Based In</p>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em]" style={{ color: "#a78bfa" }}>Based In</p>
                   <p className="mt-1 text-sm font-semibold text-ink">Lubbock, TX & Sacramento, CA</p>
                 </div>
               </div>
 
               {/* Role tags */}
               <div className="flex flex-wrap gap-2">
-                {["Data Engineering", "Data Science", "Software Engineer", "Data/Business Analysis", "Product Management"].map((tag) => (
+                {[
+                  { label: "Data Engineering",       bg: "rgba(34,211,238,0.08)",  border: "rgba(34,211,238,0.28)",  color: "#5ecfdf" },
+                  { label: "Data Science",           bg: "rgba(167,139,250,0.08)", border: "rgba(167,139,250,0.28)", color: "#a690f0" },
+                  { label: "Software Engineer",      bg: "rgba(34,211,238,0.06)",  border: "rgba(34,211,238,0.2)",   color: "#4abfcf" },
+                  { label: "Data/Business Analysis", bg: "rgba(240,185,77,0.08)",  border: "rgba(240,185,77,0.28)",  color: "#c8a040" },
+                  { label: "Product Management",     bg: "rgba(167,139,250,0.06)", border: "rgba(167,139,250,0.2)",  color: "#9880e0" },
+                ].map(({ label, bg, border, color }) => (
                   <span
-                    key={tag}
-                    className="rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate/60"
-                    style={{ border: "1px solid rgba(255,255,255,0.08)", background: "rgba(11,21,36,0.5)" }}
+                    key={label}
+                    className="rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.12em]"
+                    style={{ border: `1px solid ${border}`, background: bg, color }}
                   >
-                    {tag}
+                    {label}
                   </span>
                 ))}
               </div>
@@ -516,7 +522,7 @@ function App() {
                 <div className="text-teal">{icons[item.icon]}</div>
                 <span
                   className="rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em]"
-                  style={{ background: "rgba(34,211,238,0.07)", color: "#7d8fa8", border: "1px solid rgba(34,211,238,0.12)" }}
+                  style={{ background: "rgba(34,211,238,0.08)", color: "#22d3ee", border: "1px solid rgba(34,211,238,0.25)" }}
                 >
                   Highlight
                 </span>
