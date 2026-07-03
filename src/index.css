@@ -246,17 +246,26 @@
   }
 
   .highlight-orbit {
+    --orbit-card-width: clamp(230px, 20vw, 285px);
+    --orbit-x: calc(100vw - 38px - var(--orbit-card-width));
+    --orbit-y: calc(clamp(520px, 62vw, 680px) - 38px - 255px);
     position: absolute;
     inset: 19px;
     pointer-events: none;
+    contain: layout paint;
   }
 
   .highlight-orbit-card {
-    --orbit-card-width: clamp(230px, 20vw, 285px);
     position: absolute;
+    left: 0;
+    top: 0;
     width: var(--orbit-card-width);
     pointer-events: auto;
     animation: highlight-edge-orbit 42s linear infinite;
+    backface-visibility: hidden;
+    transform: translate3d(0, var(--orbit-y), 0);
+    transform-origin: center;
+    will-change: transform;
   }
 
   .highlight-orbit-card:nth-child(2) {
@@ -675,6 +684,9 @@
 
   .highlight-orbit {
     inset: 12px;
+    --orbit-card-width: clamp(170px, 56vw, 220px);
+    --orbit-x: calc(100vw - 48px - var(--orbit-card-width));
+    --orbit-y: calc(clamp(430px, 122vw, 560px) - 24px - 205px);
   }
 
   .certificate-carousel {
@@ -698,10 +710,6 @@
 
   .certificate-marquee {
     --certificate-card-width: clamp(280px, 78vw, 390px);
-  }
-
-  .highlight-orbit-card {
-    --orbit-card-width: clamp(170px, 56vw, 220px);
   }
 
   .highlight-card {
@@ -796,34 +804,22 @@
 
 @keyframes highlight-edge-orbit {
   0% {
-    left: 0;
-    top: 100%;
-    transform: translate(0, -100%);
+    transform: translate3d(0, var(--orbit-y), 0);
   }
   28% {
-    left: calc(100% - var(--orbit-card-width));
-    top: 100%;
-    transform: translate(0, -100%);
+    transform: translate3d(var(--orbit-x), var(--orbit-y), 0);
   }
   42% {
-    left: calc(100% - var(--orbit-card-width));
-    top: 0;
-    transform: translate(0, 0);
+    transform: translate3d(var(--orbit-x), 0, 0);
   }
   72% {
-    left: 0;
-    top: 0;
-    transform: translate(0, 0);
+    transform: translate3d(0, 0, 0);
   }
   86% {
-    left: 0;
-    top: 100%;
-    transform: translate(0, -100%);
+    transform: translate3d(0, var(--orbit-y), 0);
   }
   100% {
-    left: 0;
-    top: 100%;
-    transform: translate(0, -100%);
+    transform: translate3d(0, var(--orbit-y), 0);
   }
 }
 
