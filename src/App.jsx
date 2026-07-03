@@ -202,6 +202,15 @@ const additionalProjects = [
 ];
 
 const ALL_CATEGORIES = ["All", "Data", "App", "Web", "Research", "Utility"];
+const navItems = [
+  { label: "About", href: "#about" },
+  { label: "Projects", href: "#projects" },
+  { label: "MyApps", href: "/myapps.html" },
+  { label: "Blogs", href: "/blogs.html" },
+  { label: "Certifications", href: "/certifications.html" },
+  { label: "Research", href: "#research" },
+  { label: "Contact", href: "#contact" },
+];
 
 const icons = {
   globe: (
@@ -233,8 +242,8 @@ function ProjectCard({ project, featured = false }) {
           {project.tags.slice(0, 3).map((tag) => (
             <span
               key={tag}
-              className="mono rounded-md px-2 py-0.5 text-[10px] font-medium lowercase"
-              style={{ background: "rgba(255,255,255,0.04)", color: "#8c9cb5", border: "1px solid rgba(255,255,255,0.08)" }}
+              className="meta-pill lowercase"
+              style={{ background: "rgba(148,163,184,0.1)", color: "#66758a", border: "1px solid rgba(148,163,184,0.22)" }}
             >
               {tag}
             </span>
@@ -242,8 +251,8 @@ function ProjectCard({ project, featured = false }) {
         </div>
         {featured && (
           <span
-            className="mono shrink-0 rounded-md px-2 py-0.5 text-[10px] font-semibold lowercase tracking-tight"
-            style={{ background: "rgba(34,211,238,0.1)", color: "#22d3ee", border: "1px solid rgba(34,211,238,0.28)" }}
+            className="meta-pill shrink-0 lowercase tracking-tight"
+            style={{ background: "rgba(8,145,178,0.1)", color: "#0e7490", border: "1px solid rgba(8,145,178,0.28)" }}
           >
             ★ featured
           </span>
@@ -293,20 +302,48 @@ function App() {
       ? additionalProjects
       : additionalProjects.filter((p) => p.category === categoryFilter);
 
+  const renderHighlightCard = (item) => (
+    <div key={item.title} className="highlight-orbit-card">
+      <div className="card highlight-card">
+        <div className="flex items-center justify-between">
+          <div className="text-teal">{icons[item.icon]}</div>
+          <span
+            className="meta-pill lowercase"
+            style={{ background: "rgba(255,255,255,0.58)", color: "#075985", border: "1px solid rgba(8,145,178,0.32)" }}
+          >
+            highlight
+          </span>
+        </div>
+        <h3 className="mt-5 font-display text-xl font-semibold text-ink">{item.title}</h3>
+        <p className="mt-2 text-sm leading-relaxed text-slate">{item.detail}</p>
+        {item.title === "Data Engineering" && (
+          <div className="mt-5 flex justify-center">
+            <a
+              href="/certifications.html"
+              className="btn-secondary highlight-card-action inline-flex items-center justify-center gap-2"
+            >
+              View Certifications
+            </a>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
   return (
     <div className="relative min-h-screen overflow-hidden">
       {/* Background glow orbs */}
       <div className="pointer-events-none fixed -top-80 right-[-300px] h-[700px] w-[700px] rounded-full blur-[120px]"
-        style={{ background: "radial-gradient(circle, rgba(34,211,238,0.08) 0%, transparent 70%)" }} />
+        style={{ background: "radial-gradient(circle, rgba(8,145,178,0.1) 0%, transparent 70%)" }} />
       <div className="pointer-events-none fixed -bottom-80 left-[-300px] h-[700px] w-[700px] rounded-full blur-[120px]"
-        style={{ background: "radial-gradient(circle, rgba(167,139,250,0.08) 0%, transparent 70%)" }} />
+        style={{ background: "radial-gradient(circle, rgba(124,58,237,0.08) 0%, transparent 70%)" }} />
       <div className="pointer-events-none fixed top-[45%] left-[50%] -translate-x-1/2 -translate-y-1/2 h-[400px] w-[400px] rounded-full blur-[100px]"
-        style={{ background: "radial-gradient(circle, rgba(34,211,238,0.04) 0%, transparent 70%)" }} />
+        style={{ background: "radial-gradient(circle, rgba(8,145,178,0.06) 0%, transparent 70%)" }} />
 
       {/* ── Navigation ── */}
       <header
         className="sticky top-0 z-30 backdrop-blur-xl"
-        style={{ background: "rgba(7,11,19,0.86)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}
+        style={{ background: "rgba(255,255,255,0.86)", borderBottom: "1px solid rgba(148,163,184,0.22)" }}
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <a href="#" className="font-display text-2xl font-extrabold md:text-3xl">
@@ -314,17 +351,17 @@ function App() {
             <span className="text-ink"> Adhikari</span>
           </a>
 
-          <nav className="hidden items-center gap-1 md:flex" aria-label="Main navigation">
-            {["About", "Projects", "Research", "Contact"].map((item) => (
+          <nav className="hidden items-center gap-1 lg:flex" aria-label="Main navigation">
+            {navItems.map((item) => (
               <a
-                key={item}
-                href={`#${item.toLowerCase()}`}
-                className="rounded-lg px-4 py-2 text-sm font-semibold text-ink/80 transition-all duration-200 hover:text-teal"
-                style={{ "--hover-bg": "rgba(34,211,238,0.07)" }}
-                onMouseEnter={e => e.currentTarget.style.background = "rgba(34,211,238,0.07)"}
+                key={item.label}
+                href={item.href}
+                className="rounded-lg px-3 py-2 text-sm font-semibold text-ink/80 transition-all duration-200 hover:text-teal"
+                style={{ "--hover-bg": "rgba(8,145,178,0.08)" }}
+                onMouseEnter={e => e.currentTarget.style.background = "rgba(8,145,178,0.08)"}
                 onMouseLeave={e => e.currentTarget.style.background = "transparent"}
               >
-                {item}
+                {item.label}
               </a>
             ))}
             <a
@@ -332,9 +369,9 @@ function App() {
               target="_blank"
               rel="noreferrer"
               className="ml-3 inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-ink/80 transition-all duration-200 hover:text-teal"
-              style={{ border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.03)" }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(34,211,238,0.35)"; e.currentTarget.style.background = "rgba(34,211,238,0.06)"; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; e.currentTarget.style.background = "rgba(255,255,255,0.03)"; }}
+              style={{ border: "1px solid rgba(148,163,184,0.28)", background: "rgba(255,255,255,0.7)" }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(8,145,178,0.35)"; e.currentTarget.style.background = "rgba(8,145,178,0.08)"; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(148,163,184,0.28)"; e.currentTarget.style.background = "rgba(255,255,255,0.7)"; }}
               aria-label="GitHub Profile"
             >
               <GitHubIcon className="h-4 w-4" />
@@ -343,8 +380,8 @@ function App() {
           </nav>
 
           <button
-            className="rounded-lg px-3 py-2 text-sm font-semibold text-slate transition-colors duration-200 hover:text-teal md:hidden"
-            style={{ border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.03)" }}
+            className="rounded-lg px-3 py-2 text-sm font-semibold text-slate transition-colors duration-200 hover:text-teal lg:hidden"
+            style={{ border: "1px solid rgba(148,163,184,0.28)", background: "rgba(255,255,255,0.7)" }}
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle navigation"
             aria-expanded={menuOpen}
@@ -355,19 +392,19 @@ function App() {
 
         {menuOpen && (
           <nav
-            className="px-6 py-4 md:hidden animate-fade-in"
-            style={{ borderTop: "1px solid rgba(255,255,255,0.06)", background: "rgba(7,11,19,0.96)" }}
+            className="px-6 py-4 lg:hidden animate-fade-in"
+            style={{ borderTop: "1px solid rgba(148,163,184,0.22)", background: "rgba(255,255,255,0.96)" }}
             aria-label="Mobile navigation"
           >
             <div className="flex flex-col gap-1">
-              {["About", "Projects", "Research", "Contact"].map((item) => (
+              {navItems.map((item) => (
                 <a
-                  key={item}
+                  key={item.label}
                   onClick={() => setMenuOpen(false)}
-                  href={`#${item.toLowerCase()}`}
+                  href={item.href}
                   className="rounded-lg px-3 py-2.5 text-sm font-semibold text-ink/80 hover:text-teal"
                 >
-                  {item}
+                  {item.label}
                 </a>
               ))}
               <a
@@ -390,20 +427,6 @@ function App() {
         {/* ── Hero ── */}
         <section className="space-y-10">
           {/* Cover image */}
-          <div className="overflow-hidden rounded-2xl" style={{ border: "1px solid rgba(255,255,255,0.06)" }}>
-            <img
-              src={heroPhoto}
-              alt="Cover"
-              className="h-40 w-full object-cover sm:h-56 md:h-72"
-              style={{
-                maskImage: "linear-gradient(to right,transparent,black 4%,black 96%,transparent), linear-gradient(to bottom,transparent,black 8%,black 92%,transparent)",
-                WebkitMaskImage: "linear-gradient(to right,transparent,black 4%,black 96%,transparent), linear-gradient(to bottom,transparent,black 8%,black 92%,transparent)",
-                maskComposite: "intersect",
-                WebkitMaskComposite: "source-in",
-              }}
-            />
-          </div>
-
           {/* Hero content */}
           <div className="hero-grid grid items-start gap-10 md:grid-cols-[1fr_340px] lg:grid-cols-[1fr_380px]">
             <div className="space-y-6 reveal">
@@ -411,32 +434,32 @@ function App() {
               {/* Status + affiliation badges */}
               <div className="flex flex-wrap items-center gap-2.5">
                 <span
-                  className="mono inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-[11px] font-medium lowercase"
-                  style={{ border: "1px solid rgba(52,211,153,0.28)", background: "rgba(52,211,153,0.06)", color: "#34d399" }}
+                  className="meta-pill hero-pill lowercase"
+                  style={{ border: "1px solid rgba(5,150,105,0.3)", background: "rgba(5,150,105,0.08)", color: "#047857" }}
                 >
                   <span className="status-dot" />
                   available · for full-time roles
                 </span>
                 <span
-                  className="mono inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-[11px] font-medium"
-                  style={{ border: "1px solid rgba(255,255,255,0.09)", background: "rgba(255,255,255,0.03)", color: "#8c9cb5" }}
+                  className="meta-pill hero-pill"
+                  style={{ border: "1px solid rgba(148,163,184,0.24)", background: "rgba(255,255,255,0.72)", color: "#66758a" }}
                 >
                   M.S. CS
-                  <span style={{ color: "#566276" }}>·</span>
-                  <span style={{ color: "#22d3ee" }}>Texas Tech</span>
+                  <span style={{ color: "#64748b" }}>·</span>
+                  <span style={{ color: "#0e7490" }}>Texas Tech</span>
                 </span>
               </div>
 
               {/* Headline */}
               <h1 className="font-display text-2xl font-bold text-ink sm:text-4xl md:text-5xl lg:text-[3.5rem] lg:leading-[1.1]">
                 <span className="typing gradient-text">Software engineer</span>
-                <span className="block mt-1 text-ink/70">blending engineering, <span style={{ color: "#22d3ee", opacity: 0.9 }}>analytics</span>,</span>
-                <span className="block text-ink/70">and <span style={{ color: "#a78bfa", opacity: 0.9 }}>product thinking</span>.</span>
+                <span className="block mt-1 text-ink/85">blending engineering, <span style={{ color: "#0e7490" }}>analytics</span>,</span>
+                <span className="block text-ink/85">and <span style={{ color: "#6d28d9" }}>product thinking</span>.</span>
               </h1>
 
               <p className="max-w-xl text-sm leading-relaxed text-slate sm:text-base">
                 M.S. Computer Science student at Texas Tech University with 2 years of professional experience in software engineering for a semi-conductor component manufacturer in Japan.
-                I build scalable data and software systems across ERP, analytics, and backend integration —
+                I build scalable data and software systems across ERP, analytics, and backend integration;
                 with foundations in AI/ML and a focus on modern AI powered software engineering.
               </p>
 
@@ -460,16 +483,16 @@ function App() {
               <div className="flex flex-wrap gap-3 text-sm">
                 <div
                   className="rounded-2xl px-4 py-3"
-                  style={{ border: "1px solid rgba(34,211,238,0.22)", borderTop: "2px solid rgba(34,211,238,0.5)", background: "rgba(34,211,238,0.06)", backdropFilter: "blur(8px)" }}
+                  style={{ border: "1px solid rgba(8,145,178,0.24)", borderTop: "2px solid rgba(8,145,178,0.5)", background: "rgba(8,145,178,0.08)", backdropFilter: "blur(8px)" }}
                 >
-                  <p className="mono text-[10px] font-medium lowercase tracking-wide" style={{ color: "#22d3ee" }}>interest</p>
+                  <p className="meta-label lowercase tracking-wide" style={{ color: "#0e7490" }}>interest</p>
                   <p className="mt-1 text-sm font-semibold text-ink">Data Eng · Data Science · Software</p>
                 </div>
                 <div
                   className="rounded-2xl px-4 py-3"
-                  style={{ border: "1px solid rgba(167,139,250,0.22)", borderTop: "2px solid rgba(167,139,250,0.5)", background: "rgba(167,139,250,0.06)", backdropFilter: "blur(8px)" }}
+                  style={{ border: "1px solid rgba(109,40,217,0.22)", borderTop: "2px solid rgba(109,40,217,0.45)", background: "rgba(109,40,217,0.07)", backdropFilter: "blur(8px)" }}
                 >
-                  <p className="mono text-[10px] font-medium lowercase tracking-wide" style={{ color: "#a78bfa" }}>based in</p>
+                  <p className="meta-label lowercase tracking-wide" style={{ color: "#6d28d9" }}>based in</p>
                   <p className="mt-1 text-sm font-semibold text-ink">Lubbock, TX & Sacramento, CA</p>
                 </div>
               </div>
@@ -477,15 +500,15 @@ function App() {
               {/* Role tags */}
               <div className="flex flex-wrap gap-2">
                 {[
-                  { label: "Data Engineering",       bg: "rgba(34,211,238,0.08)",  border: "rgba(34,211,238,0.28)",  color: "#5ecfdf" },
-                  { label: "Machine Learning",           bg: "rgba(167,139,250,0.08)", border: "rgba(167,139,250,0.28)", color: "#a690f0" },
-                  { label: "Software Engineering",      bg: "rgba(34,211,238,0.06)",  border: "rgba(34,211,238,0.2)",   color: "#4abfcf" },
-                  { label: "Data/Business Analysis", bg: "rgba(240,185,77,0.08)",  border: "rgba(240,185,77,0.28)",  color: "#c8a040" },
-                  { label: "Product Management",     bg: "rgba(167,139,250,0.06)", border: "rgba(167,139,250,0.2)",  color: "#9880e0" },
+                  { label: "Data Engineering",       bg: "rgba(8,145,178,0.1)",  border: "rgba(8,145,178,0.28)",  color: "#0e7490" },
+                  { label: "Machine Learning",           bg: "rgba(109,40,217,0.08)", border: "rgba(109,40,217,0.24)", color: "#6d28d9" },
+                  { label: "Software Engineering",      bg: "rgba(37,99,235,0.08)",  border: "rgba(37,99,235,0.22)",   color: "#1d4ed8" },
+                  { label: "Data/Business Analysis", bg: "rgba(180,83,9,0.08)",  border: "rgba(180,83,9,0.24)",  color: "#92400e" },
+                  { label: "Product Management",     bg: "rgba(91,33,182,0.07)", border: "rgba(91,33,182,0.2)",  color: "#5b21b6" },
                 ].map(({ label, bg, border, color }) => (
                   <span
                     key={label}
-                    className="mono rounded-md px-2.5 py-1 text-[10px] font-medium lowercase"
+                    className="meta-pill hero-role-pill lowercase"
                     style={{ border: `1px solid ${border}`, background: bg, color }}
                   >
                     {label}
@@ -498,11 +521,11 @@ function App() {
             <div className="hidden md:block md:sticky md:top-28 md:self-start">
               <div
                 className="hero-profile relative mx-auto h-[400px] w-full max-w-[320px] overflow-hidden rounded-[28px] lg:h-[460px] lg:max-w-[360px]"
-                style={{ border: "1px solid rgba(34,211,238,0.15)" }}
+                style={{ border: "1px solid rgba(8,145,178,0.22)" }}
               >
                 <div
                   className="absolute inset-x-0 top-0 z-10 h-16 pointer-events-none"
-                  style={{ background: "linear-gradient(to bottom, rgba(7,11,19,0.35), transparent)" }}
+                  style={{ background: "linear-gradient(to bottom, rgba(255,255,255,0.2), transparent)" }}
                 />
                 <img
                   src={profilePhoto}
@@ -511,7 +534,7 @@ function App() {
                 />
                 <div
                   className="absolute inset-x-0 bottom-0 z-10 h-24 pointer-events-none"
-                  style={{ background: "linear-gradient(to top, rgba(7,11,19,0.55), transparent)" }}
+                  style={{ background: "linear-gradient(to top, rgba(255,255,255,0.36), transparent)" }}
                 />
               </div>
             </div>
@@ -519,52 +542,42 @@ function App() {
         </section>
 
         {/* ── Highlights ── */}
-        <section className="grid gap-5 md:grid-cols-3" aria-label="Expertise highlights">
-          {highlights.map((item) => (
-            <div key={item.title} className="card highlight-card">
-              <div className="flex items-center justify-between">
-                <div className="text-teal">{icons[item.icon]}</div>
-                <span
-                  className="mono rounded-md px-2.5 py-1 text-[10px] font-medium lowercase"
-                  style={{ background: "rgba(34,211,238,0.08)", color: "#22d3ee", border: "1px solid rgba(34,211,238,0.25)" }}
-                >
-                  highlight
-                </span>
-              </div>
-              <h3 className="mt-6 font-display text-xl font-semibold text-ink">{item.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-slate">{item.detail}</p>
-              {item.title === "Data Engineering" && (
-                <div className="mt-6 flex justify-center">
-                  <a
-                    href="https://www.credly.com/badges/955e4e2a-da64-49f3-be7a-aac4d5568d9b/public_url"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex flex-col items-center gap-2"
-                    aria-label="View IBM Data Engineering Essentials badge on Credly"
-                  >
-                    <img
-                      src="/credly-badge.png"
-                      alt="IBM Data Engineering Essentials badge"
-                      width="130"
-                      height="130"
-                      loading="lazy"
-                      className="rounded-xl transition"
-                      style={{ filter: "drop-shadow(0 0 12px rgba(34,211,238,0.15))" }}
-                    />
-                    <span className="mono text-[10px] font-medium lowercase text-slate/70">
-                      IBM Data Engineering Essentials
-                    </span>
-                  </a>
-                </div>
-              )}
+        <section
+          className="highlight-section relative left-1/2 w-screen -translate-x-1/2 overflow-hidden"
+          aria-label="Expertise highlights"
+          style={{ "--highlight-bg": `url(${heroPhoto})` }}
+        >
+          <div
+            className="absolute inset-0 scale-[1.08] bg-cover bg-center"
+            style={{
+              backgroundImage: `url(${heroPhoto})`,
+              filter: "saturate(1.18) contrast(1.18)",
+              mixBlendMode: "normal",
+              opacity: 1,
+            }}
+            aria-hidden="true"
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage:
+                "linear-gradient(rgba(37,99,235,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(37,99,235,0.12) 1px, transparent 1px)",
+              backgroundSize: "56px 56px",
+              opacity: 0.42,
+            }}
+            aria-hidden="true"
+          />
+          <div className="relative min-h-[680px]">
+            <div className="highlight-orbit" aria-label="Expertise highlights">
+              {highlights.map((item) => renderHighlightCard(item))}
             </div>
-          ))}
+          </div>
         </section>
 
         {/* ── About ── */}
         <section
           id="about"
-          className="panel grid gap-12 rounded-[36px] p-8 md:p-12 md:grid-cols-[1fr_1.1fr]"
+          className="panel about-glass-panel grid gap-12 rounded-[36px] p-8 md:p-12 md:grid-cols-[1fr_1.1fr]"
           aria-label="About me"
         >
           <div className="space-y-6">
@@ -594,20 +607,20 @@ function App() {
           </div>
 
           <div className="relative grid gap-6">
-            <div className="overflow-hidden rounded-[28px]" style={{ border: "1px solid rgba(255,255,255,0.06)" }}>
+            <div className="overflow-hidden rounded-[28px]" style={{ border: "1px solid rgba(148,163,184,0.22)" }}>
               <img
                 src={journalPhoto}
                 alt="TECDIA journal feature"
                 className="h-96 w-full object-contain md:h-[28rem]"
-                style={{ background: "rgba(13,19,32,0.5)" }}
+                style={{ background: "rgba(255,255,255,0.62)" }}
               />
             </div>
-            <div className="overflow-hidden rounded-[28px]" style={{ border: "1px solid rgba(255,255,255,0.06)" }}>
+            <div className="overflow-hidden rounded-[28px]" style={{ border: "1px solid rgba(148,163,184,0.22)" }}>
               <img
                 src={slides[slideIndex]}
                 alt={`About slideshow ${slideIndex + 1}`}
                 className="h-64 w-full object-contain md:h-72"
-                style={{ background: "rgba(13,19,32,0.5)" }}
+                style={{ background: "rgba(255,255,255,0.62)" }}
               />
               <div className="flex justify-end px-4 py-3">
                 <div className="flex gap-2">
@@ -623,8 +636,8 @@ function App() {
               </div>
             </div>
             <div
-              className="mono absolute -bottom-5 -right-5 hidden rounded-xl px-5 py-3 text-[11px] font-medium lowercase text-slate md:block"
-              style={{ border: "1px solid rgba(34,211,238,0.18)", background: "rgba(7,11,19,0.92)", backdropFilter: "blur(8px)" }}
+              className="meta-pill absolute -bottom-5 -right-5 hidden rounded-xl px-5 py-3 lowercase text-slate md:block"
+              style={{ border: "1px solid rgba(8,145,178,0.22)", background: "rgba(255,255,255,0.92)", backdropFilter: "blur(8px)" }}
             >
               4 languages · global experience
             </div>
@@ -647,9 +660,9 @@ function App() {
               target="_blank"
               rel="noreferrer"
               className="inline-flex shrink-0 items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold text-slate transition-all duration-200 hover:text-teal"
-              style={{ border: "1px solid rgba(255,255,255,0.1)", background: "rgba(21,29,44,0.5)" }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(34,211,238,0.3)"; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.09)"; }}
+              style={{ border: "1px solid rgba(148,163,184,0.24)", background: "rgba(255,255,255,0.72)" }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(8,145,178,0.32)"; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(148,163,184,0.24)"; }}
             >
               <GitHubIcon className="h-4 w-4" />
               View GitHub Profile
@@ -666,7 +679,7 @@ function App() {
           {/* Expand / Collapse */}
           <div className="space-y-8">
             <div className="flex items-center gap-4">
-              <div className="h-px flex-1" style={{ background: "rgba(255,255,255,0.06)" }} />
+              <div className="h-px flex-1" style={{ background: "rgba(148,163,184,0.24)" }} />
               <button
                 onClick={() => { setShowAllProjects((p) => !p); setCategoryFilter("All"); }}
                 className="expand-btn"
@@ -675,7 +688,7 @@ function App() {
                 <span>{showAllProjects ? "Hide Additional Projects" : `Show All Projects (${additionalProjects.length} more)`}</span>
                 <ChevronDownIcon open={showAllProjects} />
               </button>
-              <div className="h-px flex-1" style={{ background: "rgba(255,255,255,0.06)" }} />
+              <div className="h-px flex-1" style={{ background: "rgba(148,163,184,0.24)" }} />
             </div>
 
             {showAllProjects && (
@@ -689,11 +702,11 @@ function App() {
                       className="mono rounded-lg px-4 py-2 text-[13px] font-medium lowercase transition-all duration-200"
                       style={
                         categoryFilter === cat
-                          ? { background: "linear-gradient(115deg,#22d3ee,#818cf8)", color: "#050c18", fontWeight: 600 }
-                          : { border: "1px solid rgba(255,255,255,0.09)", background: "rgba(13,19,32,0.6)", color: "#8c9cb5" }
+                          ? { background: "linear-gradient(115deg,#0891b2,#2563eb)", color: "#ffffff", fontWeight: 600 }
+                          : { border: "1px solid rgba(148,163,184,0.24)", background: "rgba(255,255,255,0.72)", color: "#66758a" }
                       }
-                      onMouseEnter={e => { if (categoryFilter !== cat) { e.currentTarget.style.borderColor = "rgba(34,211,238,0.3)"; e.currentTarget.style.color = "#22d3ee"; } }}
-                      onMouseLeave={e => { if (categoryFilter !== cat) { e.currentTarget.style.borderColor = "rgba(255,255,255,0.09)"; e.currentTarget.style.color = "#7d8fa8"; } }}
+                      onMouseEnter={e => { if (categoryFilter !== cat) { e.currentTarget.style.borderColor = "rgba(8,145,178,0.32)"; e.currentTarget.style.color = "#0891b2"; } }}
+                      onMouseLeave={e => { if (categoryFilter !== cat) { e.currentTarget.style.borderColor = "rgba(148,163,184,0.24)"; e.currentTarget.style.color = "#66758a"; } }}
                     >
                       {cat}
                     </button>
@@ -708,7 +721,7 @@ function App() {
                 </div>
 
                 {filteredAdditional.length === 0 && (
-                  <p className="text-center text-sm text-slate/50">No projects in this category.</p>
+                  <p className="text-center text-sm text-slate">No projects in this category.</p>
                 )}
               </div>
             )}
@@ -740,7 +753,7 @@ function App() {
             </a>
           </div>
           <div className="panel-inset rounded-[24px] p-7">
-            <p className="mono text-[11px] font-medium lowercase text-teal/80">// key takeaways</p>
+            <p className="meta-label lowercase text-teal/80">// key takeaways</p>
             <ul className="mt-5 space-y-4 text-sm text-slate">
               {[
                 "Digital marketing reshapes consumer learning patterns.",
@@ -800,7 +813,7 @@ function App() {
       </main>
 
       {/* ── Footer ── */}
-      <footer style={{ borderTop: "1px solid rgba(255,255,255,0.06)", background: "rgba(7,11,19,0.82)" }}>
+      <footer style={{ borderTop: "1px solid rgba(148,163,184,0.22)", background: "rgba(255,255,255,0.82)" }}>
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-8 text-sm text-slate md:flex-row">
           <p>© 2026 Ganesh Adhikari. All rights reserved.</p>
           <div className="flex items-center gap-6">

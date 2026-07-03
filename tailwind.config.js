@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
+  content: ["./index.html", "./myapps.html", "./blogs.html", "./certifications.html", "./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
       fontFamily: {
@@ -9,25 +9,25 @@ export default {
         mono: ["\"JetBrains Mono\"", "ui-monospace", "SFMono-Regular", "monospace"],
       },
       colors: {
-        ink:   "#eef2f8",   // primary text — crisp near-white
-        slate: "#aab6ca",   // body / descriptions — brighter, readable
-        dim:   "#6b7689",   // muted text / metadata
-        cloud: "#070b13",   // main background — deep neutral navy-black
-        fog:   "#0d1320",   // card surface
-        mist:  "#151d2c",   // elevated surface
-        line:  "#1e2838",   // hairline borders
-        teal:  "#22d3ee",   // primary accent — electric cyan
-        coral: "#a78bfa",   // secondary accent — soft violet
-        mint:  "#34d399",   // tertiary — emerald (status / available)
-        gold:  "#f0b94d",   // amber gold (sparing highlight)
-        moss:  "#1a3a5c",   // deep blue
+        ink:   "#172033",
+        slate: "#3f4f63",
+        dim:   "#65748a",
+        cloud: "#f6f8fc",
+        fog:   "#ffffff",
+        mist:  "#eef4fb",
+        line:  "#d9e2ee",
+        teal:  "#0891b2",
+        coral: "#7c3aed",
+        mint:  "#059669",
+        gold:  "#b7791f",
+        moss:  "#2563eb",
       },
       boxShadow: {
-        soft: "0 4px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.04)",
-        lift: "0 8px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(34,211,238,0.12)",
-        glow: "0 0 0 1px rgba(34,211,238,0.15), 0 0 32px rgba(34,211,238,0.12), 0 20px 60px rgba(0,0,0,0.7)",
-        cyan: "0 0 20px rgba(34,211,238,0.35)",
-        violet: "0 0 20px rgba(167,139,250,0.3)",
+        soft: "0 10px 32px rgba(31,41,55,0.08), 0 0 0 1px rgba(148,163,184,0.16)",
+        lift: "0 18px 48px rgba(31,41,55,0.12), 0 0 0 1px rgba(8,145,178,0.14)",
+        glow: "0 0 0 1px rgba(8,145,178,0.16), 0 20px 60px rgba(31,41,55,0.12)",
+        cyan: "0 0 20px rgba(8,145,178,0.22)",
+        violet: "0 0 20px rgba(124,58,237,0.18)",
       },
       keyframes: {
         "fade-up": {
@@ -43,16 +43,16 @@ export default {
           "50%": { transform: "translateY(-10px)" },
         },
         "profile-breathe": {
-          "0%, 100%": { boxShadow: "0 0 0 1px rgba(34,211,238,0.12), 0 0 24px rgba(34,211,238,0.08), 0 20px 60px rgba(0,0,0,0.7)" },
-          "50%": { boxShadow: "0 0 0 1px rgba(34,211,238,0.25), 0 0 48px rgba(34,211,238,0.15), 0 20px 60px rgba(0,0,0,0.7)" },
+          "0%, 100%": { boxShadow: "0 0 0 1px rgba(8,145,178,0.18), 0 0 24px rgba(8,145,178,0.1), 0 20px 60px rgba(31,41,55,0.16)" },
+          "50%": { boxShadow: "0 0 0 1px rgba(8,145,178,0.32), 0 0 48px rgba(8,145,178,0.16), 0 20px 60px rgba(31,41,55,0.2)" },
         },
         "gradient-shift": {
           "0%, 100%": { backgroundPosition: "0% 50%" },
           "50%": { backgroundPosition: "100% 50%" },
         },
         "status-pulse": {
-          "0%, 100%": { opacity: "1", boxShadow: "0 0 0 0 rgba(52,211,153,0.5)" },
-          "50%": { opacity: "0.85", boxShadow: "0 0 0 5px rgba(52,211,153,0)" },
+          "0%, 100%": { opacity: "1", boxShadow: "0 0 0 0 rgba(5,150,105,0.34)" },
+          "50%": { opacity: "0.85", boxShadow: "0 0 0 5px rgba(5,150,105,0)" },
         },
         shimmer: {
           "0%": { backgroundPosition: "-200% 0" },
