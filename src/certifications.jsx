@@ -3,13 +3,7 @@ import { createRoot } from "react-dom/client";
 import { StandalonePage } from "./StandalonePage.jsx";
 import "./index.css";
 
-const certificateFiles = import.meta.glob("./assets/certificates_img/*.pdf", {
-  eager: true,
-  query: "?url",
-  import: "default",
-});
-
-const certificatePreviewFiles = import.meta.glob("./assets/certificates_img/previews/*.png", {
+const certificatePreviewFiles = import.meta.glob("./assets/certificates_img/previews/*.jpg", {
   eager: true,
   query: "?url",
   import: "default",
@@ -35,9 +29,10 @@ const certificateTitles = {
   "Python for DataScienceAI&Dev.pdf": "Python for Data Science, AI and Development",
 };
 
-const certificates = Object.entries(certificateFiles)
-  .map(([path, url]) => {
-    const fileName = path.split("/").pop() ?? "";
+const certificates = Object.entries(certificatePreviewFiles)
+  .map(([path, previewUrl]) => {
+    const previewFileName = path.split("/").pop() ?? "";
+    const fileName = previewFileName.replace(/\.jpe?g$/i, "");
     const title =
       certificateTitles[fileName] ??
       fileName
@@ -48,8 +43,8 @@ const certificates = Object.entries(certificateFiles)
 
     return {
       title,
-      url,
-      previewUrl: certificatePreviewFiles[`./assets/certificates_img/previews/${fileName}.png`],
+      url: previewUrl,
+      previewUrl,
     };
   })
   .sort((a, b) => a.title.localeCompare(b.title));
