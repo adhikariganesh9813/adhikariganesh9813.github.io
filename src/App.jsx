@@ -450,6 +450,25 @@ function App() {
                 </span>
               </div>
 
+              <div
+                className="hero-profile relative mx-auto h-[320px] w-full max-w-[260px] overflow-hidden rounded-[28px] md:hidden"
+                style={{ border: "1px solid rgba(8,145,178,0.22)" }}
+              >
+                <div
+                  className="absolute inset-x-0 top-0 z-10 h-14 pointer-events-none"
+                  style={{ background: "linear-gradient(to bottom, rgba(255,255,255,0.2), transparent)" }}
+                />
+                <img
+                  src={profilePhoto}
+                  alt="Ganesh Adhikari"
+                  className="h-full w-full object-cover object-[50%_10%]"
+                />
+                <div
+                  className="absolute inset-x-0 bottom-0 z-10 h-20 pointer-events-none"
+                  style={{ background: "linear-gradient(to top, rgba(255,255,255,0.36), transparent)" }}
+                />
+              </div>
+
               {/* Headline */}
               <h1 className="font-display text-2xl font-bold text-ink sm:text-4xl md:text-5xl lg:text-[3.5rem] lg:leading-[1.1]">
                 <span className="typing gradient-text">Software engineer</span>
@@ -518,9 +537,9 @@ function App() {
             </div>
 
             {/* Profile photo */}
-            <div className="block md:sticky md:top-28 md:self-start">
+            <div className="hidden md:block md:sticky md:top-28 md:self-start">
               <div
-                className="hero-profile relative mx-auto h-[340px] w-full max-w-[280px] overflow-hidden rounded-[28px] sm:h-[380px] sm:max-w-[310px] md:h-[400px] md:max-w-[320px] lg:h-[460px] lg:max-w-[360px]"
+                className="hero-profile relative mx-auto h-[400px] w-full max-w-[320px] overflow-hidden rounded-[28px] lg:h-[460px] lg:max-w-[360px]"
                 style={{ border: "1px solid rgba(8,145,178,0.22)" }}
               >
                 <div
