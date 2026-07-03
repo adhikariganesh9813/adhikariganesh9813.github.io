@@ -518,9 +518,9 @@ function App() {
             </div>
 
             {/* Profile photo */}
-            <div className="hidden md:block md:sticky md:top-28 md:self-start">
+            <div className="block md:sticky md:top-28 md:self-start">
               <div
-                className="hero-profile relative mx-auto h-[400px] w-full max-w-[320px] overflow-hidden rounded-[28px] lg:h-[460px] lg:max-w-[360px]"
+                className="hero-profile relative mx-auto h-[340px] w-full max-w-[280px] overflow-hidden rounded-[28px] sm:h-[380px] sm:max-w-[310px] md:h-[400px] md:max-w-[320px] lg:h-[460px] lg:max-w-[360px]"
                 style={{ border: "1px solid rgba(8,145,178,0.22)" }}
               >
                 <div
@@ -567,7 +567,7 @@ function App() {
             }}
             aria-hidden="true"
           />
-          <div className="relative min-h-[680px]">
+          <div className="highlight-canvas relative">
             <div className="highlight-orbit" aria-label="Expertise highlights">
               {highlights.map((item) => renderHighlightCard(item))}
             </div>

@@ -171,6 +171,10 @@
     box-shadow: 0 24px 70px rgba(31,41,55,0.12);
   }
 
+  .highlight-canvas {
+    min-height: clamp(520px, 62vw, 680px);
+  }
+
   .highlight-section .highlight-card {
     background:
       linear-gradient(145deg, rgba(255,255,255,0.5), rgba(255,255,255,0.32) 52%, rgba(225,244,249,0.28));
@@ -654,6 +658,23 @@
     grid-template-columns: 1fr;
   }
 
+  .hero-profile {
+    margin-top: 0.5rem;
+  }
+
+  .highlight-section {
+    width: calc(100vw - 24px);
+    border-radius: 28px;
+  }
+
+  .highlight-canvas {
+    min-height: clamp(430px, 122vw, 560px);
+  }
+
+  .highlight-orbit {
+    inset: 12px;
+  }
+
   .certificate-carousel {
     grid-template-columns: 48px minmax(0, 1fr) 48px;
     gap: 8px;
@@ -678,11 +699,38 @@
   }
 
   .highlight-orbit-card {
-    --orbit-card-width: min(74vw, 270px);
+    --orbit-card-width: clamp(170px, 56vw, 220px);
   }
 
   .highlight-card {
-    min-height: 250px;
+    min-height: 205px;
+    padding: 14px;
+    border-radius: 18px;
+  }
+
+  .highlight-section .highlight-card h3 {
+    margin-top: 0.7rem;
+    font-size: clamp(0.95rem, 4.2vw, 1.12rem);
+  }
+
+  .highlight-section .highlight-card p {
+    font-size: clamp(0.72rem, 3.15vw, 0.84rem);
+    line-height: 1.42;
+  }
+
+  .highlight-section .highlight-card .meta-pill {
+    padding: 0.34rem 0.56rem;
+    font-size: clamp(0.68rem, 2.7vw, 0.78rem);
+  }
+
+  .highlight-section .highlight-card .text-teal svg {
+    height: 1.35rem;
+    width: 1.35rem;
+  }
+
+  .highlight-section .highlight-card .highlight-card-action {
+    padding: 0.58rem 0.78rem;
+    font-size: clamp(0.72rem, 3vw, 0.84rem);
   }
 }
 
