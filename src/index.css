@@ -159,11 +159,11 @@
   }
 
   .highlight-card {
-    min-height: 255px;
+    min-height: 240px;
     padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.4rem;
     overflow: hidden;
   }
 
@@ -172,7 +172,7 @@
   }
 
   .highlight-canvas {
-    min-height: clamp(520px, 62vw, 680px);
+    min-height: clamp(625px, 62vw, 710px);
   }
 
   .highlight-section .highlight-card {
@@ -248,7 +248,8 @@
   .highlight-orbit {
     --orbit-card-width: clamp(230px, 20vw, 285px);
     --orbit-x: calc(100vw - 38px - var(--orbit-card-width));
-    --orbit-y: calc(clamp(520px, 62vw, 680px) - 38px - 255px);
+    /* reserve enough for the tallest card (Data Engineering, with button) plus bottom slack */
+    --orbit-y: calc(clamp(625px, 62vw, 710px) - 38px - 285px);
     position: absolute;
     inset: 19px;
     pointer-events: none;
@@ -455,7 +456,10 @@
     background: linear-gradient(135deg, rgba(240,253,250,0.94), rgba(207,250,254,0.86));
     color: #064e3b;
     font-weight: 800;
-    box-shadow: 0 12px 28px rgba(14,116,144,0.2), 0 0 0 4px rgba(255,255,255,0.44);
+    padding: 8px 16px;
+    font-size: 0.82rem;
+    border-radius: 10px;
+    box-shadow: 0 10px 22px rgba(14,116,144,0.2), 0 0 0 4px rgba(255,255,255,0.44);
     text-shadow: none;
   }
 
@@ -679,14 +683,14 @@
   }
 
   .highlight-canvas {
-    min-height: clamp(430px, 122vw, 560px);
+    min-height: clamp(505px, 122vw, 605px);
   }
 
   .highlight-orbit {
     inset: 12px;
     --orbit-card-width: clamp(170px, 56vw, 220px);
     --orbit-x: calc(100vw - 48px - var(--orbit-card-width));
-    --orbit-y: calc(clamp(430px, 122vw, 560px) - 24px - 205px);
+    --orbit-y: calc(clamp(505px, 122vw, 605px) - 24px - 232px);
   }
 
   .certificate-carousel {

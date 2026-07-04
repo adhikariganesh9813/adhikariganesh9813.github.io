@@ -317,7 +317,7 @@ function App() {
         <h3 className="mt-5 font-display text-xl font-semibold text-ink">{item.title}</h3>
         <p className="mt-2 text-sm leading-relaxed text-slate">{item.detail}</p>
         {item.title === "Data Engineering" && (
-          <div className="mt-5 flex justify-center">
+          <div className="mt-4 flex justify-center">
             <a
               href="/certifications.html"
               className="btn-secondary highlight-card-action inline-flex items-center justify-center gap-2"
