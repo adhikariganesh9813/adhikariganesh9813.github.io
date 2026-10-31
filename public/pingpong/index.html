@@ -29,17 +29,52 @@
     .player button { font-size: 14px; padding: 6px 14px; margin: 6px 0 0; }
     #state { font-size: 18px; min-height: 24px; margin: 8px; }
     #note { color: #ffd400; font-weight: bold; min-height: 20px; margin: 4px; }
+    #setup { background: #1b2a2a; border: 1px solid #14b8a6; border-radius: 10px; text-align: left;
+             font-size: 14px; color: #ccc; max-width: 600px; margin: 10px auto; padding: 10px 14px; }
+    #setup[hidden] { display: none; }
+    #setup ol { margin: 6px 0 0; padding-left: 20px; }
+    #setup li { margin: 4px 0; }
+
+    /* Phone in landscape: video on the left sized to the screen height, scores and controls on the right */
+    @media (orientation: landscape) and (max-height: 600px) {
+      h1 { display: none; }
+      #setup { font-size: 12px; margin: 0 0 6px; padding: 6px 10px; }
+      #setup li { margin: 2px 0; }
+      .back { position: static; display: block; text-align: left; margin: 4px 8px; }
+      #main { display: flex; align-items: flex-start; justify-content: center; gap: 12px; padding: 0 8px; }
+      .stage { width: auto; max-width: none; margin: 0; flex: none; }
+      video { width: auto; max-width: 62vw; max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px); }
+      #panel { flex: 1; min-width: 0; max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px); overflow-y: auto; }
+      #board { gap: 10px; margin: 0 0 4px; }
+      .player { padding: 6px 10px; min-width: 80px; }
+      .player .pts { font-size: 44px; }
+      #state { font-size: 15px; margin: 4px; }
+      #note { min-height: 0; }
+      #status, #info { font-size: 12px; margin: 4px; }
+      button { font-size: 14px; padding: 8px 12px; margin: 4px; }
+    }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.webgpu.min.js"></script>
 </head>
 <body>
   <a class="back" href="/myapps.html">← MyApps</a>
   <h1>Ping Pong Counter</h1>
+  <div id="main">
   <div class="stage" id="stage">
     <video id="video" autoplay playsinline muted></video>
     <canvas id="overlay"></canvas>
   </div>
-  <p class="hint">Phone at the side of the table, net in the middle. Tap the table surface right under the net to calibrate. Auto scoring starts after calibrating.</p>
+  <div id="panel">
+  <div id="setup">
+    <b>Setup before the game</b>
+    <ol>
+      <li>Place the phone in landscape at the side of the table, level with the table top or a little above it. The whole table should be in view, with the net in the middle.</li>
+      <li>Press <b>Start camera</b> and keep the phone still. Moving it later means calibrating again.</li>
+      <li>Tap the video on the table surface, right under the net. The dashed lines move to the net and the table edge. Tap again to adjust.</li>
+      <li>Check that P1 is on the left, and that the yellow border is on the player serving first. Use <b>Switch server</b> if it isn't.</li>
+      <li>To serve: hold the ball still for 3 seconds until the status says "to serve", then serve. A ball bounce counts only near the table line.</li>
+    </ol>
+  </div>
 
   <div id="board">
     <div class="player" id="player0">
@@ -62,11 +97,14 @@
     <button id="startBtn" disabled>Loading model…</button>
     <button id="autoBtn">Auto: on</button>
     <button id="serverBtn">Switch server</button>
+    <button id="setupBtn">Setup help</button>
     <button id="undoBtn">Undo</button>
     <button id="resetBtn">Reset match</button>
   </div>
   <p id="status"></p>
   <p id="info"></p>
+  </div>
+  </div>
 
   <script>
     const MODEL_URL = "model/best.onnx";
@@ -155,6 +193,17 @@
       lastFrameTime = performance.now();
       requestAnimationFrame(loop);
     }
+
+    // Rotating the phone can swap the camera's width/height: resize the overlay and recalibrate
+    video.addEventListener("resize", () => {
+      if (!detecting || (overlay.width === video.videoWidth && overlay.height === video.videoHeight)) return;
+      overlay.width = video.videoWidth;
+      overlay.height = video.videoHeight;
+      netX = overlay.width / 2;
+      tableY = null;
+      resetTracking();
+      message = "Camera rotated, tap the table again";
+    });
 
     // ---------- Model ----------
 
@@ -319,6 +368,7 @@
       netX = ((e.clientX - r.left) / r.width) * overlay.width;
       tableY = ((e.clientY - r.top) / r.height) * overlay.height;
       message = "Calibrated";
+      showSetup = false; // collapse the setup steps once calibrated
     });
 
     const sideOf = (x) => (x < netX ? 0 : 1); // 0 = P1 (left), 1 = P2 (right)
@@ -550,6 +600,11 @@
       message = auto ? "" : "Auto scoring off";
     });
 
+    // Setup steps stay open until calibrated; "Setup help" brings them back
+    let showSetup = false;
+    document.getElementById("setupBtn").addEventListener("click", () => { showSetup = !showSetup; });
+
+    const setupEl = document.getElementById("setup");
     const stateEl = document.getElementById("state");
     const noteEl = document.getElementById("note");
     let lastBoard = "";
@@ -570,6 +625,8 @@
       else if (state === "ready") text = `${NAMES[s]} to serve`;
       else text = `Rally: ${rally.hits} returns`;
       text = message ? `${message} · ${text}` : text;
+
+      setupEl.hidden = tableY !== null && !showSetup;
 
       const key = `${score}|${games}|${s}|${text}`;
       if (key === lastBoard) return; // nothing changed, skip DOM writes
