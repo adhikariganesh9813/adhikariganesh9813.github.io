@@ -73,6 +73,7 @@
       <li>Tap the video on the table surface, right under the net. The dashed lines move to the net and the table edge. Tap again to adjust.</li>
       <li>Check that P1 is on the left, and that the yellow border is on the player serving first. Use <b>Switch server</b> if it isn't.</li>
       <li>To serve: hold the ball still for 3 seconds until the status says "to serve", then serve. A ball bounce counts only near the table line.</li>
+      <li>A serve that touches the net and lands on the other side is a let (orange flash): no point, serve again. If the camera misses it, press <b>Let</b> right away.</li>
     </ol>
   </div>
 
@@ -98,6 +99,7 @@
     <button id="autoBtn">Auto: on</button>
     <button id="serverBtn">Switch server</button>
     <button id="setupBtn">Setup help</button>
+    <button id="letBtn">Let</button>
     <button id="undoBtn">Undo</button>
     <button id="resetBtn">Reset match</button>
   </div>
@@ -315,6 +317,7 @@
         t.vy = t.hits > 1 ? 0.3 * t.vy + 0.7 * vy : vy;
         t.x = best.cx;
         t.y = best.cy;
+        t.size = Math.min(best.w, best.h); // motion blur stretches one side, the shorter side is the ball
         t.lastSeen = now;
         t.hits++;
         if (!t.confirmed && t.hits >= CONFIRM_HITS &&
@@ -359,6 +362,17 @@
     let lastHitTime = -Infinity, lastBounceTime = -Infinity;
     let anchor = null;          // last position where the ball was considered "moving"
     let lastMotion = performance.now();
+
+    // Net touch: the net is 15.25 cm high and the ball 4 cm, so the net top sits ~3.8 ball diameters above
+    // the table line. A serve crossing close to the net top that suddenly loses forward speed touched the net.
+    const NET_HEIGHT_BALLS = 3.8;
+    const NET_CLIP_BALLS = 1.5;  // crossing lower than this many ball diameters above the net top = close enough to touch
+    const NET_SLOW = 0.65;       // forward speed after crossing below this fraction of before = it hit the net
+    const NET_CHECK_MS = 150;    // how long after crossing to measure the speed
+    let ballSize = 0;            // smoothed ball diameter in pixels
+    let netCheck = null;         // { x, y, t, before } while measuring a serve that just crossed the net
+
+    const netTopY = () => tableY - NET_HEIGHT_BALLS * ballSize;
 
     let netX = 0, tableY = null; // set by tapping the table under the net
 
@@ -406,13 +420,16 @@
         axes = null;
         anchor = null;
         pendingBounce = null;
+        netCheck = null;
         trail.length = 0;
       }
       if (!ball || ball.lastSeen !== now) return; // not seen this frame
 
       const { x, y } = ball;
-      trail.push({ x, y });
+      ballSize = ballSize ? 0.9 * ballSize + 0.1 * ball.size : ball.size;
+      trail.push({ x, y, t: now });
       if (trail.length > 20) trail.shift();
+      checkNet(now);
 
       if (!anchor || Math.hypot(x - anchor.x, y - anchor.y) > IDLE_MOVE * overlay.width) {
         anchor = { x, y };
@@ -439,6 +456,40 @@
         lastBounceTime = now;
         pendingBounce = { x, y: ty.at, t: now };
       }
+    }
+
+    // Watches the serve as it crosses the net and flags rally.netTouched if it clipped the net
+    function checkNet(now) {
+      const n = trail.length, cur = trail[n - 1], prev = trail[n - 2];
+
+      // Measure forward speed a short time after crossing and compare with before
+      if (netCheck && now - netCheck.t >= NET_CHECK_MS) {
+        const after = Math.abs(cur.x - netCheck.x) / (now - netCheck.t);
+        if (after < NET_SLOW * netCheck.before && state === "rally") {
+          rally.netTouched = true;
+          marks.push({ x: netCheck.x, y: netCheck.y, color: "orange", t: now });
+        }
+        netCheck = null;
+      }
+
+      // Only the serve's first crossing matters
+      if (!prev || sideOf(prev.x) === sideOf(cur.x)) return;
+      if (state !== "rally" || rally.hits > 0 || rally.netChecked || !ballSize) return;
+      rally.netChecked = true;
+
+      const f = (netX - prev.x) / (cur.x - prev.x);
+      const yCross = prev.y + f * (cur.y - prev.y);
+      if (yCross < netTopY() - NET_CLIP_BALLS * ballSize) return; // passed well clear of the net
+
+      const a = trail[Math.max(0, n - 5)];
+      if (prev.t <= a.t) return; // not enough history to know the speed before
+      netCheck = { x: netX, y: yCross, t: prev.t + f * (cur.t - prev.t), before: Math.abs(prev.x - a.x) / (prev.t - a.t) };
+    }
+
+    // Let: the serve touched the net but landed on the receiver's side. No point, same server serves again.
+    function letServe(reason) {
+      cancelRally(reason);
+      lastMotion = performance.now(); // fresh pause before the replayed serve
     }
 
     // ---------- Game rules: 11 points, win by 2, 2 serves each, 1 each from 10-10 ----------
@@ -492,12 +543,14 @@
         if (rally.hits === 0 && !rally.reached) return;
         return endRally(rally.target, `${NAMES[rally.lastHitter]} bounced on own side`);
       }
+      if (rally.hits === 0 && rally.netTouched) return letServe("Let: serve touched the net, serve again");
       if (rally.bounced) return endRally(rally.lastHitter, `double bounce on ${NAMES[side]}'s side`);
       rally.bounced = true;
     }
 
     function onHit(side) {
       if (!autoReady() || state !== "rally" || side !== rally.target || !rally.reached) return; // own-side reversal = noise
+      if (rally.hits === 0 && rally.netTouched) return letServe("Let: serve touched the net, serve again");
       // A return. If we missed seeing its bounce (low FPS), assume it bounced rather than calling a fault.
       rally.lastHitter = side;
       rally.target = 1 - side;
@@ -558,6 +611,7 @@
       state = "waiting";
       rally = null;
       lastMotion = performance.now(); // need a fresh 3 s pause before the next serve (ignores hand passes)
+      lastAutoPoint = reason === "added manually" ? 0 : performance.now();
       flash(winner);
       save();
     }
@@ -574,11 +628,21 @@
       btn.addEventListener("click", () => endRally(+btn.dataset.player, "added manually"))
     );
 
-    document.getElementById("undoBtn").addEventListener("click", () => {
+    function undo(msg) {
       const prev = history.pop();
       if (!prev) return;
       ({ score, games, firstServer } = prev);
-      restart("Undone");
+      lastAutoPoint = 0;
+      restart(msg);
+    }
+    document.getElementById("undoBtn").addEventListener("click", () => undo("Undone"));
+
+    // Manual let for net touches the camera missed: cancels the rally, or takes back an auto point given just now
+    const LET_UNDO_MS = 10000;
+    let lastAutoPoint = 0;
+    document.getElementById("letBtn").addEventListener("click", () => {
+      if (state === "rally") letServe("Let called, serve again");
+      else if (lastAutoPoint && performance.now() - lastAutoPoint < LET_UNDO_MS) undo("Let called, point removed, serve again");
     });
 
     document.getElementById("resetBtn").addEventListener("click", () => {
@@ -690,6 +754,14 @@
         octx.lineTo(overlay.width, tableY);
       }
       octx.stroke();
+      // Estimated net top (from the ball's size), should line up with the real net
+      if (tableY !== null && ballSize) {
+        octx.strokeStyle = "orange";
+        octx.beginPath();
+        octx.moveTo(netX - overlay.width / 20, netTopY());
+        octx.lineTo(netX + overlay.width / 20, netTopY());
+        octx.stroke();
+      }
       octx.restore();
 
       octx.strokeStyle = "yellow";
