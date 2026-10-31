@@ -56,7 +56,7 @@
       button { font-size: 14px; padding: 8px 12px; margin: 4px; }
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.webgpu.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.1/dist/ort.webgpu.min.js"></script>
 </head>
 <body>
   <a class="back" href="/myapps.html">← MyApps</a>
@@ -131,39 +131,58 @@
     const ictx = input.getContext("2d", { willReadFrequently: true });
     const pixels = new Float32Array(3 * SIZE * SIZE); // reused every frame instead of reallocating
 
-    ort.env.wasm.wasmPaths = "https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/";
+    ort.env.wasm.wasmPaths = "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.1/dist/";
     let session, backend;
 
-    // Try the GPU first, fall back to CPU (WASM)
-    (async function loadModel() {
-      for (const ep of ["webgpu", "wasm"]) {
+    // Load the model on the first backend that works: GPU first, CPU (WASM) as fallback
+    async function loadModel(eps) {
+      for (const ep of eps) {
         try {
           session = await ort.InferenceSession.create(MODEL_URL, { executionProviders: [ep] });
           backend = ep;
-          break;
+          return true;
         } catch (err) {
           console.warn(`${ep} failed:`, err);
         }
       }
-      if (!session) {
+      return false;
+    }
+
+    loadModel(["webgpu", "wasm"]).then((ok) => {
+      if (!ok) {
         status.textContent = "Could not load model. Is model/best.onnx in place?";
         return;
       }
       status.textContent = `Model loaded (${backend})`;
       startBtn.disabled = false;
       startBtn.textContent = "Start camera";
-    })();
+    });
+
+    // Keep the screen on while counting: when the phone auto-locks, the browser suspends
+    // (or kills) a page that is using the camera and GPU
+    let wakeLock = null;
+    async function keepScreenOn() {
+      if (!navigator.wakeLock || (wakeLock && !wakeLock.released)) return;
+      try { wakeLock = await navigator.wakeLock.request("screen"); } catch {}
+    }
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState !== "visible" || !detecting) return;
+      keepScreenOn(); // the lock is released whenever the page is hidden
+      video.play().catch(() => {});
+    });
 
     startBtn.addEventListener("click", async () => {
+      keepScreenOn();
       try {
-        // 4:3 is the native sensor shape on most phones, so it avoids cropping (wider view than 16:9)
+        // 4:3 is the native sensor shape on most phones, so it avoids cropping (wider view than 16:9).
+        // The model only sees 640x640, so a bigger camera image just costs memory, heat and battery.
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
             facingMode: "user",
-            width: { ideal: 1920 },
-            height: { ideal: 1440 },
+            width: { ideal: 1280 },
+            height: { ideal: 960 },
             aspectRatio: { ideal: 4 / 3 },
-            frameRate: { ideal: 60 }, // more frames = fewer missed bounces
+            frameRate: { ideal: 30 },
           },
           audio: false,
         });
@@ -195,7 +214,7 @@
       overlay.height = video.videoHeight;
       netX = overlay.width / 2; // default until the user taps to calibrate
       lastFrameTime = performance.now();
-      requestAnimationFrame(loop);
+      nextFrame(loop);
     }
 
     // Rotating the phone can swap the camera's width/height: resize the overlay and recalibrate
@@ -788,9 +807,26 @@
     }
 
     // ---------- Main loop ----------
-    let frames = 0, lastFpsTime = performance.now(), fps = 0, lastFrameTime = 0;
+    let frames = 0, lastFpsTime = performance.now(), fps = 0, lastFrameTime = 0, failures = 0;
+
+    // Run once per new camera frame where supported (no wasted work on repeated frames), else per screen refresh
+    const nextFrame = (fn) =>
+      video.requestVideoFrameCallback ? video.requestVideoFrameCallback(fn) : requestAnimationFrame(fn);
+
+    // Inference failed (e.g. the GPU was lost after the phone slept): retry, then fall back to the CPU
+    async function recover(err) {
+      console.warn("Inference failed:", err);
+      if (++failures < 3) return;
+      failures = 0;
+      if (backend === "webgpu") {
+        status.textContent = "GPU stopped, switching to CPU…";
+        try { await session.release(); } catch {}
+        status.textContent = (await loadModel(["wasm"])) ? "Running on CPU (wasm)" : "Model stopped, reload the page";
+      }
+    }
 
     async function loop() {
+      if (document.hidden || video.readyState < 2) return nextFrame(loop); // nothing to read yet
       const t0 = performance.now();
 
       // After a long gap the ball's path is unknown: drop it rather than score a "missed" ball
@@ -802,8 +838,16 @@
       lastFrameTime = t0;
 
       const prep = preprocess();
-      const results = await session.run({ [session.inputNames[0]]: prep.tensor });
+      let results;
+      try {
+        results = await session.run({ [session.inputNames[0]]: prep.tensor });
+      } catch (err) {
+        await recover(err);
+        return nextFrame(loop);
+      }
+      failures = 0;
       const boxes = postprocess(results[session.outputNames[0]], prep);
+      for (const t of Object.values(results)) t.dispose?.(); // free output memory right away
 
       markStill(boxes, t0);
       updateTracks(boxes, t0);
@@ -820,7 +864,7 @@
         lastFpsTime = t0;
       }
       info.textContent = `Detections: ${boxes.length} | Ball: ${ball ? "tracked" : "none"} | ${fps.toFixed(1)} FPS | ${(performance.now() - t0).toFixed(0)} ms/frame`;
-      requestAnimationFrame(loop);
+      nextFrame(loop);
     }
 
     renderBoard();
