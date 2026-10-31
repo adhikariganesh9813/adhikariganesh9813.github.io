@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ping Pong Counter | Ganesh Adhikari</title>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <style>
+    body { margin: 0; background: #111; color: #fff; font-family: sans-serif; text-align: center; }
+    h1 { font-size: 22px; margin: 10px 0; }
+    .stage { position: relative; width: 100%; max-width: 640px; margin: 0 auto; }
+    video { width: 100%; display: block; background: #000; object-fit: contain; }
+    canvas#overlay { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    button { font-size: 18px; padding: 12px 24px; margin: 8px; }
+    button:disabled { opacity: 0.5; }
+    .back { position: absolute; left: 12px; top: 12px; color: #14b8a6; text-decoration: none; font-size: 14px; }
+    .hint { color: #888; font-size: 13px; margin: 6px; }
+
+    #board { display: flex; justify-content: center; gap: 24px; margin: 12px 0; }
+    .player { background: #222; border-radius: 12px; padding: 10px 20px; min-width: 110px; border: 2px solid transparent; }
+    .player.serving { border-color: #ffd400; }
+    .player .name { font-size: 16px; color: #aaa; }
+    .player .serve { color: #ffd400; visibility: hidden; }
+    .player.serving .serve { visibility: visible; }
+    .player .pts { display: block; font-size: 60px; font-weight: bold; }
+    .player .games { font-size: 14px; color: #aaa; }
+    .player button { font-size: 14px; padding: 6px 14px; margin: 6px 0 0; }
+    #state { font-size: 18px; min-height: 24px; margin: 8px; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.webgpu.min.js"></script>
+</head>
+<body>
+  <a class="back" href="/myapps.html">← MyApps</a>
+  <h1>Ping Pong Counter</h1>
+  <div class="stage" id="stage">
+    <video id="video" autoplay playsinline muted></video>
+    <canvas id="overlay"></canvas>
+  </div>
+  <p class="hint">Phone at the side of the table, net in the middle. Tap the table surface right under the net to calibrate.</p>
+
+  <div id="board">
+    <div class="player" id="player0">
+      <div class="name">P1 (left) <span class="serve">● serve</span></div>
+      <span class="pts" id="pts0">0</span>
+      <div class="games">Games: <b id="games0">0</b></div>
+      <button data-player="0" class="plus">+1</button>
+    </div>
+    <div class="player" id="player1">
+      <div class="name">P2 (right) <span class="serve">● serve</span></div>
+      <span class="pts" id="pts1">0</span>
+      <div class="games">Games: <b id="games1">0</b></div>
+      <button data-player="1" class="plus">+1</button>
+    </div>
+  </div>
+  <p id="state"></p>
+
+  <div>
+    <button id="startBtn" disabled>Loading model…</button>
+    <button id="undoBtn">Undo</button>
+    <button id="resetBtn">Reset match</button>
+  </div>
+  <p id="status"></p>
+  <p id="info"></p>
+
+  <script>
+    const MODEL_URL = "model/best.onnx";
+    const SIZE = 640;   // model input size (matches training imgsz)
+    const CONF = 0.4;   // minimum confidence to count as a ball
+    const IOU = 0.45;   // overlap threshold for removing duplicate boxes
+    const MAX_SIZE = 0.08; // ignore "balls" wider than this fraction of the frame (e.g. bald heads)
+
+    const video = document.getElementById("video");
+    const overlay = document.getElementById("overlay");
+    const octx = overlay.getContext("2d");
+    const startBtn = document.getElementById("startBtn");
+    const status = document.getElementById("status");
+    const info = document.getElementById("info");
+
+    // Square canvas used to letterbox each frame to 640x640 for the model
+    const input = document.createElement("canvas");
+    input.width = input.height = SIZE;
+    const ictx = input.getContext("2d", { willReadFrequently: true });
+
+    ort.env.wasm.wasmPaths = "https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/";
+    let session, backend;
+
+    // Try the GPU first, fall back to CPU (WASM)
+    (async function loadModel() {
+      for (const ep of ["webgpu", "wasm"]) {
+        try {
+          session = await ort.InferenceSession.create(MODEL_URL, { executionProviders: [ep] });
+          backend = ep;
+          break;
+        } catch (err) {
+          console.warn(`${ep} failed:`, err);
+        }
+      }
+      if (!session) {
+        status.textContent = "Could not load model. Is model/best.onnx in place?";
+        return;
+      }
+      status.textContent = `Model loaded (${backend})`;
+      startBtn.disabled = false;
+      startBtn.textContent = "Start camera";
+    })();
+
+    startBtn.addEventListener("click", async () => {
+      try {
+        // 4:3 is the native sensor shape on most phones, so it avoids cropping (wider view than 16:9)
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: "user",
+            width: { ideal: 1920 },
+            height: { ideal: 1440 },
+            aspectRatio: { ideal: 4 / 3 },
+          },
+          audio: false,
+        });
+        video.srcObject = stream;
+
+        // Zoom out fully if the camera supports it (widest field of view)
+        const track = stream.getVideoTracks()[0];
+        const caps = track.getCapabilities ? track.getCapabilities() : {};
+        if (caps.zoom) {
+          await track.applyConstraints({ advanced: [{ zoom: caps.zoom.min }] });
+        }
+
+        const s = track.getSettings();
+        status.textContent = `Model: ${backend} | Camera: ${s.width}x${s.height}` + (caps.zoom ? " (zoomed out)" : "");
+        startBtn.style.display = "none";
+
+        video.addEventListener("loadedmetadata", startDetecting, { once: true });
+        if (video.readyState >= 1) startDetecting();
+      } catch (err) {
+        status.textContent = "Camera error: " + err.message;
+      }
+    });
+
+    function startDetecting() {
+      overlay.width = video.videoWidth;
+      overlay.height = video.videoHeight;
+      netX = overlay.width / 2; // default until the user taps to calibrate
+      requestAnimationFrame(loop);
+    }
+
+    // ---------- Model ----------
+
+    // Resize frame into 640x640 with grey padding (same as YOLO training), as a CHW float tensor
+    function preprocess() {
+      const vw = video.videoWidth, vh = video.videoHeight;
+      const scale = Math.min(SIZE / vw, SIZE / vh);
+      const w = Math.round(vw * scale), h = Math.round(vh * scale);
+      const dx = (SIZE - w) / 2, dy = (SIZE - h) / 2;
+
+      ictx.fillStyle = "rgb(114,114,114)";
+      ictx.fillRect(0, 0, SIZE, SIZE);
+      ictx.drawImage(video, dx, dy, w, h);
+
+      const { data } = ictx.getImageData(0, 0, SIZE, SIZE);
+      const n = SIZE * SIZE;
+      const f = new Float32Array(3 * n);
+      for (let i = 0; i < n; i++) {
+        f[i] = data[i * 4] / 255;
+        f[i + n] = data[i * 4 + 1] / 255;
+        f[i + 2 * n] = data[i * 4 + 2] / 255;
+      }
+      return { tensor: new ort.Tensor("float32", f, [1, 3, SIZE, SIZE]), scale, dx, dy };
+    }
+
+    // Model output is [1, 5, 8400]: for each of 8400 candidates -> cx, cy, w, h, score
+    function postprocess(out, { scale, dx, dy }) {
+      const d = out.data, N = out.dims[2];
+      const boxes = [];
+      for (let i = 0; i < N; i++) {
+        const score = d[4 * N + i];
+        if (score < CONF) continue;
+        const w = d[2 * N + i] / scale, h = d[3 * N + i] / scale;
+        if (Math.max(w, h) > MAX_SIZE * video.videoWidth) continue; // too big to be a ping pong ball
+        const cx = (d[i] - dx) / scale, cy = (d[N + i] - dy) / scale;
+        boxes.push({ x: cx - w / 2, y: cy - h / 2, w, h, score });
+      }
+      return nms(boxes.sort((a, b) => b.score - a.score));
+    }
+
+    function iou(a, b) {
+      const x1 = Math.max(a.x, b.x), y1 = Math.max(a.y, b.y);
+      const x2 = Math.min(a.x + a.w, b.x + b.w), y2 = Math.min(a.y + a.h, b.y + b.h);
+      const inter = Math.max(0, x2 - x1) * Math.max(0, y2 - y1);
+      return inter / (a.w * a.h + b.w * b.h - inter);
+    }
+
+    function nms(boxes) {
+      const keep = [];
+      for (const b of boxes) {
+        if (keep.every(k => iou(k, b) < IOU)) keep.push(b);
+      }
+      return keep;
+    }
+
+    // ---------- Ball events: bounces and hits ----------
+    const MIN_MOVE = 0.015;     // ball must move this fraction of the frame before a direction change counts
+    const LOST_MS = 500;        // forget the ball's path if it is unseen for this long
+    const MARK_MS = 400;        // how long a bounce/hit flash stays on screen
+    const HIT_WINDOW_MS = 200;  // a "bounce" this close to a left/right reversal was really a bat hit
+    const TABLE_BAND = 0.08;    // bounces must be within this fraction of frame height from the table line
+    const IDLE_MOVE = 0.02;     // moving less than this fraction of the frame counts as "still"
+
+    let tracker = null;         // { x: axisState, y: axisState, lastSeen }
+    const trail = [];           // recent ball centres, for drawing
+    const marks = [];           // recent bounce/hit points, for flashing
+    let pendingBounce = null;   // bounce on hold until we know it wasn't a bat hit
+    let lastHitTime = -Infinity;
+    let anchor = null;          // last position where the ball was considered "moving"
+    let lastMotion = performance.now();
+
+    let netX = 0, tableY = null; // set by tapping the table under the net
+
+    document.getElementById("stage").addEventListener("click", (e) => {
+      if (!video.videoWidth) return; // camera not started yet
+      const r = overlay.getBoundingClientRect();
+      netX = ((e.clientX - r.left) / r.width) * overlay.width;
+      tableY = ((e.clientY - r.top) / r.height) * overlay.height;
+    });
+
+    const sideOf = (x) => (x < netX ? 0 : 1); // 0 = P1 (left), 1 = P2 (right)
+    const nearTable = (y) => tableY === null || Math.abs(y - tableY) < TABLE_BAND * overlay.height;
+
+    // Tracks movement on one axis with hysteresis. Returns the turning point when direction reverses.
+    // a.dir: +1 increasing, -1 decreasing, 0 unknown. a.ext: furthest point reached in the current direction.
+    function axisTurn(a, v, min) {
+      if (a.dir === 0) {
+        if (Math.abs(v - a.ext) > min) { a.dir = Math.sign(v - a.ext); a.ext = v; }
+        return null;
+      }
+      if ((v - a.ext) * a.dir > 0) { a.ext = v; return null; } // still moving the same way
+      if (Math.abs(v - a.ext) > min) {                         // reversed by enough to be real
+        const turn = { from: a.dir, at: a.ext };
+        a.dir = -a.dir;
+        a.ext = v;
+        return turn;
+      }
+      return null;
+    }
+
+    function updateBall(boxes, now) {
+      // A held bounce with no bat hit right after it is a real table bounce
+      if (pendingBounce && now - pendingBounce.t > HIT_WINDOW_MS) {
+        const b = pendingBounce;
+        pendingBounce = null;
+        marks.push({ x: b.x, y: b.y, color: "red", t: now });
+        onBounce(sideOf(b.x));
+      }
+
+      if (!boxes.length) {
+        if (tracker && now - tracker.lastSeen > LOST_MS) { tracker = null; trail.length = 0; }
+        return;
+      }
+      const b = boxes[0]; // highest-confidence ball
+      const x = b.x + b.w / 2, y = b.y + b.h / 2;
+      trail.push({ x, y });
+      if (trail.length > 20) trail.shift();
+
+      if (!anchor || Math.hypot(x - anchor.x, y - anchor.y) > IDLE_MOVE * overlay.width) {
+        anchor = { x, y };
+        lastMotion = now;
+      }
+      onBallSeen(sideOf(x));
+
+      if (!tracker) {
+        tracker = { x: { dir: 0, ext: x }, y: { dir: 0, ext: y }, lastSeen: now };
+        return;
+      }
+      tracker.lastSeen = now;
+
+      // Left/right reversal = a bat hit, on the side where it turned
+      const tx = axisTurn(tracker.x, x, MIN_MOVE * overlay.width);
+      if (tx) {
+        lastHitTime = now;
+        pendingBounce = null; // that "bounce" was the bat
+        marks.push({ x: tx.at, y, color: "deepskyblue", t: now });
+        onHit(sideOf(tx.at));
+      }
+      // Image y grows downward: falling (+1) then rising, near the table = bounce
+      const ty = axisTurn(tracker.y, y, MIN_MOVE * overlay.height);
+      if (ty && ty.from === 1 && now - lastHitTime > HIT_WINDOW_MS && nearTable(ty.at)) {
+        pendingBounce = { x, y: ty.at, t: now };
+      }
+    }
+
+    // ---------- Game rules: 11 points, win by 2, 2 serves each, 1 each from 10-10 ----------
+    const SERVE_PAUSE_MS = 3000; // ball still/hidden this long before a serve is accepted
+    const RALLY_END_MS = 1500;   // ball still/gone this long ends the rally
+    const NAMES = ["P1", "P2"];
+
+    let score = [0, 0], games = [0, 0], firstServer = 0;
+    let history = [];            // snapshots for Undo
+    let state = "waiting";       // waiting -> ready -> rally -> waiting
+    let rally = null;            // { lastHitter, target, bounced, hits, reached }
+    let message = "";
+
+    function server() {
+      const total = score[0] + score[1];
+      const turns = total < 20 ? Math.floor(total / 2) : 10 + (total - 20);
+      return (firstServer + turns) % 2;
+    }
+
+    function onBallSeen(side) {
+      if (state === "rally" && side === rally.target) rally.reached = true;
+    }
+
+    function onBounce(side) {
+      if (state === "ready") {
+        // Serve starts with a bounce on the server's own side. Anything else (hand pass, drop) is ignored.
+        if (side === server()) {
+          const s = server();
+          rally = { lastHitter: s, target: 1 - s, bounced: false, hits: 0, reached: false };
+          state = "rally";
+          message = "";
+        }
+        return;
+      }
+      if (state !== "rally") return;
+
+      if (side !== rally.target) {
+        // Extra bounces on the server's side before the ball crosses = server just bouncing it, ignore
+        if (rally.hits === 0 && !rally.reached) return;
+        return endRally(rally.target, `${NAMES[rally.lastHitter]} bounced on own side`);
+      }
+      if (rally.bounced) return endRally(rally.lastHitter, `double bounce on ${NAMES[side]}'s side`);
+      rally.bounced = true;
+    }
+
+    function onHit(side) {
+      if (state !== "rally" || side !== rally.target) return; // reversal on the hitter's own side = noise
+      // A return. If we missed seeing its bounce (low FPS), assume it bounced rather than calling a fault.
+      rally.lastHitter = side;
+      rally.target = 1 - side;
+      rally.bounced = false;
+      rally.hits++;
+    }
+
+    function updateGame(now) {
+      if (state === "waiting" && now - lastMotion > SERVE_PAUSE_MS) state = "ready";
+
+      if (state === "rally" && now - lastMotion > RALLY_END_MS) {
+        if (rally.hits === 0 && !rally.reached) {
+          state = "waiting"; // "serve" never reached the other side: hand pass or practice bounce
+          rally = null;
+          message = "No serve, ignored";
+        } else if (rally.bounced) {
+          endRally(rally.lastHitter, `${NAMES[rally.target]} missed`);
+        } else {
+          endRally(rally.target, `${NAMES[rally.lastHitter]} hit out or into the net`);
+        }
+      }
+    }
+
+    function endRally(winner, reason) {
+      history.push({ score: [...score], games: [...games], firstServer });
+      score[winner]++;
+      message = `Point ${NAMES[winner]}: ${reason}`;
+
+      const [a, b] = score;
+      if (Math.max(a, b) >= 11 && Math.abs(a - b) >= 2) {
+        games[winner]++;
+        message = `${NAMES[winner]} wins the game ${a}-${b}!`;
+        score = [0, 0];
+        firstServer = 1 - firstServer; // other player serves first next game
+      }
+      state = "waiting";
+      rally = null;
+      lastMotion = performance.now(); // need a fresh 3 s pause before the next serve (ignores hand passes)
+    }
+
+    document.querySelectorAll(".plus").forEach((btn) =>
+      btn.addEventListener("click", () => endRally(+btn.dataset.player, "added manually"))
+    );
+
+    document.getElementById("undoBtn").addEventListener("click", () => {
+      const prev = history.pop();
+      if (!prev) return;
+      ({ score, games, firstServer } = prev);
+      state = "waiting";
+      rally = null;
+      message = "Undone";
+      lastMotion = performance.now();
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      score = [0, 0]; games = [0, 0]; firstServer = 0; history = [];
+      state = "waiting"; rally = null; message = "";
+      lastMotion = performance.now();
+    });
+
+    const stateEl = document.getElementById("state");
+
+    function renderBoard() {
+      const s = server();
+      for (const p of [0, 1]) {
+        document.getElementById(`pts${p}`).textContent = score[p];
+        document.getElementById(`games${p}`).textContent = games[p];
+        document.getElementById(`player${p}`).classList.toggle("serving", p === s);
+      }
+      let text;
+      if (state === "waiting") text = "Hold the ball still to serve…";
+      else if (state === "ready") text = `${NAMES[s]} to serve`;
+      else text = `Rally: ${rally.hits} returns`;
+      stateEl.textContent = message ? `${message} · ${text}` : text;
+    }
+
+    // ---------- Drawing ----------
+    function draw(boxes) {
+      octx.clearRect(0, 0, overlay.width, overlay.height);
+      octx.lineWidth = Math.max(2, overlay.width / 250);
+      octx.strokeStyle = "lime";
+      const fontSize = Math.max(14, overlay.width / 40);
+      octx.font = `${fontSize}px sans-serif`;
+      octx.textBaseline = "top";
+      const pad = fontSize * 0.2, lh = fontSize + pad * 2;
+      const placed = []; // label rects already drawn, so new ones don't overlap them
+
+      for (const b of boxes) {
+        octx.strokeRect(b.x, b.y, b.w, b.h);
+
+        const text = `ball ${(b.score * 100) | 0}%`;
+        const lw = octx.measureText(text).width + pad * 2;
+        // Above the box if there is room, otherwise inside its top; kept within the frame
+        let lx = Math.min(Math.max(0, b.x), overlay.width - lw);
+        let ly = b.y - lh >= 0 ? b.y - lh : Math.max(0, b.y);
+        // Move down until it no longer overlaps an earlier label
+        while (placed.some(p => lx < p.x + p.w && lx + lw > p.x && ly < p.y + p.h && ly + lh > p.y)) {
+          ly += lh;
+        }
+        placed.push({ x: lx, y: ly, w: lw, h: lh });
+
+        octx.fillStyle = "rgba(0, 0, 0, 0.7)";
+        octx.fillRect(lx, ly, lw, lh);
+        octx.fillStyle = "lime";
+        octx.fillText(text, lx + pad, ly + pad);
+      }
+    }
+
+    function drawTracking(now) {
+      // Net (left/right split) and table line
+      octx.save();
+      octx.setLineDash([12, 10]);
+      octx.strokeStyle = "rgba(255, 255, 255, 0.6)";
+      octx.lineWidth = Math.max(2, overlay.width / 400);
+      octx.beginPath();
+      octx.moveTo(netX, 0);
+      octx.lineTo(netX, overlay.height);
+      if (tableY !== null) {
+        octx.moveTo(0, tableY);
+        octx.lineTo(overlay.width, tableY);
+      }
+      octx.stroke();
+      octx.restore();
+
+      octx.strokeStyle = "yellow";
+      octx.lineWidth = Math.max(2, overlay.width / 300);
+      octx.beginPath();
+      trail.forEach((p, i) => (i ? octx.lineTo(p.x, p.y) : octx.moveTo(p.x, p.y)));
+      octx.stroke();
+
+      while (marks.length && now - marks[0].t > MARK_MS) marks.shift();
+      for (const m of marks) {
+        octx.fillStyle = m.color;
+        octx.beginPath();
+        octx.arc(m.x, m.y, overlay.width / 40, 0, Math.PI * 2);
+        octx.fill();
+      }
+    }
+
+    // ---------- Main loop ----------
+    let frames = 0, lastFpsTime = performance.now(), fps = 0;
+
+    async function loop() {
+      const t0 = performance.now();
+      const prep = preprocess();
+      const results = await session.run({ [session.inputNames[0]]: prep.tensor });
+      const boxes = postprocess(results[session.outputNames[0]], prep);
+
+      draw(boxes);
+      updateBall(boxes, t0);
+      updateGame(t0);
+      drawTracking(t0);
+      renderBoard();
+
+      frames++;
+      if (t0 - lastFpsTime > 1000) {
+        fps = (frames * 1000) / (t0 - lastFpsTime);
+        frames = 0;
+        lastFpsTime = t0;
+      }
+      info.textContent = `Balls: ${boxes.length} | ${fps.toFixed(1)} FPS | ${(performance.now() - t0).toFixed(0)} ms/frame`;
+      requestAnimationFrame(loop);
+    }
+
+    renderBoard();
+  </script>
+</body>
+</html>
