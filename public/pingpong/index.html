@@ -31,7 +31,9 @@
     #note { color: #ffd400; font-weight: bold; min-height: 20px; margin: 4px; }
     #setup { background: #1b2a2a; border: 1px solid #14b8a6; border-radius: 10px; text-align: left;
              font-size: 14px; color: #ccc; max-width: 600px; margin: 10px auto; padding: 10px 14px; }
-    #setup[hidden] { display: none; }
+    #setup summary { font-weight: bold; cursor: pointer; }
+    #setup summary::after { content: " (tap to hide)"; font-weight: normal; color: #888; }
+    #setup:not([open]) summary::after { content: " (tap to show)"; }
     #setup ol { margin: 6px 0 0; padding-left: 20px; }
     #setup li { margin: 4px 0; }
 
@@ -65,8 +67,8 @@
     <canvas id="overlay"></canvas>
   </div>
   <div id="panel">
-  <div id="setup">
-    <b>Setup before the game</b>
+  <details id="setup" open>
+    <summary>Setup before the game</summary>
     <ol>
       <li>Place the phone in landscape at the side of the table, level with the table top or a little above it. The whole table should be in view, with the net in the middle.</li>
       <li>Press <b>Start camera</b> and keep the phone still. Moving it later means calibrating again.</li>
@@ -75,7 +77,7 @@
       <li>To serve: hold the ball still for 3 seconds until the status says "to serve", then serve. A ball bounce counts only near the table line.</li>
       <li>A serve that touches the net and lands on the other side is a let (orange flash): no point, serve again. If the camera misses it, press <b>Let</b> right away.</li>
     </ol>
-  </div>
+  </details>
 
   <div id="board">
     <div class="player" id="player0">
@@ -382,7 +384,7 @@
       netX = ((e.clientX - r.left) / r.width) * overlay.width;
       tableY = ((e.clientY - r.top) / r.height) * overlay.height;
       message = "Calibrated";
-      showSetup = false; // collapse the setup steps once calibrated
+      setupEl.open = false; // minimize the setup steps once calibrated
     });
 
     const sideOf = (x) => (x < netX ? 0 : 1); // 0 = P1 (left), 1 = P2 (right)
@@ -664,11 +666,19 @@
       message = auto ? "" : "Auto scoring off";
     });
 
-    // Setup steps stay open until calibrated; "Setup help" brings them back
-    let showSetup = false;
-    document.getElementById("setupBtn").addEventListener("click", () => { showSetup = !showSetup; });
-
+    // Setup steps: tap the title to minimize/expand. Minimizes itself once calibrated; remembered across visits.
+    const SETUP_KEY = "pingpong-setup-hidden";
     const setupEl = document.getElementById("setup");
+    if (localStorage.getItem(SETUP_KEY)) setupEl.open = false;
+    setupEl.addEventListener("toggle", () => {
+      if (setupEl.open) localStorage.removeItem(SETUP_KEY);
+      else localStorage.setItem(SETUP_KEY, "1");
+    });
+    document.getElementById("setupBtn").addEventListener("click", () => {
+      setupEl.open = !setupEl.open;
+      if (setupEl.open) setupEl.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    });
+
     const stateEl = document.getElementById("state");
     const noteEl = document.getElementById("note");
     let lastBoard = "";
@@ -689,8 +699,6 @@
       else if (state === "ready") text = `${NAMES[s]} to serve`;
       else text = `Rally: ${rally.hits} returns`;
       text = message ? `${message} · ${text}` : text;
-
-      setupEl.hidden = tableY !== null && !showSetup;
 
       const key = `${score}|${games}|${s}|${text}`;
       if (key === lastBoard) return; // nothing changed, skip DOM writes
